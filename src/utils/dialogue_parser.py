@@ -3,7 +3,7 @@ import string
 import spacy
 from sklearn.pipeline import Pipeline
 
-nlp = spacy.load("de_core_news_sm")
+nlp = spacy.load("de_core_news_md")
 nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
 import pandas as pd

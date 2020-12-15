@@ -3,13 +3,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from utils.dialogue_parser import DialogueParser, preprocess
 import pandas as pd
+import matplotlib as plt
+
 
 if __name__ == '__main__':
     nlp = spacy.load("de_core_news_md")
     init_corpus = False
 
     if init_corpus:
-        # Paths must be adjust according to the location of the files!
+        # @todo Paths must be adjust according to the location of the files!
         parsers = [
             DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 27_T1_IM_FW.docx", "DEPR", 27, "B",
                            True),
@@ -46,4 +48,17 @@ if __name__ == '__main__':
     vectorizer = TfidfVectorizer()
     vectorizer.fit(corpus)
     x = vectorizer.transform(corpus).toarray()
-    print(x.shape)
+
+    df = pd.DataFrame(x, columns=vectorizer.get_feature_names())
+    df.to_excel("tf_idf.xlsx")
+
+    # df_tfidf = pd.DataFrame(x.T.todense(), index=vectorizer.get_feature_names())
+    # df_tfidf['mean'] = df_tfidf.mean(axis=1)
+    # df_tfidf = df_tfidf.sort_values('mean', ascending=False)
+    #
+    # fig, axes = plt.subplots(nrows=1, ncols=4, figsize=(30, 7))
+    # titles = ['TFIDF - Homer Simpson\'s most important words', 'TFIDF - Marge Simpson\'s most important words',
+    #           'TFIDF - Bart Simpson\'s most important words', 'TFIDF - Lisa Simpson\'s most important words']
+    # for i in range(len(tfidf_lines_list)):
+    #     tfidf_lines_list[i].head(10).plot(ax=axes[i], kind='bar', title=titles[i], xlabel='words',
+    #                                       ylabel='mean tfidf weight over all ligns')

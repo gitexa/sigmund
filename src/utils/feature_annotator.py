@@ -5,7 +5,7 @@ import pyphen
 dic = pyphen.Pyphen(lang='de')
 import spacy
 
-nlp = spacy.load("de_core_news_sm")
+nlp = spacy.load("de_core_news_md")
 
 
 
@@ -36,7 +36,6 @@ def reading_ease_german(text):
     word_count, syllable_count, sent_count = syllable_counter(text)
     if syllable_count == 0 or word_count == 0 or sent_count == 0:
         return 0
-    print(word_count, syllable_count, sent_count)
     score = 180 - (word_count / sent_count) - (58.5 * (syllable_count / word_count))
     return score
 

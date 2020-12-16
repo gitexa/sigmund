@@ -24,6 +24,9 @@ pyphen = "*"
 importlib-metadata = "==1.7.0"
 de-core-news-md = {path = "./de_core_news_md-2.3.0.tar.gz"}
 openpyxl = "*"
+pytest = "*"
+nltk = "*"
+liwc = "*"
 
 [scripts]
 test = "coverage run -m unittest discover -s ./tests -p *_test.py"

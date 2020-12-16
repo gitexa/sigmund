@@ -8,7 +8,7 @@ import matplotlib as plt
 
 if __name__ == '__main__':
     nlp = spacy.load("de_core_news_md")
-    init_corpus = False
+    init_corpus = True
 
     if init_corpus:
         # @todo Paths must be adjust according to the location of the files!
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     x = vectorizer.transform(corpus).toarray()
 
     df = pd.DataFrame(x, columns=vectorizer.get_feature_names())
-    df.to_excel("tf_idf.xlsx")
+    # df.to_excel("tf_idf.xlsx")
 
     # df_tfidf = pd.DataFrame(x.T.todense(), index=vectorizer.get_feature_names())
     # df_tfidf['mean'] = df_tfidf.mean(axis=1)

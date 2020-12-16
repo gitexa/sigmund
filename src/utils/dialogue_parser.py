@@ -20,6 +20,7 @@ class DialogueParser:
     def split_speaker_text(text_line):
         pattern = re.compile(r"^(([AB]): )(.*)")
         matches = pattern.match(text_line)
+
         if matches:
             return matches.group(2), matches.group(3)
         else:
@@ -55,8 +56,6 @@ class DialogueParser:
 
         super().__init__()
 
-    def preprocess(self):
-        pass
 
     def get_sentences(self):
         pass
@@ -68,14 +67,22 @@ class DialogueParser:
         pass
 
 
+def remove_annotations(raw_text):
+    removed_annotations = re.sub(r"\(.*\)", "", raw_text)
+    removed_annotations = ' '.join(removed_annotations.split())
+    return removed_annotations
+
+
 def preprocess(row):
-    doc = nlp(str.lower(row["raw_text"]))
+    raw_text = remove_annotations(str.lower(row["raw_text"]))
+    doc = nlp(raw_text)
     row["sent_count"] = len(list(doc.sents))
     doc = nlp(' '.join([token.text for token in doc if not token.is_punct]))
     row["word_count"] = len(list(doc))
     row["lemmatized"] = ' '.join([token.lemma_ if not token.pos_ == "PRON" else token.text for token in doc])
     doc = nlp(row["lemmatized"])
     row["stopwords_removed"] = ' '.join([token.text for token in doc if not token.is_stop])
+    # Normalized without
     row["normalized_text"] = doc.text
     return row
 

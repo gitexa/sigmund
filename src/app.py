@@ -32,9 +32,12 @@ if uploaded_docx:
     couple_id = st.text_input("ID")
     dp = DialogueParser(uploaded_docx, group, couple_id=couple_id, female_label=female_label, depressed=is_depressed)
     preprocessed_df = dp.get_paragraphs().apply(preprocess, axis=1)
+    st.markdown("## Before Preprocessing")
     st.write(dp.get_paragraphs())
+    st.markdown("## After Preprocessing")
     st.write(preprocessed_df)
 
+    
 
     corpus =preprocessed_df["stopwords_removed"]
 

@@ -17,6 +17,9 @@ Project Members
 * Seaborn for visualisation
 * NLTK Stemmer
 * SentiWS
+* LIWC library with german dictionary (https://pypi.org/project/liwc/)
+
+
 
 ### Contributions
 - DocX Extraction
@@ -38,10 +41,19 @@ We consider restructuring our project using a different dataset (reddit mental h
 * Pre-Processing
 * Feature-Engineering
 
+
 ## Data Analysis
 * As our dataset was not available due to the date of the milestone, it was hard to do some Data-Analysis.
 ### Data Sources
 * (German) Transcripts of MDD-Pairs
+* Assumption
+    * Docx format
+    * Sequence of Speakers, separated by paragraph, starting with speaker label
+    * Annotations are made clear using parenthesis (Those should not be evaluated)
+    * In Our case, the depressive person is always female, however this is not necessary
+    * No further MetaData   
+ 
+
 ### Pre-Processing
 * Extracting Text-Data from docx
 * Annotate Ground-Truth (Hamilton-Score, Depressive / non depressive)
@@ -51,12 +63,13 @@ We consider restructuring our project using a different dataset (reddit mental h
 * Removal of Stop-Words
 * Lemmatisation using German
 ## Basic Statistic
-At the time of writing we had:
-* Two Transcripts
-* 2000 Words
-* Unclear Specification
-* ~ 120 Utterances (60 per Script)
-## Current code State
+* 16.12.2020: 10 Transkripte
+* Total: Ca 13.000 Wörter
+* 20 Sprecher
+* Davon 5 D
+* 5 weiblich, ND
+* 10 Männlich, ND
+* 
 
 
 

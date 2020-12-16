@@ -56,6 +56,12 @@ At the time of writing we had:
 * 2000 Words
 * Unclear Specification
 * ~ 120 Utterances (60 per Script)
+## Feature Engineering
+Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression.
+### Structural Features
+#### Complexity of speech
+
+### Content Features
 ## Current code State
 
 

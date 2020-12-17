@@ -1,4 +1,4 @@
-from utils.dialogue_parser import clear_annotations
+from src.utils.dialogue_parser import clear_annotations
 
 
 def test_remove_annotations():

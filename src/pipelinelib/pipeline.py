@@ -22,9 +22,13 @@ class Pipeline:
         spacy's Doc instance.
     """
 
-    def __init__(self, model):
+    def __init__(self, model, empty_pipeline=False):
         self._model = model
         self._extensions: Dict[str, Any] = dict()
+
+        if empty_pipeline:
+            for pipe_name in self._model.pipe_names:
+                self._model.remove_pipe(pipe_name)
 
     def add_component(self, component: Component):
         """
@@ -80,4 +84,4 @@ class Pipeline:
         """
         Add the transformation declared by the component to the pipeline
         """
-        self._model.add_pipe(component.apply)
+        self._model.add_pipe(component.apply, name=component.name)

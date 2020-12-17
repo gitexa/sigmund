@@ -2,7 +2,8 @@ import unittest
 
 import spacy
 
-from src.pipelinelib.component import Component, Extension
+from src.pipelinelib.component import Component
+from src.pipelinelib.extension import Extension
 from src.pipelinelib.pipeline import Pipeline as PAPI
 
 CLASHING_EXTENSION = Extension("clash-with-me", list())
@@ -29,6 +30,9 @@ class Pipeline(unittest.TestCase):
         self.assertRaises(Exception, self.pipeline.add_component, D1())
 
     def test_trigger_nothing(self):
+        """
+        Successful case: C1 add extensions, D1 references it
+        """
         try:
             self.pipeline.add_component(C1())
             self.pipeline.add_component(D1())

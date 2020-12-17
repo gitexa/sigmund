@@ -1,8 +1,8 @@
 import string
 
 import pandas as pd
-import spacy
 import pyphen
+import spacy
 
 
 def get_word_sentence_ratio(n_sentences, n_words):
@@ -32,8 +32,8 @@ if __name__ == '__main__':
     grouped_by_depr = df.groupby(by="is_depressed").sum()
     grouped_by_gender = df.groupby(by=["gender", "is_depressed"]).sum()
 
-    grouped_by_depr["ws_ratio"] = grouped_by_depr.apply(lambda x: get_word_sentence_ratio(x.word_count, x.sent_count),
-                                                        axis=1)
+    grouped_by_depr["ws_ratio"] = grouped_by_depr.apply(
+        lambda x: get_word_sentence_ratio(x.word_count, x.sent_count), axis=1)
     grouped_by_couple["ws_ratio"] = grouped_by_couple.apply(
         lambda x: get_word_sentence_ratio(x.word_count, x.sent_count),
         axis=1)
@@ -49,4 +49,3 @@ if __name__ == '__main__':
     print(grouped_by_depr)
     print(grouped_by_couple.sort_values(by=["ws_ratio"]))
     print(grouped_by_gender)
-

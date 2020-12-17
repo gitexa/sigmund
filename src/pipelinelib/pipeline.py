@@ -84,4 +84,4 @@ class Pipeline:
         """
         Add the transformation declared by the component to the pipeline
         """
-        self._model.add_pipe(component.apply, name=component.name)
+        self._model.add_pipe(component._internal_apply, name=component.name)

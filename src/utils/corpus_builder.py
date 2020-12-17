@@ -1,5 +1,6 @@
 import json
 import os
+from os import getcwd
 
 import matplotlib as plt
 import pandas as pd
@@ -8,7 +9,7 @@ from dialogue_parser import DialogueParser, preprocess
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 if __name__ == '__main__':
-    nlp = spacy.load("de_core_news_md")
+    nlp = spacy.load("de_core_news_sm")
     init_corpus = True
 
     with open(os.path.join(os.getcwd(), 'config.json'), 'r') as configfile:

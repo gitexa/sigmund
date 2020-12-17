@@ -1,21 +1,14 @@
-import os
+import spacy
 
-from utils.sample import hello_world  # import of module from subfolder
-
-"""
-This script should serve as entrypoint to your program.
-Every module or package it relies on has to be imported at the beginning.
-The code that is actually executed is the one below 'if __name__ ...' (if run
-as script).
-"""
+from pipelinelib.pipeline import Pipeline
+from sigmund.features import syllables, words
 
 if __name__ == "__main__":
-    # run example function
-    hello_world_success = hello_world()
-    print("Hello World completed successfully!") if hello_world_success else print(
-        "Hello Wold failed!"
-    )
+    nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
+    sentence = "Ich habe Hunger und bin glücklich aber auch traurig und ein Baum"
+    doc = Pipeline(model=nlp) \
+        .add_component(syllables.SyllableExtractor()) \
+        .add_component(words.WordExtractor()) \
+        .execute(text=sentence)
 
-    # exemplify how to access environment variables
-    print("\nEnvironment variable: {}".format(os.environ["TEST_PW"]))
-    print("In production never print password to console! :)\n")
+    print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.syllables])))

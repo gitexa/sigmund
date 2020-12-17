@@ -18,10 +18,8 @@ class SyllableExtractor(Component):
                          creates_extensions=[SyllableExtractor.SYLLABLES])
         self.dic = pyphen.Pyphen(lang='de')
 
-    def apply(self, doc: Doc):
-        doc.set_extension(self.SYLLABLES.name, default=self.SYLLABLES.default_type)
+    def apply(self, doc: Doc) -> Doc:
         for token in doc:
             if not str(token) in string.punctuation:
                 doc._.syllables.extend(self.dic.inserted(str(token)).split("-"))
-
         return doc

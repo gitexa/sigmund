@@ -1,3 +1,4 @@
+import operator
 import re
 import string
 from collections import Counter
@@ -44,7 +45,7 @@ class LiwcScores(Component):
 
     def __init__(self, dictionary_path):
         super().__init__(LiwcScores.__name__, required_extensions=[
-            SyllableExtractor.SYLLABLES],
+            WordExtractor.WORDS],
             creates_extensions=[LiwcScores.SCORES])
         self._dictionary_path = dictionary_path
 
@@ -59,5 +60,5 @@ class LiwcScores(Component):
         return doc
 
     def _tokenize_and_lower(self, doc: Doc):
-        for match in re.finditer(r'\w+', doc, re.UNICODE):
-            yield match.group(0).lower()
+        getter = operator.attrgetter(WordExtractor.WORDS.name)
+        return [word.lower() for word in getter(doc._)]

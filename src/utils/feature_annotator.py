@@ -43,3 +43,4 @@ def tf_idf_svd(corpus, components):
     x = vectorizer.transform(corpus).toarray()
     svd.fit(x)
     print(svd.singular_values_)
+

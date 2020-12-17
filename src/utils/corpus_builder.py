@@ -1,41 +1,28 @@
-import spacy
-from sklearn.feature_extraction.text import TfidfVectorizer
+import json
+import os
 
-from utils.dialogue_parser import DialogueParser, preprocess
-import pandas as pd
 import matplotlib as plt
-
+import pandas as pd
+import spacy
+from dialogue_parser import DialogueParser, preprocess
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 if __name__ == '__main__':
     nlp = spacy.load("de_core_news_md")
-    init_corpus = False
+    init_corpus = True
+
+    with open(os.path.join(os.getcwd(), 'config.json'), 'r') as configfile:
+        config = json.load(configfile)
 
     if init_corpus:
         # @todo Paths must be adjust according to the location of the files!
-        parsers = [
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 27_T1_IM_FW.docx", "DEPR", 27, "B",
-                           True),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 29_T1_IM_FW.docx", "DEPR", 29, "B",
-                           False),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 47_T1_IM_FW.docx", "DEPR", 47, "B",
-                           True),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 58_T1_IM_FW.docx", "DEPR", 58, "B",
-                           False),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 60_T1_IM_FW.docx", "DEPR", 60, "A",
-                           True),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 81_T1_IM_FW.docx", "DEPR", 81, "A",
-                           False),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 87_T1_IM_FW.docx", "DEPR", 87, "B",
-                           False),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 105_T1_IM_FW.docx", "DEPR", 105, "B",
-                           True),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 138_T1_IM_FW.docx", "DEPR", 138, "A",
-                           True),
-            DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 182_T1_IM_FW.docx", "DEPR", 182, "A",
-                           False)
-        ]
 
-        preprocessed = [parser.get_paragraphs().apply(preprocess, axis=1) for parser in parsers]
+        parsers = []
+        for transcript in config['transcrips']:
+            parsers.append(DialogueParser(os.path.join(config['path_to_transcripts'], transcript['transcript_id']), transcript['group'], transcript['couple_id'], transcript['female_label'], transcript['depression']))
+        
+        preprocessed = [parser.get_paragraphs().apply(preprocess, axis=1)
+                        for parser in parsers]
         all_frames = pd.concat(preprocessed)
         all_frames.to_csv("all_preprocessed.csv")
 
@@ -50,7 +37,7 @@ if __name__ == '__main__':
     x = vectorizer.transform(corpus).toarray()
 
     df = pd.DataFrame(x, columns=vectorizer.get_feature_names())
-    df.to_excel("tf_idf.xlsx")
+    # df.to_excel("tf_idf.xlsx")
 
     # df_tfidf = pd.DataFrame(x.T.todense(), index=vectorizer.get_feature_names())
     # df_tfidf['mean'] = df_tfidf.mean(axis=1)

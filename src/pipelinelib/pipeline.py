@@ -8,7 +8,6 @@ from .component import Component
 from .extension import Extension
 
 
-
 class Pipeline:
     """
     A class to represent a pipeline for training a model
@@ -22,6 +21,7 @@ class Pipeline:
         a collection of extensions that the pipeline will create on
         spacy's Doc instance.
     """
+
     def __init__(self, model):
         self._model = model
         self._extensions: Dict[str, Any] = dict()
@@ -55,8 +55,9 @@ class Pipeline:
         # depends on non-existent Extension
         missing_extensions = list(filterfalse(self._extensions.__contains__, names))
         if missing_extensions:
-            raise Exception(f"Unable to apply {component.name} to pipeline: missing extensions " +
-                            f"from Doc object:\n{', '.join(missing_extensions)}")
+            raise Exception(
+                f"Unable to apply {component.name} to pipeline: missing extensions " +
+                f"from Doc object:\n{', '.join(missing_extensions)}")
 
         # read names from Extensions
         names = map(operator.attrgetter("name"),
@@ -64,8 +65,9 @@ class Pipeline:
         # would overwrite pre-existing Extensions
         overwritten_extensions = list(filter(self._extensions.__contains__, names))
         if overwritten_extensions:
-            raise Exception(f"Unable to apply {component.name} to pipeline: would overwrite extensions " +
-                            f"in Doc object:\n{', '.join(overwritten_extensions)}")
+            raise Exception(
+                f"Unable to apply {component.name} to pipeline: would overwrite extensions "
+                + f"in Doc object:\n{', '.join(overwritten_extensions)}")
 
     def _register_extensions(self, component: Component):
         """

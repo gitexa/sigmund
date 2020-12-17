@@ -1,9 +1,9 @@
+import pyphen
+import string
 from blocks.component import Component
 from blocks.extension import Extension
-
 from spacy.tokens import Doc, Token
-import string
-import pyphen
+
 
 class SyllableExtractor(Component):
     SYLLABLES = Extension(name="syllables", default_type=list())

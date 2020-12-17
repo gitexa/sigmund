@@ -40,7 +40,12 @@ We consider restructuring our project using a different dataset (reddit mental h
 ### High-Level Architecture:
 * Pre-Processing
 * Feature-Engineering
-
+    * Share of Speech
+    * Talking Turns
+    * Flesch reading-ease score
+    * Aggreement-Score
+    * Diminished cooperativeness
+    * (Responding to negative-positive emotions) 
 
 ## Data Analysis
 * As our dataset was not available due to the date of the milestone, it was hard to do some Data-Analysis.
@@ -72,6 +77,10 @@ At the time of writing we had:
 Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression.
 ### Structural Features
 #### Complexity of speech
+Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
+where higher values indicate less complex speech:
+
+<img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">
 
 ### Content Features
 ## Current code State

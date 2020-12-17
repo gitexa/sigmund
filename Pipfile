@@ -27,6 +27,8 @@ openpyxl = "*"
 pytest = "*"
 nltk = "*"
 liwc = "*"
+prettytable = "*"
+tabulate = "*"
 
 [scripts]
 test = "coverage run -m unittest discover -s ./tests -p *_test.py"

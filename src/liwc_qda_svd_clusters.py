@@ -2,6 +2,7 @@ from sklearn.decomposition import TruncatedSVD
 from scipy.sparse import random as sparse_random
 from sklearn.model_selection import train_test_split
 from sklearn.random_projection import sparse_random_matrix
+from sklearn.manifold import TSNE
 
 import spacy
 import numpy as np
@@ -58,6 +59,8 @@ if False:
 if __name__ == '__main__':
     # Clustered
     svd = TruncatedSVD(n_components=2, algorithm="arpack")
+    tsne = TSNE(n_components=2, random_state=42)
+    # features_dense = pd.DataFrame(tsne.fit_transform(feature_array))
     features_dense = pd.DataFrame(svd.fit_transform(feature_array))
     X_train, X_test, y_train, y_test = train_test_split(
         features_dense, label_array, test_size=0.2)
@@ -65,6 +68,7 @@ if __name__ == '__main__':
     print(label_array)
     depressed = features_dense[label_array]
     non_depressed = features_dense[np.logical_not(label_array)]
+
 
 
     plt.scatter(non_depressed[0], non_depressed[1])

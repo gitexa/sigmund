@@ -1,6 +1,6 @@
-from utils.dialogue_parser import remove_annotations
+from utils.dialogue_parser import clear_annotations
 
 
 def test_remove_annotations():
-    print(remove_annotations("Hello (World) dawg"))
+    print(clear_annotations("Hello (World) dawg"))
 

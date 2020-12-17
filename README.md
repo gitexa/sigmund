@@ -40,7 +40,12 @@ We consider restructuring our project using a different dataset (reddit mental h
 ### High-Level Architecture:
 * Pre-Processing
 * Feature-Engineering
-
+    * Share of Speech
+    * Talking Turns
+    * Flesch reading-ease score
+    * Aggreement-Score
+    * Diminished cooperativeness
+    * (Responding to negative-positive emotions) 
 
 ## Data Analysis
 * As our dataset was not available due to the date of the milestone, it was hard to do some Data-Analysis.

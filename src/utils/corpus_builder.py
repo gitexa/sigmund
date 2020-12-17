@@ -15,12 +15,18 @@ if __name__ == '__main__':
         config = json.load(configfile)
 
     if init_corpus:
-        # @todo Paths must be adjust according to the location of the files!
-
         parsers = []
-        for transcript in config['transcrips']:
-            parsers.append(DialogueParser(os.path.join(config['path_to_transcripts'], transcript['transcript_id']), transcript['group'], transcript['couple_id'], transcript['female_label'], transcript['depression']))
-        
+        for transcript in config['transcripts']:
+            parsers.append(
+                DialogueParser(
+                    os.path.join(
+                        config['path_to_transcripts'],
+                        transcript['transcript_id']),
+                    transcript['group'],
+                    transcript['couple_id'],
+                    transcript['female_label'],
+                    transcript['depression']))
+
         preprocessed = [parser.get_paragraphs().apply(preprocess, axis=1)
                         for parser in parsers]
         all_frames = pd.concat(preprocessed)

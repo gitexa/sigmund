@@ -44,3 +44,5 @@ def tf_idf_svd(corpus, components):
     svd.fit(x)
     print(svd.singular_values_)
 
+
+if __name__ == '__main__':

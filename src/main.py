@@ -1,3 +1,5 @@
+from os import getcwd
+
 import spacy
 
 from pipelinelib.pipeline import Pipeline
@@ -9,7 +11,7 @@ if __name__ == "__main__":
     doc = Pipeline(model=nlp) \
         .add_component(syllables.SyllableExtractor()) \
         .add_component(words.WordExtractor()) \
-        .add_component(words.LiwcScores()) \
+        .add_component(words.LiwcScores("./data/German_LIWC2001_Dictionary.dic")) \
         .execute(text=sentence)
 
-    print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.syllables])))
+    print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.liwc_scores])))

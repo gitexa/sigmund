@@ -3,6 +3,7 @@ from copy import copy
 
 import pandas
 import spacy
+from prettytable import prettytable, PrettyTable
 from sklearn.pipeline import Pipeline
 
 nlp = spacy.load("de_core_news_md")
@@ -18,7 +19,7 @@ import re
 class DialogueParser:
     @staticmethod
     def split_speaker_text(text_line):
-        pattern = re.compile(r"^(([AB]): )(.*)")
+        pattern = re.compile(r"^(([AB])[:;] )(.*)")
         matches = pattern.match(text_line)
 
         if matches:
@@ -26,7 +27,7 @@ class DialogueParser:
         else:
             return None, None
 
-    def __init__(self, doc_file, group, couple_id, female_label="B", depressed=None):
+    def __init__(self, doc_file, group, couple_id, female_label="B", depressed=None, remove_annotations=True):
 
         self.female_label = female_label
         self.group = group
@@ -35,13 +36,54 @@ class DialogueParser:
         self.is_depressed = depressed
         self.id = id
 
+        super().__init__()
+
+    # @ToDo Deal with single Characters and whitespaces interpreted as sentences
+    def get_sentences(self, remove_annotations=True, drop_na=True):
         rows = []
-        for p in self.docx.paragraphs[3:]:
+        for i, p in enumerate(self.docx.paragraphs[3:]):
+            speaker, text = self.split_speaker_text(p.text)
+
+            gender = "W" if speaker == self.female_label else "M"
+            depression_label = (gender == "W" and self.is_depressed)
+
+            if speaker:
+                if remove_annotations:
+                    text = re.sub(r"\(.*\)\w?", "", text)
+                    text = re.sub(r"\[.*\]\w?", "", text)
+                doc = nlp(text)
+                for j, sent in enumerate(doc.sents):
+                    row = {
+                        "par_pos": i,
+                        "sent_pos": j,
+                        "speaker": speaker,
+                        "raw_text": sent.text,
+                        "group": self.group,
+                        "gender": gender,
+                        "is_depressed": depression_label,
+                        "couple_id": self.couple_id}
+                    rows.append(row)
+
+        sentence_df = pd.DataFrame(rows)
+
+        if drop_na:
+            sentence_df.dropna(inplace=True)
+
+        return sentence_df
+
+
+    def get_paragraphs(self, remove_annotations=True, drop_na=True):
+        rows = []
+        for i, p in enumerate(self.docx.paragraphs[3:]):
             speaker, text = self.split_speaker_text(p.text)
             gender = "W" if speaker == self.female_label else "M"
             depression_label = (gender == "W" and self.is_depressed)
             if speaker:
+                if remove_annotations:
+                    text = re.sub(r"\(.*\)\w?", "", text)
+                    text = re.sub(r"\[.*\]\w?", "", text)
                 row = {
+                    "par_pos": i,
                     "speaker": speaker,
                     "raw_text": text,
                     "group": self.group,
@@ -50,31 +92,27 @@ class DialogueParser:
                     "couple_id": self.couple_id,
                 }
                 rows.append(row)
-            pass
 
-        self.paragraph_df = pd.DataFrame(rows)
+        paragraph_df = pd.DataFrame(rows)
 
-        super().__init__()
+        if drop_na:
+            paragraph_df.dropna(inplace=True)
 
+        return paragraph_df
 
-    def get_sentences(self):
-        pass
-
-    def get_paragraphs(self):
-        return self.paragraph_df
-
+    # @ToDo Implement get fulltext
     def get_fulltext(self):
         pass
 
 
-def remove_annotations(raw_text):
+def clear_annotations(raw_text):
     removed_annotations = re.sub(r"\(.*\)", "", raw_text)
     removed_annotations = ' '.join(removed_annotations.split())
     return removed_annotations
 
 
 def preprocess(row):
-    raw_text = remove_annotations(str.lower(row["raw_text"]))
+    raw_text = clear_annotations(str.lower(row["raw_text"]))
     doc = nlp(raw_text)
     row["sent_count"] = len(list(doc.sents))
     doc = nlp(' '.join([token.text for token in doc if not token.is_punct]))
@@ -86,3 +124,9 @@ def preprocess(row):
     row["normalized_text"] = doc.text
     return row
 
+
+if __name__ == '__main__':
+    dp_1 = DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 27_T1_IM_FW.docx", "DEPR", 27, "B",
+                          True)
+    sentences = dp_1.get_sentences(drop_na=False)
+    print(sentences.to_markdown())

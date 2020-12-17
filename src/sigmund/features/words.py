@@ -1,10 +1,15 @@
+import re
 import string
+from collections import Counter
 from itertools import filterfalse
 
+import liwc
 from spacy.tokens import Doc
 
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
+
+from .syllables import SyllableExtractor
 
 
 class WordExtractor(Component):
@@ -17,11 +22,42 @@ class WordExtractor(Component):
     WORD_COUNT = Extension("word_count", int())
 
     def __init__(self):
-        super().__init__(WordExtractor.__name__, required_extensions=list(),
-                         creates_extensions=[WordExtractor.WORDS, WordExtractor.WORD_COUNT])
+        super().__init__(WordExtractor.__name__, required_extensions=[],
+                         creates_extensions=[
+            WordExtractor.WORDS, WordExtractor.WORD_COUNT
+        ]
+        )
 
     def apply(self, doc: Doc) -> Doc:
         tokens = map(str, doc)
         doc._.words = list(filterfalse(string.punctuation.__contains__, tokens))
         doc._.word_count = len(doc._.words)
         return doc
+
+
+class LiwcScores(Component):
+    """
+    TODO: @greenhippo
+    """
+
+    SCORES = Extension("liwc_scores", dict())
+
+    def __init__(self, dictionary_path):
+        super().__init__(LiwcScores.__name__, required_extensions=[
+            SyllableExtractor.SYLLABLES],
+            creates_extensions=[LiwcScores.SCORES])
+        self._dictionary_path = dictionary_path
+
+    def apply(self, doc: Doc) -> Doc:
+        tokens = list(self._tokenize_and_lower(doc))
+        parse, category_names = liwc.load_token_parser(self._dictionary_path)
+
+        liwc_counts = Counter(category for token in tokens for category in parse(token))
+        doc._.liwc_scores = {
+            token: score / len(tokens) for token, score in liwc_counts.items()
+        }
+        return doc
+
+    def _tokenize_and_lower(self, doc: Doc):
+        for match in re.finditer(r'\w+', doc, re.UNICODE):
+            yield match.group(0).lower()

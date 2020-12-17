@@ -9,6 +9,7 @@ if __name__ == "__main__":
     doc = Pipeline(model=nlp) \
         .add_component(syllables.SyllableExtractor()) \
         .add_component(words.WordExtractor()) \
+        .add_component(words.LiwcScores()) \
         .execute(text=sentence)
 
     print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.syllables])))

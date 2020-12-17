@@ -27,3 +27,4 @@ TODO.md
 # data
 src/data/*
 !src/data/.gitkeep
+all_preprocessed.csv

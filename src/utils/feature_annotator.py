@@ -1,5 +1,5 @@
 import string
-
+import pandas as pd
 import pyphen
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -46,3 +46,4 @@ def tf_idf_svd(corpus, components):
 
 
 if __name__ == '__main__':
+    df = pd.read_csv("all_preprocessed.csv")

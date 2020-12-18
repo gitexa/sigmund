@@ -35,11 +35,9 @@ class DialogueCorpusManager:
     def get_depressive_sentences(self):
         assert self.sentences_ready, "Sentence Data-Frame has not been loaded yet"
         return self.sentence_frame.query("is_depressed")
-        pass
 
     def get_depressive_paragraphs(self):
         return self.paragraph_frame.query("is_depressed")
-        pass
 
     def get_couple_paragraphs(self, couple_id):
         return self.paragraph_frame.query(f"couple_id == {couple_id}")
@@ -51,3 +49,7 @@ class DialogueCorpusManager:
     def get_sentences(self):
         assert self.sentences_ready, "Sentence Data-Frame has not been loaded yet"
         return self.sentence_frame
+
+    def get_paragraphs(self):
+        # assert self.sentences_ready, "Sentence Data-Frame has not been loaded yet"
+        return self.paragraph_frame

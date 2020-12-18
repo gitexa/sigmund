@@ -36,16 +36,12 @@ if __name__ == "__main__":
 
     x_train = np.zeros((len(ds), 3))
 
-
+    y_train = ds["is_depressed"]
     for index, doc in enumerate(ds.apply(lambda p: pipeline.execute(p.raw_text), axis=1)):
-        x_train[index,:] = [doc._.liwc_scores.get("Inhib"), doc._.liwc_scores.get("Inhib"), doc._.liwc_scores.get("Inhib")]
+        x_train[index, :] = [doc._.liwc_scores.get("Posemo"), doc._.liwc_scores.get("Negemo"),
+                             doc._.liwc_scores.get("Inhib")]
 
-    print(x_train)
-
-    train_set_length = 100
-    np.random.seed(0)
-    x_train = np.random.uniform(0, 0.2, [100, 3])
-    y_train = np.random.randint(2, size=train_set_length)
+    x_train = np.nan_to_num(x_train, copy=False)
 
     pipeline = Pipeline(model=nlp, empty_pipeline=True) \
         .add_component(psyllables.SyllableExtractor()) \

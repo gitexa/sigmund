@@ -99,7 +99,6 @@ class DialogueParser:
 
         return paragraph_df
 
-    # @ToDo Implement get fulltext
     def get_fulltext(self):
         return self.get_paragraphs().groupby(
             ['gender', "is_depressed"],

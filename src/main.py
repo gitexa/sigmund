@@ -5,7 +5,9 @@ from utils.dialogue_parser import DialogueParser
 
 from pipelinelib.pipeline import Pipeline
 from sigmund.classification import qda
-from sigmund.features import syllables, words
+from sigmund.features import words as fwords
+from sigmund.preprocessing import syllables as psyllables
+from sigmund.preprocessing import words as pwords
 
 if __name__ == "__main__":
     nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
@@ -20,10 +22,10 @@ if __name__ == "__main__":
     # print(paragraphs.to_markdown())
 
     pipeline = Pipeline(model=nlp) \
-        .add_component(syllables.SyllableExtractor()) \
-        .add_component(words.WordExtractor()) \
-        .add_component(words.LiwcScores("./data/German_LIWC2001_Dictionary.dic")) \
-        .add_component(qda.QDA_ON_LIWC())
+        .add_component(psyllables.SyllableExtractor()) \
+        .add_component(pwords.WordExtractor()) \
+        .add_component(fwords.LiwcScores("./data/German_LIWC2001_Dictionary.dic")) \
+        # .add_component(qda.QDA_ON_LIWC())
 
     for doc in paragraphs.apply(lambda p: pipeline.execute(p.raw_text), axis=1):
         print(len(doc), doc._.liwc_scores.get("Inhib", 0.0))

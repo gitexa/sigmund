@@ -1,4 +1,4 @@
-import panda as pd
+import pandas as pd
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from spacy.tokens import Doc
 
@@ -18,8 +18,6 @@ class QDA_ON_LIWC(Component):
         posemo = doc._.liwc_scores.get("Posemo", 0.0)
         negemo = doc._.liwc_scores.get("Negemo", 0.0)
         inhib = doc._.liwc_scores.get("Inhib", 0.0)
-
-        df = pd.DataFrame()
 
         feature_vector = [posemo, negemo, inhib]
         self.qda.predict(feature_vector)

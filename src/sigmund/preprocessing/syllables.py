@@ -6,6 +6,7 @@ from spacy.tokens import Doc
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
 
+import string
 
 class SyllableExtractor(Component):
     """

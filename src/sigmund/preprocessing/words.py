@@ -21,7 +21,7 @@ class Tokenizer(Component):
         super().__init__(Tokenizer.__name__, required_extensions=[],
                          creates_extensions=[
                              Tokenizer.TOKENS, Tokenizer.TOKEN_COUNT
-                         ])
+        ])
 
     def apply(self, doc: Doc) -> Doc:
         tokens = map(str, doc)
@@ -38,8 +38,10 @@ class Stemmer(Component):
     STEMMED = Extension("stemmed", list())
 
     def __init__(self, stemmer=GermanStemmer()):
-        super(Stemmer, self).__init__(Stemmer.__name__, required_extensions=[Tokenizer.TOKENS],
-                                      creates_extensions=[Stemmer.STEMMED])
+        super(
+            Stemmer, self).__init__(
+            Stemmer.__name__, required_extensions=[Tokenizer.TOKENS],
+            creates_extensions=[Stemmer.STEMMED])
         self._stemmer = stemmer
 
     def apply(self, doc: Doc) -> Doc:
@@ -57,17 +59,16 @@ class Lemmatizer(Component):
     LEMMATIZED = Extension("lemmatized", list())
 
     def __init__(self):
-        super(Lemmatizer, self).__init__(Lemmatizer.__name__, required_extensions=[Tokenizer.TOKENS],
-                                         creates_extensions=[
-                                             Lemmatizer.LEMMATIZED
-                                         ])
+        super(
+            Lemmatizer, self).__init__(
+            Lemmatizer.__name__, required_extensions=[Tokenizer.TOKENS],
+            creates_extensions=[Lemmatizer.LEMMATIZED])
 
     def apply(self, doc: Doc) -> Doc:
         doc._.lemmatized = self._apply(doc)
         return doc
 
     def _apply(self, doc: Doc) -> list:
-        getter = operator.attrgetter(Tokenizer.TOKENS.name)
         return [token.lemma_ for token in doc]
 
 
@@ -78,14 +79,15 @@ class StemmedAndLemmatized(Component):
     STEM_AND_LEMMATIZE = Extension("stem_and_lemma", list())
 
     def __init__(self, stemmer=GermanStemmer()):
-        super(StemmedAndLemmatized, self).__init__(StemmedAndLemmatized.__name__,
-                                                   required_extensions=[], creates_extensions=[
-                StemmedAndLemmatized.STEM_AND_LEMMATIZE
-            ])
+        super(
+            StemmedAndLemmatized, self).__init__(
+            StemmedAndLemmatized.__name__, required_extensions=[],
+            creates_extensions=[StemmedAndLemmatized.STEM_AND_LEMMATIZE])
         self._stemmer = stemmer
 
     def apply(self, doc: Doc) -> Doc:
-        valid_tokens = filterfalse(lambda t: string.punctuation.__contains__(t.text), doc)
+        valid_tokens = filterfalse(
+            lambda t: string.punctuation.__contains__(t.text), doc)
         doc._.stem_and_lemma = list(
             self._stemmer.stem(token.lemma_) for token in valid_tokens
         )

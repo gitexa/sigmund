@@ -87,7 +87,6 @@ The structure of the repository is as follow:
 We furthermore provide a simple front-end for the Institute for Medical Psychology to present the results and provide feature details. 
 
 ## Data Analysis
-* As our dataset was not available due to the date of the milestone, it was hard to do some Data-Analysis.
 
 ### Data Sources
 * 10 Transcripts of couple conversations as part of the "Enhancing Social Interaction in Depression" (SIDE) [study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6173246/).

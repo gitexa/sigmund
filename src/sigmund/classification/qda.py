@@ -14,7 +14,7 @@ class QDA_ON_LIWC(Component):
     def __init__(self, X_train, y_train):
         super().__init__(name=QDA_ON_LIWC.__name__, required_extensions=[
             LiwcScores.SCORES], creates_extensions=[QDA_ON_LIWC.QDA_ON_LIWC])
-        self.qda = LinearDiscriminantAnalysis()
+        self.qda = QuadraticDiscriminantAnalysis()
         self.qda.fit(X_train, y_train)
 
     def apply(self, doc: Doc) -> Doc:

@@ -1,19 +1,17 @@
+import re
 import string
 from copy import copy
 
+import docx
+import numpy as np
 import pandas
+import pandas as pd
 import spacy
-from prettytable import prettytable, PrettyTable
+from prettytable import PrettyTable, prettytable
 from sklearn.pipeline import Pipeline
 
 nlp = spacy.load("de_core_news_md")
 nlp.add_pipe(nlp.create_pipe('sentencizer'))
-
-import pandas as pd
-import numpy as np
-
-import docx
-import re
 
 
 class DialogueParser:
@@ -27,7 +25,9 @@ class DialogueParser:
         else:
             return None, None
 
-    def __init__(self, doc_file, group, couple_id, female_label="B", depressed=None, remove_annotations=True):
+    def __init__(
+            self, doc_file, group, couple_id, female_label="B", depressed=None,
+            remove_annotations=True):
 
         self.female_label = female_label
         self.group = group
@@ -71,7 +71,6 @@ class DialogueParser:
 
         return sentence_df
 
-
     def get_paragraphs(self, remove_annotations=True, drop_na=True):
         rows = []
         for i, p in enumerate(self.docx.paragraphs[3:]):
@@ -100,9 +99,11 @@ class DialogueParser:
 
         return paragraph_df
 
-    # @ToDo Implement get fulltext
     def get_fulltext(self):
-        pass
+        return self.get_paragraphs().groupby(
+            ['gender', "is_depressed"],
+            as_index=False).agg(
+            {'raw_text': ' '.join})
 
 
 def clear_annotations(raw_text):
@@ -117,16 +118,19 @@ def preprocess(row):
     row["sent_count"] = len(list(doc.sents))
     doc = nlp(' '.join([token.text for token in doc if not token.is_punct]))
     row["word_count"] = len(list(doc))
-    row["lemmatized"] = ' '.join([token.lemma_ if not token.pos_ == "PRON" else token.text for token in doc])
+    row["lemmatized"] = ' '.join(
+        [token.lemma_ if not token.pos_ == "PRON" else token.text for token in doc])
     doc = nlp(row["lemmatized"])
-    row["stopwords_removed"] = ' '.join([token.text for token in doc if not token.is_stop])
+    row["stopwords_removed"] = ' '.join(
+        [token.text for token in doc if not token.is_stop])
     # Normalized without
     row["normalized_text"] = doc.text
     return row
 
 
 if __name__ == '__main__':
-    dp_1 = DialogueParser(r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 27_T1_IM_FW.docx", "DEPR", 27, "B",
-                          True)
+    dp_1 = DialogueParser(
+        r"C:\Users\juliusdaub\PycharmProjects\sigmund\data\Paar 27_T1_IM_FW.docx",
+        "DEPR", 27, "B", True)
     sentences = dp_1.get_sentences(drop_na=False)
     print(sentences.to_markdown())

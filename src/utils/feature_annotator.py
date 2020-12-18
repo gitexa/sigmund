@@ -1,11 +1,11 @@
 import string
 import pandas as pd
 import pyphen
+import spacy
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 dic = pyphen.Pyphen(lang='de')
-import spacy
 
 nlp = spacy.load("de_core_news_md")
 
@@ -13,6 +13,7 @@ nlp = spacy.load("de_core_news_md")
 def add_features(data_frame):
     data_frame["flesh_score"] = data_frame["Text"].apply(reading_ease_german)
     return data_frame
+
 
 def syllable_counter(text):
     doc = nlp(text)
@@ -27,7 +28,9 @@ def syllable_counter(text):
 
     return word_count, syllable_count, sent_count
 
-## Adopted formula to calculate Flesh reading ease for german
+# Adopted formula to calculate Flesh reading ease for german
+
+
 def reading_ease_german(text):
     word_count, syllable_count, sent_count = syllable_counter(text)
     if syllable_count == 0 or word_count == 0 or sent_count == 0:

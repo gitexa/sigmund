@@ -101,7 +101,10 @@ class DialogueParser:
 
     # @ToDo Implement get fulltext
     def get_fulltext(self):
-        pass
+        return self.get_paragraphs().groupby(
+            ['gender', "is_depressed"],
+            as_index=False).agg(
+            {'raw_text': ' '.join})
 
 
 def clear_annotations(raw_text):

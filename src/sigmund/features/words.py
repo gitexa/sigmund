@@ -43,7 +43,7 @@ class LiwcScores(Component):
 
     SCORES = Extension("liwc_scores", dict())
 
-    def __init__(self, dictionary_path):
+    def __init__(self, dictionary_path: str):
         super().__init__(LiwcScores.__name__, required_extensions=[
             WordExtractor.WORDS],
             creates_extensions=[LiwcScores.SCORES])

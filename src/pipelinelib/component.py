@@ -1,4 +1,6 @@
 import abc
+import operator
+from itertools import filterfalse
 from typing import Iterable, Union
 
 from spacy.tokens import Doc
@@ -34,8 +36,9 @@ class Component(metaclass=abc.ABCMeta):
         that automatically intialises declared extensions
         on the doc
         """
-        for extension in self.creates_extensions:
-            doc.set_extension(extension.name, default=extension.default_type)
+        for extension in filterfalse(lambda e: doc.has_extension(e.name), self.creates_extensions):
+            doc.set_extension(
+                extension.name, default=extension.default_type)
 
         return self.apply(doc)
 

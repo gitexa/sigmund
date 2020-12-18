@@ -10,10 +10,8 @@ differences between couples, in which one partner is suffering from MDD, and cou
 * Ubeydullah Ilhan (3447661) | Applied Informatics (M.Sc.) | ubeydullah.il@gmail.com
 * Benjamin Sparks (3664690) | Applied Informatics (M.Sc.) | benjamin.sparks@protonmail.comGitHub:https://github.com/gitexa/sigmund
 
-
-### Contributions
-- DocX Extraction
-- Experiments with Speech To Text
+### Contributions for the Milestone
+- Data acquisition: Ospeech-to-text and DocX Extraction
 - General Architecture
 - Feature Engineering
 
@@ -48,22 +46,32 @@ The next steps are to implement the features from our research and evaluate how 
 ### High Level Architecture Description 
 Our pipeline consists of 4 parts, which are connected using spacy. For every part of the pipeline, components can be designed manually and added in a modular fashion.
 * Data import: as the transcripts are not allowed on github-servers, we provide a config.json where the local path to the transcripts needs to be specified. We then use the path to create a document corpus with the raw text. 
-* Preprocessing: as our features require different representations of the corpus, we provide a modular preprocessing pipeline. For that purpose, different layers of the text can be queried, ranging from character, to syllable, to word, to sentences, to paragraph, to document, to corpus. The preprocessing steps can be applied to the different layers, currently implemented are:
-    * Extracting Text-Data from docx
-    * Annotate Ground-Truth (Hamilton-Score, Depressive / non depressive)
-    * Removal of "annotations" like "(spricht unverständlich")
-    * Splitting into sentences
-    * Splitting into "utterances"
-    * Removal of Stop-Words
-    * Lemmatisation using German
-* Feature Engineering: features can be added in a modular fashion as well. Currently (NOT) implemented are:
-    * Share of Speech
-    * Talking Turns
-    * Flesch reading-ease score
-    * Aggreement-Score
-    * Diminished cooperativeness
-    * (Responding to negative-positive emotions) 
+* Preprocessing: as our features require different representations of the corpus, we provide a modular preprocessing pipeline. For that purpose, different layers of the text can be queried, ranging from character, to syllable, to word, to sentences, to paragraph, to document, to corpus. The preprocessing steps can be applied to the different layers. 
+* Feature Engineering: features can be added in a modular fashion as well. 
 * Classification: we finally use a classification model in order to classify the transcripts as depressed or non-depressed using the feature vector and report a loss value. The models can also be specified as components in the corresponding subfolder.
+
+The structure of the repository is as follow:
+
+├── pipelinelib
+│   ├── component.py
+│   ├── extension.py
+│   ├── pipeline.py
+│   └── requirements.txt
+├── sigmund
+│   ├── classification
+│   │   └── qda.py
+│   ├── features
+│   │   ├── pos.py
+│   │   └── words.py
+│   └── preprocessing
+│       ├── syllables.py
+│       └── words.py
+└── utils
+    ├── corpus_builder.py
+    ├── corpus_manager.py
+    ├── dialogue_parser.py
+    ├── feature_annotator.py
+    └── statistics.py
 
 We furthermore provide a simple front-end for the Institute for Medical Psychology to present the results and provide feature details. 
 
@@ -89,13 +97,22 @@ At 16.12.2020 we had:
 More detailed statics of the transcripts are included in the data_description.ipynb.
 
 ### Pre-Processing
+* Extracting Text-Data from docx
+* Annotate Ground-Truth (Hamilton-Score, Depressive / non depressive)
+* Removal of "annotations" like "(spricht unverständlich")
+* Splitting into sentences
+* Splitting into "utterances"
+* Removal of Stop-Words
+* Lemmatisation using German
 
 ### Feature Engineering
 Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with all features can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing)
 
 #### Structural Features
 
-##### Complexity of speech
+#### Share of speech 
+
+##### Complexity of speech | Flesch reading-ease score
 Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
 where higher values indicate less complex speech:
 
@@ -112,9 +129,6 @@ not really talking over the speech.
 The Agreement-Score shows how often the partners agree oder disagree to each other. 
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
 If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. 
-At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.  
-
-#### Content Features
-
+At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.
 
 

@@ -56,7 +56,7 @@ Our pipeline consists of 4 parts, which are connected using spacy. For every par
     * Splitting into "utterances"
     * Removal of Stop-Words
     * Lemmatisation using German
-* Feature Engineering: features can be added in a modular fashion as well. Currently implemented are:
+* Feature Engineering: features can be added in a modular fashion as well. Currently (NOT) implemented are:
     * Share of Speech
     * Talking Turns
     * Flesch reading-ease score
@@ -96,6 +96,16 @@ Person suffering from MDD tend to structure their sentences with less complexity
 where higher values indicate less complex speech:
 
 <img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">
+
+#### Talking Turns
+To represent the talking turns each paragraph for each person is count together. 
+The ratio of both numbers describes the dialog distribution. Is the ratio closer to 1, the dialog is
+distributed more evenly between the partners.
+However shorter sentences indicating only an agreement or disagreement are not counted in, as they are 
+not really talking over the speech.
+
+#### Agreement-Score
+The Agreement-Score shows how often the partners agree oder disagree to each other. This feature is extracted by analizing the words in the first sentence of a paragraph. If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.  
 
 ### Content Features
 ## Current code State

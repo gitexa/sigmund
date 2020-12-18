@@ -7,7 +7,7 @@ from pipelinelib.component import Component
 from pipelinelib.extension import Extension
 
 
-class WordExtractor(Component):
+class Tokenizer(Component):
     """
     Extracts words from texts. Stores the words and their count under
     doc._.words and doc._.word_count respectively
@@ -17,9 +17,9 @@ class WordExtractor(Component):
     WORD_COUNT = Extension("word_count", int())
 
     def __init__(self):
-        super().__init__(WordExtractor.__name__, required_extensions=[],
+        super().__init__(Tokenizer.__name__, required_extensions=[],
                          creates_extensions=[
-            WordExtractor.WORDS, WordExtractor.WORD_COUNT
+            Tokenizer.WORDS, Tokenizer.WORD_COUNT
         ])
 
     def apply(self, doc: Doc) -> Doc:

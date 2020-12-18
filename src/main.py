@@ -60,9 +60,10 @@ if __name__ == "__main__":
     feature_frame = pd.DataFrame(dict_rows)
     feature_frame["ground_truth"] = paragraphs["is_depressed"]
 
-    true_labels = np.array(["ground_truth"])
+    true_labels = np.array(feature_frame["ground_truth"])
     prediction = np.array(feature_frame["qda_prediction"])
 
+    print(prediction.shape, true_labels.shape)
     accuracy = accuracy_score(prediction, true_labels)
     print(f"Total Accuracy {accuracy}")
 

@@ -7,7 +7,7 @@ We examine transcripts of couple conversations from a current [research project]
 * Julius Daub (3536557) | Applied Informatics (M.Sc.) | julius@daubweb.com
 * Alexander Haas (3503540) | Applied Informatics (M.Sc.) | haas.alexanderjulian@gmail.com
 * Ubeydullah Ilhan (3447661) | Applied Informatics (M.Sc.) | ubeydullah.il@gmail.com
-* Benjamin Sparks (3664690) | Applied Informatics (M.Sc.) | benjamin.sparks@protonmail.comGitHub:https://github.com/gitexa/sigmund
+* Benjamin Sparks (3664690) | Applied Informatics (M.Sc.) | benjamin.sparks@protonmail.com
 
 ### Contributions for the Milestone
 * Data acquisition: speech-to-text and docx-extraction

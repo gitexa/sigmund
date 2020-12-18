@@ -11,6 +11,8 @@ from sigmund.features import words as fwords
 from sigmund.preprocessing import syllables as psyllables
 from sigmund.preprocessing import words as pwords
 import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score
 
 if __name__ == "__main__":
     nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
@@ -49,6 +51,21 @@ if __name__ == "__main__":
         .add_component(fwords.LiwcScores(liwc_dict_path)) \
         .add_component(qda.QDA_ON_LIWC(X_train=x_train, y_train=y_train)) \
 
+
+    dict_rows = []
     for doc in paragraphs.apply(lambda p: pipeline.execute(p.raw_text), axis=1):
-        print(len(doc), doc._.liwc_scores.get("Inhib", 0.0), f"qda_prediction: {doc._.QDA_ON_LIWC}")
+        dict_row = {"len": len(doc), "inhib_score" : doc._.liwc_scores.get("Inhib", 0.0), "qda_prediction": doc._.QDA_ON_LIWC}
+        dict_rows.append(dict_row)
+
+    feature_frame = pd.DataFrame(dict_rows)
+    feature_frame["ground_truth"] = paragraphs["is_depressed"]
+
+    true_labels = np.array(["ground_truth"])
+    prediction = np.array(feature_frame["qda_prediction"])
+
+    accuracy = accuracy_score(prediction, true_labels)
+    print(f"Total Accuracy {accuracy}")
+
+
+
     # print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.liwc_scores])))

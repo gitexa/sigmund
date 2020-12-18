@@ -53,3 +53,4 @@ class DialogueCorpusManager:
     def get_paragraphs(self):
         # assert self.sentences_ready, "Sentence Data-Frame has not been loaded yet"
         return self.paragraph_frame
+

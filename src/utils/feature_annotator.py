@@ -45,7 +45,6 @@ def tf_idf_svd(corpus, components):
     vectorizer.fit(corpus)
     x = vectorizer.transform(corpus).toarray()
     svd.fit(x)
-    print(svd.singular_values_)
 
 
 if __name__ == '__main__':

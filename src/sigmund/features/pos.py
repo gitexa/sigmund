@@ -5,6 +5,7 @@ from collections import Counter
 from itertools import filterfalse
 
 import liwc
+import pandas as pd
 from spacy.tokens import Doc
 
 from pipelinelib.component import Component
@@ -21,13 +22,15 @@ class PartOfSpeech(Component):
     POS = Extension("part_of_speech", dict())
 
     def __init__(self):
-        super().__init__(PartOfSpeech.__name__, required_extensions=[WordExtractor.WORDS], creates_extensions=[PartOfSpeech.SCORES])
+        super().__init__(PartOfSpeech.__name__,
+                         required_extensions=[WordExtractor.WORDS],
+                         creates_extensions=[PartOfSpeech.SCORES])
 
     def apply(self, doc: Doc) -> Doc:
         # Load LIWC Dictionary provided by path
         #parse, category_names = liwc.load_token_parser(self._dictionary_path)
 
-        #""" Calculate counts per word-category and divide by number of tokens, append dictionary of liwc-scores to document-
+        # """ Calculate counts per word-category and divide by number of tokens, append dictionary of liwc-scores to document-
         # object """
         #liwc_counts = Counter(category for token in tokens for category in parse(token))
 
@@ -49,7 +52,7 @@ class PartOfSpeech(Component):
             len(pos_list)).sort_index()
 
         return dict(zip(pos_shares.index, pos_shares.values[:, 0]))
-    
+
     def _get_pos(word_list):
         df_as_string = ' '.join(word_list)
         doc = nlp(df_as_string)

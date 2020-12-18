@@ -3,9 +3,10 @@ import string
 from itertools import filterfalse
 
 from nltk.stem.snowball import GermanStemmer
+from spacy.tokens import Doc
+
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
-from spacy.tokens import Doc
 
 
 class Tokenizer(Component):
@@ -69,7 +70,7 @@ class Lemmatizer(Component):
         return doc
 
     def _apply(self, doc: Doc) -> list:
-        return [token.lemma_ for token in doc]
+        return [token.lemma_ if not token.pos_ == "PRON" else token.text for token in doc]
 
 
 class StemmedAndLemmatized(Component):

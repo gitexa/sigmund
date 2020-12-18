@@ -2,10 +2,11 @@ import operator
 from collections import Counter
 
 import liwc
+from spacy.tokens import Doc
+
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
 from sigmund.preprocessing.words import Tokenizer
-from spacy.tokens import Doc
 
 
 class LiwcScores(Component):
@@ -22,7 +23,7 @@ class LiwcScores(Component):
     def __init__(self, dictionary_path: str):
         super().__init__(LiwcScores.__name__, required_extensions=[
             Tokenizer.TOKENS],
-                         creates_extensions=[LiwcScores.SCORES])
+            creates_extensions=[LiwcScores.SCORES])
         self._dictionary_path = dictionary_path
 
     def apply(self, doc: Doc) -> Doc:

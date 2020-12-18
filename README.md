@@ -38,15 +38,15 @@ The libraries and versions are specified in the Pipfile.
 ## Project State
 
 ### Planning State
-We planned to get 150 transcripts of couple conversations from the Institute of Medical Psychology. As the audio quality was quite bad, they could not use automatic speech-to-text programs and had to create the transcripts by hand. We therefore spent a considerable amount of time in trying to get transcripts from the audio files, which turned out to be not possible with the given signal. We finally received 10 transcripts from the Institute for Medical Psychology on 15.12.2020, which is only a small subset of the 150 available conversations. In the case of promising results, they offered to provide resources for transcribing further conversations. Upon receiving the transcripts, we started with some basic statistics which are included in the data_description.ipynb. We additionally collected different feature engineering approaches from literature which are provided in the file metrics.csv. Furthermore, we set up a modular text analytics pipeline and implemented first components for every step of the pipeline.
+We planned to get 150 transcripts of couple conversations from the Institute of Medical Psychology. As the audio quality was quite bad, they could not use automatic speech-to-text programs and had to create the transcripts by hand. We therefore spent a considerable amount of time in trying to get transcripts from the audio files, which turned out to be not possible with the given signal. We finally received 10 transcripts from the Institute of Medical Psychology on 15.12.2020, which is only a small subset of the 150 available conversations. In the case of promising results, they offered to provide resources for transcribing further conversations. Upon receiving the transcripts, we started with some basic statistics which are included in the *data_description.ipynb*. We additionally collected different feature engineering approaches from literature which are summarized [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing). Furthermore, we set up a modular text analytics pipeline and implemented first components for every step of the pipeline.
 
 ### Future Planning
 The next steps are to implement the features from our research and evaluate how well they are able to detect depression patterns and how well they serve towards classifying transcripts. 
-- 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources).
-- 05.02. Summary of results
-- 08.02. Second "official" feedback round with supervisor
-- 25.02. Second milestone: Code and presentation due
-- 15.03. Third milestone: Report deadline 
+* 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources).
+* 05.02. Summary of results
+* 08.02. Second "official" feedback round with supervisor
+* 25.02. Second milestone: Code and presentation due
+* 15.03. Third milestone: Report deadline 
 
 ### High Level Architecture Description 
 To structure our pipeline, we built a pipline library on the basis of Spacy's pipeline which is contained in pipelinelib. It is defined by three parts: 

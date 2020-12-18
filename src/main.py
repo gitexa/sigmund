@@ -24,11 +24,8 @@ if __name__ == "__main__":
     train_set_length = 100
     np.random.seed(0)
     x_train = np.random.uniform(0,0.2,[100,3])
-    print(x_train)
     y_train = np.random.randint(2, size=train_set_length)
-    print(y_train)
 
-    print(len(x_train))
 
     pipeline = Pipeline(model=nlp) \
         .add_component(psyllables.SyllableExtractor()) \
@@ -37,6 +34,5 @@ if __name__ == "__main__":
         .add_component(qda.QDA_ON_LIWC(X_train=x_train, y_train=y_train))
 
     for doc in paragraphs.apply(lambda p: pipeline.execute(p.raw_text), axis=1):
-        print(len(doc), doc._.liwc_scores.get("Inhib", 0.0))
-        print(f"qda_prediction: {doc._.QDA_ON_LIWC}")
+        print(len(doc), doc._.liwc_scores.get("Inhib", 0.0),f"qda_prediction: {doc._.QDA_ON_LIWC}")
     # print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.liwc_scores])))

@@ -137,7 +137,7 @@ not really talking over the speech.
 ##### Agreement-Score
 The Agreement-Score shows how often the partners agree oder disagree to each other. 
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
-If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. 
+If the words show disagreement like in "nein, trotzdem, aber" the paragraph is counted as 1 disagreement. 
 At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.
 
 #### Content Features

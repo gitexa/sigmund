@@ -1,16 +1,11 @@
 import operator
-import re
-import string
 from collections import Counter
-from itertools import filterfalse
 
 import liwc
-from spacy.tokens import Doc
-
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
-from sigmund.preprocessing.syllables import SyllableExtractor
-from sigmund.preprocessing.words import WordExtractor
+from sigmund.preprocessing.words import Tokenizer
+from spacy.tokens import Doc
 
 
 class LiwcScores(Component):
@@ -26,7 +21,7 @@ class LiwcScores(Component):
 
     def __init__(self, dictionary_path: str):
         super().__init__(LiwcScores.__name__, required_extensions=[
-            WordExtractor.WORDS],
+            Tokenizer.TOKENS],
                          creates_extensions=[LiwcScores.SCORES])
         self._dictionary_path = dictionary_path
 
@@ -45,5 +40,5 @@ class LiwcScores(Component):
         return doc
 
     def _tokenize_and_lower(self, doc: Doc):
-        getter = operator.attrgetter(WordExtractor.WORDS.name)
+        getter = operator.attrgetter(Tokenizer.TOKENS.name)
         return [word.lower() for word in getter(doc._)]

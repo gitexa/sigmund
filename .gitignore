@@ -28,3 +28,4 @@ TODO.md
 src/data/*
 !src/data/.gitkeep
 all_preprocessed.csv
+*.tar.gz

@@ -50,6 +50,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(model=nlp) \
         .add_component(psyllables.SyllableExtractor()) \
         .add_component(pwords.Tokenizer()) \
+        .add_component(pwords.StemmedAndLemmatized()) \
         .add_component(fwords.LiwcScores("./data/German_LIWC2001_Dictionary.dic")) \
         .add_component(qda.QDA_ON_LIWC(X_train=x_train, y_train=y_train))
 

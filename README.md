@@ -32,6 +32,7 @@ We use several libraries for the project, including:
 * Seaborn for visualisation
 * LIWC library with german dictionary (https://pypi.org/project/liwc/)
 * German news dataset (https://spacy.io/models/de)
+
 The libraries and versions are specified in the Pipfile.
 
 ## Project State
@@ -115,11 +116,9 @@ More detailed statics of the transcripts are included in the data_description.ip
 * Lemmatisation using German
 
 ### Feature Engineering
-Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with all features can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing)
+Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing) We started the implementation with the following features.
 
 #### Structural Features
-
-#### Share of speech 
 
 ##### Complexity of speech | Flesch reading-ease score
 Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
@@ -139,5 +138,14 @@ The Agreement-Score shows how often the partners agree oder disagree to each oth
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
 If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. 
 At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.
+
+#### Content Features
+
+##### Part-of-Speech
+Assings a tag to each token (e.g. noun, adjective, ...). We use Spacy's POS feature.
+
+##### Term-frequency Inverse-document-frequency (TFIDF)
+To find the most important words, we use TFIDF.
+
 
 

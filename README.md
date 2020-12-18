@@ -62,26 +62,27 @@ The pipeline itself contains 3 main parts, **preprocessing**, **features** and *
 
 The structure of the repository is as follow:
 
-├── pipelinelib\
-│   ├── component.py\
-│   ├── extension.py\
-│   ├── pipeline.py\
-│   └── requirements.txt\
-├── sigmund\
-│   ├── classification\
-│   │   └── qda.py\
-│   ├── features\
-│   │   ├── pos.py\
-│   │   └── words.py\
-│   └── preprocessing\
-│       ├── syllables.py\
-│       └── words.py\
-└── utils\
-    ├── corpus_builder.py\
-    ├── corpus_manager.py\
-    ├── dialogue_parser.py\
-    ├── feature_annotator.py\
-    └── statistics.py\
+```
+├── pipelinelib
+│   ├── component.py
+│   ├── extension.py
+│   ├── pipeline.py
+├── sigmund
+│   ├── classification
+│   │   └── qda.py
+│   ├── features
+│   │   ├── pos.py
+│   │   └── words.py
+│   └── preprocessing
+│       ├── syllables.py
+│       └── words.py
+└── utils
+    ├── corpus_builder.py
+    ├── corpus_manager.py
+    ├── dialogue_parser.py
+    ├── feature_annotator.py
+    └── statistics.py
+```
 
 We furthermore provide a simple front-end for the Institute for Medical Psychology to present the results and provide feature details. 
 

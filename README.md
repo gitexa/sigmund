@@ -12,7 +12,7 @@ We examine transcripts of couple conversations from a current [research project]
 ### Contributions for the Milestone
 * Data acquisition: speech-to-text and docx-extraction
 * Implementation of the pipeline architecture
-* Implementation of a demo text mining workflow
+* Implementation of a demo text mining workflow contained in the branch *demonstration*
 * Implementation of demo components
 * [Collection of possible metrics](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing) from literature 
 * Basic statistics of the data set and first iteration of feature engineering (got the data on 15.12.2020)
@@ -55,10 +55,11 @@ To structure our pipeline, we built a pipline library on the basis of Spacy's pi
 * Pipeline: a class to represent a pipeline for training a model
 
 The pipeline itself contains 3 main parts, **preprocessing**, **features** and **classification**.
-* Data import: as the transcripts are not allowed on github-servers, we provide a config.json where the local path to the transcripts needs to be specified. We then use the path to create a document corpus with the raw text. 
 * Preprocessing: as our features require different representations of the corpus, we provide a modular preprocessing pipeline. For that purpose, different layers of the text can be queried, ranging from character, to syllable, to word, to sentences, to paragraph, to document, to corpus. The preprocessing steps can be applied to the different layers. 
 * Feature Engineering: features can be added in a modular fashion as well. 
 * Classification: we finally use a classification model in order to classify the transcripts as depressed or non-depressed using the feature vector and report a loss value. The models can also be specified as components in the corresponding subfolder.
+
+As the transcripts are not allowed on github-servers, we provide a config.json where the local path to the transcripts needs to be specified. We then use the path to create a document corpus with the raw text. The *corpus_manager* implements functionality to return different levels of the documents.
 
 The structure of the repository is as follow:
 
@@ -84,7 +85,7 @@ The structure of the repository is as follow:
     └── statistics.py
 ```
 
-We furthermore provide a simple front-end for the Institute for Medical Psychology to present the results and provide feature details. 
+We furthermore provide a simple front-end for the Institute of Medical Psychology to present the results and provide feature details. 
 
 ## Data Analysis
 
@@ -107,7 +108,6 @@ At 16.12.2020 we had:
 More detailed statics of the transcripts are included in the data_description.ipynb.
 
 ### Pre-Processing
-
 * Extracting Text-Data from docx
 * Annotate Ground-Truth (Hamilton-Score, Depressive / non depressive)
 * Removal of "annotations" like "(spricht unverständlich")
@@ -137,7 +137,7 @@ not really talking over the speech.
 ##### Agreement-Score
 The Agreement-Score shows how often the partners agree oder disagree to each other. 
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
-If the words show disagreement like in "nein, trotzdem, aber" the paragraph is counted as 1 disagreement. 
+If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. 
 At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.
 
 #### Content Features

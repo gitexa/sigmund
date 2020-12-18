@@ -7,7 +7,6 @@ import numpy as np
 import json
 >>>>>>> 5a31b33 (Added new feature for part of speech)
 import spacy
-
 from utils.corpus_manager import DialogueCorpusManager
 from utils.dialogue_parser import DialogueParser
 from sigmund.utils import DialogueCorpusManager
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     x_train = np.nan_to_num(x_train, copy=False)
 
-    pipeline = Pipeline(model=nlp) \
+    pipeline = Pipeline(model=nlp, empty_pipeline=True) \
         .add_component(psyllables.SyllableExtractor()) \
         .add_component(pwords.Tokenizer()) \
         .add_component(pwords.StemmedAndLemmatized()) \

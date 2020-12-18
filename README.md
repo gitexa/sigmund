@@ -71,54 +71,50 @@ We furthermore provide a simple front-end for the Institute for Medical Psycholo
 * As our dataset was not available due to the date of the milestone, it was hard to do some Data-Analysis.
 
 ### Data Sources
-* (German) Transcripts of MDD-Pairs
-* Assumption
+* 10 Transcripts of couple conversations as part of the "Enhancing Social Interaction in Depression" (SIDE) [study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6173246/).
+* The structure of the entire dataset of the SIDE study is described in detail in the project proposal, which can be found in the repository as well
+* The format of the transcripts is as follows:
     * Docx format
     * Sequence of Speakers, separated by paragraph, starting with speaker label
-    * Annotations are made clear using parenthesis (Those should not be evaluated)
+    * Annotations of the transcriber are defined using parenthesis 
     * In Our case, the depressive person is always female, however this is not necessary
     * No further MetaData   
- 
+
+### Basic Statistic
+At 16.12.2020 we had:
+* 10 transcripts (10 couples, 20 speakers; 5 pairs with depression, 5 pairs without depression; depressed partner always female)
+* word count ~ 1000 words per transcript
+* word count total ~ 13.000
+* utterances ~ 60 per transcript
+More detailed statics of the transcripts are included in the data_description.ipynb.
 
 ### Pre-Processing
 
-## Basic Statistic
-At the time of writing we had:
-* Two Transcripts
-* 2000 Words
-* Unclear Specification
-* ~ 120 Utterances (60 per Script)
-## Feature Engineering
-Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression.
-### Structural Features
-#### Complexity of speech
+### Feature Engineering
+Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with all features can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing)
+
+#### Structural Features
+
+##### Complexity of speech
 Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
 where higher values indicate less complex speech:
 
 <img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">
 
-#### Talking Turns
+##### Talking Turns
 To represent the talking turns each paragraph for each person is count together. 
 The ratio of both numbers describes the dialog distribution. Is the ratio closer to 1, the dialog is
 distributed more evenly between the partners.
 However shorter sentences indicating only an agreement or disagreement are not counted in, as they are 
 not really talking over the speech.
 
-#### Agreement-Score
+##### Agreement-Score
 The Agreement-Score shows how often the partners agree oder disagree to each other. 
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
 If the words show disagreement like in: "nein, trotzdem, aber" ; the paragraph is counted as 1 disagreement. 
 At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.  
 
-### Content Features
-## Current code State
-* 16.12.2020: 10 Transkripte
-* Total: Ca 13.000 Wörter
-* 20 Sprecher
-* Davon 5 D
-* 5 weiblich, ND
-* 10 Männlich, ND
-* 
+#### Content Features
 
 
 

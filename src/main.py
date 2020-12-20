@@ -1,15 +1,12 @@
+import json
 import os
 from os import getcwd
-<<<<<<< HEAD
 
 import numpy as np
-=======
-import json
->>>>>>> 5a31b33 (Added new feature for part of speech)
 import spacy
 from utils.corpus_manager import DialogueCorpusManager
 from utils.dialogue_parser import DialogueParser
-from sigmund.utils import DialogueCorpusManager
+
 from pipelinelib.pipeline import Pipeline
 from sigmund.classification import qda
 from sigmund.features import words as fwords
@@ -25,14 +22,14 @@ if __name__ == "__main__":
         doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
         depressed=True, remove_annotations=True)
     # path2file = "/home/benji/Documents/Uni/heidelberg/01/text-analytics/sigmund/src/data/Paargespräche_text/Paar 47_T1_IM_FW.docx"
-    #with open(os.path.join(os.getcwd(), 'config.json'), 'r') as configfile:
+    # with open(os.path.join(os.getcwd(), 'config.json'), 'r') as configfile:
     #    config = json.load(configfile)
     #path2file = os.path.join(config['path_to_transcripts'], 'Paar 47_T1_IM_FW.docx'),
 
-    #dialogue = DialogueParser(
-        #doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
-        #depressed=True, remove_annotations=True)
-    
+    # dialogue = DialogueParser(
+    # doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
+    # depressed=True, remove_annotations=True)
+
     corpus_file_path = 'all_preprocessed.csv'
     full_dataset = DialogueCorpusManager(corpus_file=corpus_file_path, nlp=nlp)
     ds = full_dataset.get_paragraphs()
@@ -53,9 +50,11 @@ if __name__ == "__main__":
     x_train = np.zeros((len(ds), 3))
 
     y_train = ds["is_depressed"]
-    for index, doc in enumerate(ds.apply(lambda p: pipeline.execute(p.raw_text), axis=1)):
-        x_train[index, :] = [doc._.liwc_scores.get("Posemo"), doc._.liwc_scores.get("Negemo"),
-                             doc._.liwc_scores.get("Inhib")]
+    for index, doc in enumerate(
+        ds.apply(lambda p: pipeline.execute(p.raw_text),
+                 axis=1)):
+        x_train[index, :] = [doc._.liwc_scores.get("Posemo"), doc._.liwc_scores.get(
+            "Negemo"), doc._.liwc_scores.get("Inhib")]
 
     x_train = np.nan_to_num(x_train, copy=False)
 

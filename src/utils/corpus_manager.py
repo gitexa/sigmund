@@ -54,3 +54,6 @@ class DialogueCorpusManager:
         # assert self.sentences_ready, "Sentence Data-Frame has not been loaded yet"
         return self.paragraph_frame
 
+    def get_couple_full_text(self, couple_id):
+        self.paragraph_frame.query(f"couple_id == {couple_id}")
+       

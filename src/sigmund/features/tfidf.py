@@ -5,6 +5,7 @@ from collections import Counter
 from itertools import filterfalse
 
 import liwc
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from spacy.tokens import Doc
 
 from pipelinelib.component import Component
@@ -15,7 +16,7 @@ from sigmund.preprocessing.words import WordExtractor
 
 class TFIDF(Component):
     """
-    This component provides features for classification by using Spacy's POS component
+    This component provides features for classification by using sklearn tfidf 
     """
 
     POS = Extension("tfidf_scores", dict())

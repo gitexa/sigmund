@@ -110,7 +110,7 @@ def normalize_and_count(dataframe):
     dataframe["reading_ease"] = dataframe.apply(
             lambda x: flesh_reading_ease(x.syll_count, x.word_count, x.sent_count), axis=1)
 
-def calc_liwc(dataframe):
+defcalc_liwc(dataframe):
     row_dict = []
     for row in dataframe.itertuples():
         tokens = row.normalized.split(" ")
@@ -121,6 +121,9 @@ def calc_liwc(dataframe):
         row_dict.append(liwc_scores)
     df_features = pd.DataFrame(row_dict)
     return df_features
+
+
+
 
 if __name__ == '__main__':
     nlp = spacy.load("de_core_news_md")

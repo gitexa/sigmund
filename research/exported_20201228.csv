@@ -1,0 +1,759 @@
+,group,paragraph_position,couple_id,speaker,raw_text,gender,is_depressive,is_paragraph
+0,1,0,105,A, Jetzt sollen wir uns unterhalten?,M,False,True
+1,1,1,105,B,"Genau. Also ich fand es richtig schön, dass wir morgen (unv. 3 s.). Ich finde es tol,l dass du mich dazu überredet hast das mit zu machen.",W,True,True
+2,1,2,105,A,"Das war ja gut gemacht, ich hab dich so lange angestarrt bis du die Spinne auf die Hand genommen hast ohne überhaupt selbst (unv. 2 s.) (lacht).",M,False,True
+3,1,3,105,B,"Ohne es wirklich zu wollen, eigentlich. (unv. 6 s.).Dass du zwar Ideen mit reinbringst aber mich so weit machen lässt (unv. 2 s). ",W,True,True
+4,1,4,105,A,Ich konnte es mir ja eh nicht vorstellen bevor es fertig ist. ,M,False,True
+5,1,5,105,B,"(unv. 2 s.) sagen würde „ne, das gefällt mir nicht, das gefällt mir nicht, das gefällt mir nicht“, das tust du halt nicht. Du bringst einen Vorschlag mit ein, wenn dir noch was einfällt.",W,True,True
+6,1,6,105,A,"Ich finde es schön, dass du da so kreativ bist, also das vorstellen, wie eine Beginnerin, die denkt zu viel (lacht). Deswegen, wenn du dich da ausleben kannst, das finde ich ja auch toll, besonders wenn ich merke, dass es dir auch Spaß macht. Ja, also.",M,False,True
+7,1,7,105,B,"Das tut es, es ist ein schöner Ausgleich, etwas was ich gerne mache. Ich bin weniger der Mensch der viel unterwegs sein muss, also ich bin gerne unterwegs, aber ich kann mich auch alleine gut beschäftigen. Das find ich schön dass du mittlerweile doch irgendwie gemerkt hast, dass das mit mir so ist.",W,True,True
+8,1,8,105,A,Mit dem Buch auf dem Schrank (beide lachen). Deine Beschäftigung.,M,False,True
+9,1,9,105,B,"Auch mit dem Schrank find ich halt auch schön, dass wir das machen (unv. 1s). Auch wenn es funktioniert.",W,True,True
+10,1,10,105,A,"Die Frau Seppig war auch begeistert von den Bildern, sie mag auch selber keine Spinnen. Sie hat mir erzählt, dass sie als kleines Kind, sie durfte kein Nachtlicht haben, und musste dann auf die Toilette in der Nacht und ist dann auf irgendwas drauf getreten und hat wohl einer Spinne ein Bein ausgerissen und irgendwie hat es sie nachträglich so beeinflusst, dass sie jetzt Angst vor Spinnen hat. Aber gut.",M,False,True
+11,1,11,105,B,"Ich finde es schön was wir machen, die Vielfalt, ja auf (unv. 1 s.) freue ich mich ganz doll. ",W,True,True
+12,1,12,105,A,"Wie hast denn du das jetzt, also, wir treffen die anderen, die Aussteller sind ja meistens, es sind ja meistens Aussteller, oder?",M,False,True
+13,1,13,105,B,Wir sollen über positive Sachen reden.,W,True,True
+14,1,14,105,A,Was?,M,False,True
+15,1,15,105,B,Über positive Dinge unterhalten wir uns.,W,True,True
+16,1,16,105,A,"Ja, und? Was ist denn nicht positiv",M,False,True
+17,1,17,105,B,"Ja, was uns aneinander gefällt, es hat damit zu tun.",W,True,True
+18,1,18,105,A,Ach so. Wenn wir über morgen reden ist es doch nicht positiv? ,M,False,True
+19,1,19,105,B,"Doch, dass wir uns freuen über so Sachen (unv. 3s). ",W,True,True
+20,1,20,105,A,"Okay, gut.",M,False,True
+21,1,21,105,B,"Mir gefällt es, dass du dir die Haare wachsen lässt. Sieht echt gut aus. Ich bin mal gespannt wie es aussieht wenn alle drin sind. ",W,True,True
+22,1,22,105,A,"Es sind fast alle drin, aber immer wenn ich sie wasche fallen einzelne raus (lacht).",M,False,True
+23,1,23,105,B,"Mir gefällt es gut, dass du immer darauf achtest wie du rumläufst, dass man dir nicht sagen muss das was dreckig oder kaputt ist.",W,True,True
+24,1,24,105,A,Gestern dafür (lacht).,M,False,True
+25,1,25,105,B,"Im Großen und Ganzen guckst du immer, dass man dich immer gut mitnehmen kann. Dass du dich mit allen gut unterhalten kannst, egal ob du sie wirklich magst oder nicht. Dass du erst mal allem richtig offen gegenüber stehst.",W,True,True
+26,1,26,105,A,Man muss schon viel machen dass ich einen überhaupt nicht mag. ,M,False,True
+27,1,27,105,B,"Ja und das find ich auch schön, dass es überhaupt keine Probleme macht dich in meinen Freundeskreis mitzunehmen. Ja und dass du da nicht daneben gesessen hast und geschmollt hast (lacht) (A spricht).",W,True,True
+28,1,28,105,A,[(unv. 2 s.) (lacht)].	,M,False,True
+29,1,29,105,B,"Dass du gleich beim Kochen dich in die Gespräche mit eingebracht hast, und dass ich auch in solchen Situationen ganz normal weg gehen kann ohne dass du beleidigt bist weil ich dich alleine lasse. Das finde ich schön.",W,True,True
+30,1,30,105,A,"Fände ich doof, wenn ich dir das aufdrängen würde",M,False,True
+31,1,31,105,B,"Ja aber das ist halt nicht immer so und das finde ich halt gut, dass das so ist.",W,True,True
+32,1,32,105,A,Okay. ,M,False,True
+33,1,33,105,B,Ich finde es interessant wie viele (unv. 3 s.). ,W,True,True
+34,1,34,105,A,(unv. 2 s.),M,False,True
+35,1,35,105,B,"Backfischfest, Mädchenfest, Oktoberfest.",W,True,True
+36,1,36,105,A,Das weltberühmte Backfischfest (unv. 2s).,M,False,True
+37,1,37,105,B,"Wo mal es so Sachen gibt die einfach nur wir beide, spazieren gehen, ganz in Ruhe und dass wir auch mal spazieren gehen können ohne viel zu reden, aber dass wir uns meistens auch gut unterhalten können, und eigentlich auch oft (unv. 3 s.).",W,True,True
+38,1,38,105,A,"Ja, mir gefällt es auch, also dass man mit dir spazieren gehen kann, und du nicht die bist die denn großen Stadttrip will und von einem Schuhladen (B lacht) zum anderen. Deswegen, perfekt für mich, also, besonders weil du ja weißt wie ich shoppen liebe. (beide lachen)",M,False,True
+39,1,39,105,B,"Cool, shoppen, das funktioniert nicht als Freizeitgestaltung. ",W,True,True
+40,1,40,105,A,Außer in der Metro in der Süßwarenabteilung.  ,M,False,True
+41,1,41,105,B,"Ich finde es schön, dass du nicht dauernd meckerst wo ich relative viele Süßigkeiten esse, und das einfach hinnimmst.",W,True,True
+42,1,42,105,A,"Ja. Nur wenn es neue Süßigkeiten sind und wir noch alte haben, aber, das ist ja. (B hustet) Du kannst essen was du willst, auch wenn ich nicht darf, schade aber. ",M,False,True
+43,1,43,105,B,"Ja, viel würden kommen „wirst du dick, wirst du dick, wirst du dick“ mag ich gar nicht.",W,True,True
+44,1,44,105,A,"Wenn du dick wirst, sage ich dir das schon. Ich finde dich nicht zu dick. (beide lachen).",M,False,True
+45,1,45,105,B,Ich finde du hast eine gute Figur. ,W,True,True
+46,1,46,105,A,Danke.,M,False,True
+47,1,47,105,B,Verrätst du mir wie du es geschafft hast in der Examenszeit abzunehmen? (lacht).,W,True,True
+48,1,48,105,A,Wie?,M,False,True
+49,1,49,105,B,"Ja, du hattest ja ein bisschen mehr, zwischenzeitlich. ",W,True,True
+50,1,50,105,A,Also ich war gestern unter 80. ,M,False,True
+51,1,51,105,B,"Genau das sag ich ja, du hattest zwischenzeitlich mehr, siehe die Anzugshosen. ",W,True,True
+52,1,52,105,A,Ja aber ich weiß nicht (B unterbricht),M,False,True
+53,1,53,105,B,"Ich sag doch, ich finde gut, dass du das wieder runtergekriegt hast. Weil du mich eben unterbrochen hast.",W,True,True
+54,1,54,105,A,"Hab ich doch gar nicht, häh? Hab ich gar nicht.",M,False,True
+55,1,55,105,B,Doch.,W,True,True
+56,1,56,105,A,Nein. Egal. (lächelt und guckt runter),M,False,True
+57,1,57,105,A,Glaubst du das? Es wäre schön wenn das mit der Wohnung klappen würde in (Name unv.). ,M,False,True
+58,1,58,105,B,Ja. (unv. 6 s.). ,W,True,True
+59,1,59,105,A,Mhm.,M,False,True
+60,1,60,105,B,"Keine Ahnung, so Fliesen statt Laminat, so Sachen. Ich glaube mit einer würde es noch gut klappen. ",W,True,True
+61,1,61,105,A,"Ja. Ich bin mal gespannt wie hart der Geschäftsmann durchkommt oder nicht. Bin ich mal gespannt. So drei Zimmer, 70 Quadratmeter, wie viel haben wir jetzt?",M,False,True
+62,1,62,105,B,50. ,W,True,True
+63,1,63,105,A,"Das ist ja quasi ein Zimmer noch dazu, oder?",M,False,True
+64,1,64,105,B,Ja.,W,True,True
+65,1,65,105,A,"Arbeitszimmer, und dann mit den ganzen Unterlagen von dir.",M,False,True
+66,1,66,105,B,Viele Bücher.,W,True,True
+67,1,67,105,A,Viele Bücher. ,M,False,True
+68,1,68,105,B,(unv. 2 s.),W,True,True
+69,1,69,105,A,So viele Buchstaben wie du habe ich nicht. Auch wenn ich einige Ordner hab. ,M,False,True
+70,1,70,105,B,"Ach so, ja. (beide lachen)",W,True,True
+71,1,71,105,A,Du hast mehr Buchstaben.,M,False,True
+72,1,72,105,B,Mehr Buchstaben?,W,True,True
+73,1,73,105,A,Mit deinen Büchern. (unv. 2s.),M,False,True
+74,1,74,105,B,Ich hab viele Bücher.,W,True,True
+75,1,75,105,A,Ja. ,M,False,True
+76,1,76,105,B,"Ja, ich finde es schön dass wir zwischendurch auch mal so jeder für sich quasi, aber trotzdem irgendwie zusammen was machen. Einer liest, einer daddelt oder so. Das genieße ich immer. Das ist auch gut geht so ganz ohne Druck, der andere wartet jetzt mich, dass wir was machen.",W,True,True
+77,1,77,105,A,"Ja, du bist ja nicht da, um mich zu bespaßen. also, find ich schon schön, aber nicht die ganze Zeit, da bin ich auch genervt.",M,False,True
+78,1,78,105,B,"Ja, aber so kann man auch nicht leben. Einfach entspannt, quasi jeder für sich aber doch irgendwie  miteinander sein. (unv. 6 s.) Ich hab auch das Gefühl dass du entspannter (unv. 2s.)",W,True,True
+79,1,79,105,A,Ja. ,M,False,True
+80,1,80,105,B,(unv. 4 s),W,True,True
+81,1,81,105,A,Hm.,M,False,True
+82,1,82,105,B,"Ja wenn wir uns wenig gesehen haben ist die Erwartung eh eine andere, ist klar.",W,True,True
+83,1,83,105,A,"(Schulterzucken) Ja, gut. Das war jetzt auch so (unv. 2 s)",M,False,True
+84,1,84,105,B,"Ich find es schön, dass du da so dran geblieben bist und da jeden Tag was für getan hast. Du kannst auch ein paar Punkte sagen.",W,True,True
+85,1,85,105,A,"Ich sag doch die ganze Zeit schon positive Dinge. Wie es mir gefällt wie du gestaltest, wie attraktiv du bist, dass du nicht shoppen gehen willst, ich hab (Türklopfen).",M,False,True
+88,1,0,138,A,(unv. 2 s.),W,False,True
+89,1,1,138,B,"Am Ammersee. Dann machen wir es so. Da, wo man da übernachten kann, aber da bin ich noch nicht so weit, dass ich da einen exzellenten Vorschlag mache.",M,True,True
+90,1,2,138,A,"Könntest du dir denn vorstellen, dass wir da tatsächlich so ein Fahrrad kaufen, wenn es passt?",W,False,True
+91,1,3,138,B,"Ja, also das muss natürlich, hm, schwer, war da ein bisschen geteilter Meinung, weil wenn wir jetzt da nur eine Übernachtung machen, dann muss ja der Termin entweder am Nachmittag sein wo wir ankommen, weil am nächsten Morgen passt es ja nicht. Wir wollen da ja auch rechtzeitig los.",M,True,True
+92,1,4,138,A,Stimmt.,W,False,True
+93,1,5,138,B,"Aber, vielleicht müssen wir einfach mal schauen.",M,True,True
+94,1,6,138,A,Ja.,W,False,True
+95,1,7,138,B,Dass wir das auch mal zu einem anderen Zeitpunkt machen. ,M,True,True
+96,1,8,138,A,Hm. Okay.,W,False,True
+97,1,9,138,B,"Vielleicht passt irgendwie. Ja, ich denk da nicht dass ich mit dem Fahrrad unter dem Arm da (…)",M,True,True
+98,1,10,138,A,Ne?,W,False,True
+99,1,11,138,B,Ne das glaube ich jetzt nicht.,M,True,True
+100,1,12,138,A,Ach so.,W,False,True
+101,1,13,138,B,"Ne, weil ich denke dass die Vielfalt einfach zu groß. Ich weiß nicht ob ich mich da so spontan entscheiden kann. Direkt so aus dem Bauch (A lacht) die Bremsen und der Sattel.",M,True,True
+102,1,14,138,A,"Da bin ich ja total, total (…)",W,False,True
+103,1,15,138,B,Oder wir müssen verschiedene Räder kaufen.,M,True,True
+104,1,16,138,A,"Ja, das ist ja auch okay. ",W,False,True
+105,1,17,138,B,"Ja, wäre eigentlich auch eine Möglichkeit.",M,True,True
+106,1,18,138,A,"Da gehe ich sehr impulsiv von und lass mich da leiten. Ja, gut, okay. Ja, das sehen wir ja dann. Aber trotzdem, ja, das ist sehr positiv besetzt und ja, da freue ich mich und umso mehr das ja unsere Regel dann auch dass der nächste Urlaub auch schon in Planung ist was es ja dann (…)",W,False,True
+107,1,19,138,B,Mit München.,M,True,True
+108,1,20,138,A,Ja.,W,False,True
+109,1,21,138,B,Ah ja.,M,True,True
+110,1,22,138,A,"Ja, also im groben (B spricht)",W,False,True
+111,1,23,138,B,Da nehmen wir aber keine Fahrräder mit.,M,True,True
+112,1,24,138,A,"Im groben wissen wir jedenfalls, dass wir da hingehen.",W,False,True
+113,1,25,138,B,Ja.,M,True,True
+114,1,26,138,A,Und uns das Konzert anhören.,W,False,True
+115,1,27,138,B,"Ja, okay.",M,True,True
+116,1,28,138,A,Und das passt jetzt so.,W,False,True
+117,1,29,138,B,"Ja oder ich müsste vielleicht mal, vielleicht gibt es, ah ich weiß nicht, mit deiner Mutter macht das keinen Sinn, die Fahrräder in München (unv. 1s).",M,True,True
+118,1,30,138,A,Hm.,W,False,True
+119,1,31,138,B,"Aber, ja.",M,True,True
+120,1,32,138,A,"Ich glaub irgendwann gehen wir dann mal in den Urlaub, da verkehren wir dann mal die Rollen (lacht). ",W,False,True
+121,1,33,138,B,Warum?,M,True,True
+122,1,34,138,A,"Du setzt dich gut gelaunt ins Auto, auf den Beifahrersitz, und ich hab dann alles geplant und organisiert, oder halt nicht, so wie ich es mache (lacht).",W,False,True
+123,1,35,138,B,Da kann ich mich darauf einlassen.,M,True,True
+124,1,36,138,A,Es gibt noch was anderes. ,W,False,True
+125,1,37,138,B,Passt das.,M,True,True
+126,1,38,138,A,"Ja, okay. Also es ist, für mich ist es jetzt auch was Besonderes weil es ist ja eigentlich so der letzte große Urlaub vor dem Hochsommer, wenn dann die Ferienzeit ist. ",W,False,True
+127,1,39,138,B,"Ja, aber ich denk, dass wenn es bei uns dann warm ist vielleicht machen wir dann einfach was nahes irgendwo vielleicht Startpunkt Niehl so, vielleicht dass man da irgendwo übernachtet und dann eine Stunde vielleicht fährt und dann ist vielleicht in der Gegend noch gar nicht warm und sind dann positiv überrascht. ",M,True,True
+128,1,40,138,A,Das stimmt.,W,False,True
+129,1,41,138,B,"Also das ist, das könnte ich mir schon gut vorstellen, die Gegend.",M,True,True
+130,1,42,138,A,"Ja, ja.",W,False,True
+131,1,43,138,B,"Ja, aber muss man einfach mal schauen.",M,True,True
+132,1,44,138,A,"Ja, das ist so, für mich ist es jetzt so wenn ich unsere Urlaube so betrachte in den letzten 7 Jahren, das ist ja schon ein Phänomen, weil ich denke das ist immer was ganz besonderes, auch nicht immer unter optimalen Bedingungen, und trotzdem gelingt uns da immer was gutes dabei. ",W,False,True
+133,1,45,138,B,"Ja, es war immer gut.",M,True,True
+134,1,46,138,A,"Ja, ja. Auch wenn ich jetzt an Sylt denke, wo es ja knackig kalt war, wo es richtig, die Bedingungen, die Wetterbedingungen waren ja schon sehr unangenehm, aber trotzdem, es war, war gut. ",W,False,True
+135,1,47,138,B,Hm.,M,True,True
+136,1,48,138,A,"Ja, trotz allem. Ja das gibt so ein, das gibt so ein Gefühl von Stärke, das ist sowas was uns, wo wir sehr gut zusammenkommen. ",W,False,True
+137,1,49,138,B,"Ja, vielleicht schaffen wir es ja dann auch, dass irgendwann mal auf den Alltag zu übertragen. Aber ich denk da, Stück für Stück gehen wir da vor an. ",M,True,True
+138,1,50,138,A,"Auf einem guten Weg. (lacht) Okay, magst du noch was zum Reden. ",W,False,True
+139,1,51,138,B,"Ja, Haushaltsaufgaben. (beide lachen)",M,True,True
+140,1,52,138,A,"Okay, das ist ja relativ einfach. Ich verwüste die Küche bei dir und dann lege ich mich hin und muss ausruhen und du sagst „Ich mach das“ (beide lachen)",W,False,True
+141,1,53,138,B,"Genau so, so machen wir das. So behalten wir das bei.",M,True,True
+142,1,54,138,A,"Ja, wobei neulich als ich bei mir zuhause gekocht habe und es war einfach viel, die Spülmaschine lief dann zwei Mal. „Wow“ hab ich gedacht, das ist schon ein Unterschied ob man das bei dir oder bei mir macht.",W,False,True
+143,1,55,138,B,Ah okay.,M,True,True
+144,1,56,138,A,"Ja, auch wenn ich es bei dir sauber mache ist es schon was anderes als bei mir. Irgendwie finde ich meine Küche nicht so praktisch.",W,False,True
+145,1,57,138,B,"Ja, also (unv. 2s.)",M,True,True
+146,1,58,138,A,Teilen der Hausarbeit (lacht).,W,False,True
+147,1,59,138,B,"So, Gespräche über Kindererziehung, haben wir keine.",M,True,True
+148,1,60,138,A,"Das wäre mal spannend, ob wir die hätten.",W,False,True
+149,1,61,138,B,"Ja, hm, daran kann ich (unv. 2 s.) aber ich denke hätten wir auch gut hinbekommen.",M,True,True
+150,1,62,138,A,Hm. Hm zustimmendes Hm.,W,False,True
+151,1,63,138,B,"So, dann gucke ich nochmal. Vertrauen, Ehrlichkeit.",M,True,True
+152,1,64,138,A,"Ich hab vorhin, mir ist noch ein Punkt in Erinnerung geblieben der für mich, oder, für mich und ich denke auch für uns, das ist auch so ein Selbstläufer, es ist so unkompliziert und ich weiß ja, dass es gleichzeitig für andere ein Riesenproblem ist, das war der Punkt Großzügigkeit. ",W,False,True
+153,1,65,138,B,"Ah ja, okay. Ja, da hast du dich ja vor zwei Tagen sehr gefreut, da vor einem Tag, dass es so schnell ging (unv. 1 s.)",M,True,True
+154,1,66,138,A,"Ja klar, auch, auch die Großzügigkeit untereinander, unter uns, und das hat ja auch sehr viel mit Vertrauen zu tun.",W,False,True
+155,1,67,138,B,"Ja, ich mein, da kann man auch enttäuscht werden. Da hab ich eigentlich auch, mach ich mir gar keine Gedanken. Also, das läuft sehr gut denk ich.",M,True,True
+156,1,68,138,A,"Okay. Okay. Du ziehst jetzt so eine Augenbraue hoch, was bedeutet das? (lacht)",W,False,True
+157,1,69,138,B,"Ne, ne, ich finde wirklich dass es gut läuft.",M,True,True
+158,1,70,138,A,"Ja, das war ja für mich auch von Anfang an, war das total unkompliziert.",W,False,True
+159,1,71,138,B,"Du, das war eigentlich noch nie ein Thema, außer wenn wir früher mal beim Bäcker eingekauft haben (unv. 2 s.). Ja, also das ist schon etwas wo wir keinen Schlag bekommen.",M,True,True
+160,1,72,138,A,"Ja, aber das ist ja auch, ich denke es ist wichtig jetzt so, mit so einer Positiv-Liste so wo man sich sehen lässt was alles gut ist und nicht immer so den Fokus darauf setzen was nicht gut ist, das finde ich ist ja auch, ja (…)",W,False,True
+161,1,73,138,B,"Das habe ich ja auch was vorhin mit dieser Liste gemeint was wir für uns tun und, ja, dass man da einfach mal die Woche Revue passieren lässt und sagt okay „ja das war gut, das war gut, das war gut“ und dann ist der Alltag vielleicht genauso gut wie der Urlaub.",M,True,True
+162,1,74,138,A,"Ja, also irgendwie versuchen, behaupte ich jetzt mal, dass ich das schon versuche zu tun.",W,False,True
+163,1,75,138,B,"So, eine Rückschau zu halten?",M,True,True
+164,1,76,138,A,Ja und zwar mit dem Schwerpunkt auf die positiven.,W,False,True
+165,1,77,138,B,"Ja, ich krieg auch abends immer ein paar schöne Mails von dir. ",M,True,True
+166,1,78,138,A,Schon lange nicht mehr.,W,False,True
+167,1,79,138,B,Die hebe ich mir auch immer auf.,M,True,True
+168,1,80,138,A,Auch Fotos (lacht),W,False,True
+169,1,81,138,B,"Ne, das was ich (…) Fotos nicht mehr (…) teilweise auch Mails so wo ich mir dann auch ausdrucke.",M,True,True
+170,1,82,138,A,"Ja, ich weiß was du meinst, aber letztendlich, ich weiß gar nicht ob das bei dir so ankommt, also ich mache ja viele Fotos, auch schon speziell für dich. ",W,False,True
+171,1,83,138,B,"Ja, die werden auch (unv. 1 s.), ja die werden auch behalten.",M,True,True
+172,1,84,138,A,"Ja das ist ja gestern, wegen dem Fragebogen, ich weiß jetzt nicht genau wie es hieß „ Machen sie ihrem Partner Komplimente oder Liebeserklärungen?“ oder so, wo ich dachte „ Ja, auf vielfältige Art und Weise, jeder auf seine Art“.",W,False,True
+173,1,85,138,B,Okay und das ist dann wenn du so ein Foto schickst dann?,M,True,True
+174,1,86,138,A,"Ja, empfindest du das nicht so?",W,False,True
+175,1,87,138,B,"Doch, das ist schon was Besonderes, ich hab jetzt grad überlegt, ich hab das Paket (unv. 2s.) nach der getanen Arbeit, ich hab auch zwei Fotos gemacht von den Bäumen und so, und das ist schon was Schönes einfach, egal wo man ist, ob das jetzt zuhause ist, ob das im Urlaub ist, oder beim Wandern oder so, das sind immer schöne Momente, (…) schöne Zeit und die muss man in Erinnerung behalten. ",M,True,True
+176,1,88,138,A,"Hm (…). Ja es gibt viele Erinnerungen die irgendwie die Fotos unterstützen, nicht irgendwie dass es dabei, das merke ich auch, ich bin ja sehr visuell orientiert, dass die Erinnerung dann viel besser zu bewahren ist wenn es dann Fotos gibt, zum Beispiel von den Bänken wo wir auch schon zusammen sind, als anders. Es ist interessant.",W,False,True
+177,1,89,138,B,"Ja, ich mein das war ja schon damals mit dem Album was du mir geschenkt hast, da kamen extrem viele Erinnerungen hoch, was man teilweise auch so aus dem Gedächtnis gestrichen hat oder sich nicht spontan daran erinnert, aber mit Bildern weiß man genau wo man war und ja das ist schon schön. ",M,True,True
+178,0,0,182,A,(unv. 00:02),M,False,True
+179,0,1,182,B,Hm?,W,False,True
+180,0,2,182,A,Du solltest doch nicht nachgucken.,M,False,True
+181,0,3,182,B,(lacht) Sag nur ``Ich darf den schönen Mädchen nicht nachgucken‘‘.,W,False,True
+182,0,4,182,A,"Doch, darfst du.",M,False,True
+184,0,6,182,B,Also.,W,False,True
+185,0,7,182,A,"Ja, fängst du an, oder fang ich an?",M,False,True
+186,0,8,182,B,"(zögert) Mach mal du, ja.",W,False,True
+187,0,9,182,A,"Dann guck mich mal an, dann sag ich dir gleich dass ich dir so unheimlich gerne in deine Augen schaue, und das weißt du auch.",M,False,True
+188,0,10,182,B,"Ja, ich weiß das (lacht). Aber es ist trotzdem schwer für mich, das zu verstehen, mir? Mir in die Augen schauen? Hm.",W,False,True
+189,0,11,182,A,"Du. Du weißt, dass ich das unheimlich gerne mache.",M,False,True
+190,0,12,182,B,"Ja, weiß ich.",W,False,True
+191,0,13,182,A,Und dass du jetzt auch wieder so ganz lieb lächelst und mich anschaust.,M,False,True
+192,0,14,182,B,(lacht).,W,False,True
+193,0,15,182,A,"Ja, mit was willst du denn anfangen?",M,False,True
+194,0,16,182,B,"Ja, ich lese das Programm von oben nach unten, so wie vorhin. 1 ist gut: emotionale Offenheit des Partners. Das ist etwas was ich sehr an die schätze. Ich kann mit dir alles bereden, egal was für ein Thema. Und (3 s.) war alles (lacht). Ich hab es gerade überlegt. Einiges willst du gar nicht hören, klammerst du aus. ",W,False,True
+195,0,17,182,A,Ja?,M,False,True
+196,0,18,182,B,Ja. ,W,False,True
+197,0,19,182,A,Was denn? Jetzt lieber nicht.,M,False,True
+198,0,20,182,B,"Nein? Lieber nicht? Ne, lassen wir das. Okay…",W,False,True
+199,0,21,182,A,"Ne, ich bin da auch so froh darüber, dass ich mit dir über alles reden kann, und dass ich nicht das Gefühl hab du wärest mir böse darüber, egal was ich sage. ",M,False,True
+200,0,22,182,B,Ja.,W,False,True
+201,0,23,182,A,"Dass du zuhörst und ich wirklich mit allem zu dir kommen kann, ohne Angst zu haben, dass es irgendwie Streit geben könnte, bei irgendwas. Dass es manchmal auch ein ernsthaftes Gespräch gibt, aber dass es nicht Streit gibt, und das liebe ich ganz arg an dir. ",M,False,True
+202,0,24,182,B,Ja. Geht mir auch so. Jetzt haben wir? Vorhin haben wir über die gemeinsame Freizeit gesprochen. ,W,False,True
+203,0,25,182,A,Mhm.,M,False,True
+204,0,26,182,B,Freizeitgestaltung. ,W,False,True
+205,0,27,182,A,Ja.,M,False,True
+206,0,28,182,B,"Und du weißt, ich reise gerne. ",W,False,True
+207,0,29,182,A,Mhm?,M,False,True
+208,0,30,182,B,Aber du bist eher dann doch häuslicher. ,W,False,True
+209,0,31,182,A,"Ne, ich reise ja auch gerne, nur würde ich dich gerne überreden nicht in einem Zelt zu schlafen, sondern in einem schönen Hotelzimmer. ",M,False,True
+210,0,32,182,B,(lacht) Ja. ,W,False,True
+211,0,33,182,A,"Oder in einer schönen Finca, was wir ja auch ab nächster Woche machen. Da freue ich mich ganz arg darauf, jetzt wieder mit dir in den Urlaub  zu fahren. Weil es auch so schön ist mit dir in den Urlaub zu fahren, weil ich da auch nie Angst haben muss, dass es irgendwie böse Wörter gibt, oder Streit gibt um irgendwas sondern, dass ich das wirklich vollauf genießen kann, ganz entspannt. ",M,False,True
+212,0,34,182,B,"Ja, das stimmt.",W,False,True
+213,0,35,182,A,"Ich guck da mal weiter. Gemeinsame Freizeitgestaltung, da ist das so schön, dass wir ein gemeinsames Hobby gefunden haben, dass wir zusammen tanzen gehen. ",M,False,True
+214,0,36,182,B,Absolut.,W,False,True
+215,0,37,182,A,"Dass ich mir das ja immer gewünscht habe, und dass ich jetzt einen Partner habe, der das nicht nur mir zuliebe macht sondern, dem das auch unheimlich Spaß macht.",M,False,True
+216,0,38,182,B,"Ja, das ist stimmig. Unheimlich stimmig.",W,False,True
+217,0,39,182,A,"Und dass ich da auch nie Angst haben muss wenn es nicht gleich klappt, mit Tanzschritten oder so.",M,False,True
+218,0,40,182,B,So wie das letzte Mal? (lacht).,W,False,True
+219,0,41,182,A,"Ja. Dass du nie irgendwie noch nie Anzeichen gemacht hast, dass dich das jetzt aufregt oder, dass du mit mir geschimpft hättest, sondern dass wir da meistens darüber lachen. Dann halt noch mal probieren und noch mal probieren bis es dann sitzt.",M,False,True
+220,0,42,182,B,"Hm (…) aber ich habe es manchmal auch schwer für mich zu sagen, ich möchte das jetzt können, diesen Tanzschritt, und dann noch mal probiere. Ja, das ist manchmal schwer, für mich. Aber ich sag mir ohne das kommen wir nicht her.",W,False,True
+221,0,43,182,A,"Aber wenn wir überlegen was wir jetzt schon alles können, und ich war ja bei null, ich hab ja überhaupt nichts gekonnt. ",M,False,True
+222,0,44,182,B,"Ja, allerdings.",W,False,True
+223,0,45,182,A,"Und du ja auch nicht so arg viel, aber was wir jetzt uns zusammen erarbeitet haben das finde ich schon super. ",M,False,True
+224,0,46,182,B,(lächelnd) Das stimmt. ,W,False,True
+225,0,47,182,A,"Wenn wir das gerade davon haben, von Freizeit: ich finde es so schön, dass du bei meinem Klavier spielen zuhörst, obwohl das ja manchmal katastrophal ist, und ich auch immer Hemmungen gehabt habe vor irgendjemandem Klavier zu üben, weil ich da halt so schlecht bin, dass ich bei dir aber überhaupt keine Hemmungen habe, dass mich das überhaupt nicht stresst wenn du dabei bist und zuhörst.",M,False,True
+226,0,48,182,B,"Ähm (…) das ist ja nicht unbedingt jetzt ein positives von mir, ich muss da nichts machen, das ist einfach so und ich hör dem gerne zu, ich bin dann einfach, hm, sag ich mal, beim Zuhören, und kann Gedanken fließen lassen und das geht da so gut. Und ich kann da abschalten, ich kann da runterfahren. Du solltest öfter Klavier üben und mir meine mh ",W,False,True
+227,0,49,182,A,Die Auszeit gönnen.,M,False,True
+228,0,50,182,B,"Die Auszeit gönnen, mich da reinzulassen, weil es mir gut tut. Ja, ist ja schön, dass ich da so entspannt, uns mal los machen.",W,False,True
+229,0,51,182,A,"Ich finde es auch schön, wenn ich im Garten, du bist ja nicht der der gerne im Garten arbeitet, und ich mach das ja unheimlich gerne, dass ich dich dann trotzdem bitten kann, mir irgendwas zu helfen. ",M,False,True
+230,0,52,182,B,"Ich helfe dir gerne, ja. ",W,False,True
+231,0,53,182,A,Ich gucke mal was es da noch weiter gibt.,M,False,True
+232,0,54,182,B,"Aber, manchmal bin ich mir auch unsicher ob meine Hilfe auch so gewollt ist. Ich sehe es doch mal, die Geschirrspülmaschine einräumen. Da hab ich mich schwer disziplinieren müssen, sie nicht so einzuräumen, wie ich das gewohnt in. Aber okay (lacht).",W,False,True
+233,0,55,182,A,Aber es hat ja zum Glück kein Problem zwischen uns gegeben.,M,False,True
+234,0,56,182,B,"Nein, kein Problem.",W,False,True
+235,0,57,182,A,Hast nicht mit mir geschimpft sondern nur gesagt ``muss das denn sein? ‘‘. (unv. 2 s.).,M,False,True
+236,0,58,182,B,"Warum sollte ich? Jeder hat seine eigenen Vorstellungen und mir ist es jetzt nicht schlimm, ob ich so rum oder so rum die Tasse reinstelle. (…) Attraktivität?",W,False,True
+237,0,59,182,A,(lacht).,M,False,True
+238,0,60,182,B,Komplimente?,W,False,True
+239,0,61,182,A,Ja.,M,False,True
+240,0,62,182,B,"wenn ich die dir mache dann denke ich immer ``die kommen an‘‘. Aber die Glaubwürdigkeit, von sich selbst zu überzeugen, ob es wirklich so ist. (…) Ich denke ich finde mich auch nicht sehr attraktiv. Das ist manchmal schwer für mich, das zu verstehen wenn du sagst ``schöne Beine‘‘.",W,False,True
+241,0,63,182,A,Oder ``Ich liebe deine großen Hände‘‘.,M,False,True
+242,0,64,182,B,"Ja, für mich sind die halt alt und schrumpelig (beide lachen). Aber na ja.",W,False,True
+243,0,65,182,A,"Also ich glaube, dass deine Komplimente wirklich ehrlich gemeint sind, aber mir geht es ja genauso (…), dass ich mir das Kompliment nicht selbst machen würde. Dass ich dann auch sage ``ne, ist doch gar nicht so‘‘.",M,False,True
+244,0,66,182,B,(schmunzelt) Ja.,W,False,True
+245,0,67,182,A,"Aber ich denke trotzdem, dass wir viel aneinander finden, dass uns gut gefällt, in Richtung Attraktivität.",M,False,True
+246,0,68,182,B,Ja.,W,False,True
+247,0,69,182,A,"Auch wenn man es selbst vielleicht nicht so versteht und sagt ``dass der das gefallen kann‘‘, aber das ist einfach so.",M,False,True
+249,0,71,182,B,"Deine Hingabe. Ich erinnere (…) (beide lachen) die ist ja wirklich enorm, da bin ich immer so (…) ``wow‘‘, wie das geht, so hingebungsvoll. Jetzt nicht nur deine Attraktivität und dein (…) wie steht es da? Emotionale Offenheit, sondern auch deine körperliche Hingabe. Da bin ich immer wieder von den Socken (beide schmunzeln). Also, überrascht.",W,False,True
+250,0,72,182,A,"Aber das kommt halt auch davon, weil du so zärtlich bist, und so liebevoll.",M,False,True
+251,0,73,182,B,"Ja, nicht jeder kann es ertragen, das weißt du.",W,False,True
+252,0,74,182,A,Ja.,M,False,True
+253,0,75,182,B,"Und deshalb bin ich froh, dass du es gerne (…).",W,False,True
+254,0,76,182,A,"Ja, ich ertrage es nicht, sondern ich habe es sehr gerne.",M,False,True
+255,0,77,182,B,"Dass du es gerne hast, ja. Das ist schon ein sehr gutes (…), ein sehr guter Ausgangspunkt für irgendwas, egal. Wenn vielstimmig ist. Geduld (es klopft an der Tür), Verständnis. ",W,False,True
+258,1,0,27,A,Positive Gefühle.,M,False,True
+259,1,1,27,B,"Ja, positive Gefühle können bei mir auslösen wenn du mich gut behandelst, fühle ich mich echt toll, wenn du zärtlich mit mir umgehst, zärtlich redest.",W,True,True
+260,1,2,27,A,"(A zieht seine Brille auf) Zuwendung, das ist ja, Zuwendung, wir beide, wenn du dich mir zuwendest dann fühle ich mich wohl, das tut mir gut. Verteilung der Haushaltsaufgaben, das machen wir sowieso, ich glaub da brauchen wir, da fühlen wir uns beide wohl, da muss man nichts sagen, dazu. Gleiche Vorstellung bei der Kindererziehung, ich glaub, dass wir da auch nie uns streiten würden, dass wir da sehr ähnliche Auffassungen haben, wie Kinder zu behandeln sind.",M,False,True
+261,1,3,27,B,"Wir lieben beide Kinder, [A: Ja] und die lieben uns. Von da ist nichts gemacht. Es ist schön wie du meine Kinder, mein Kinder behandelst, wie deine eigenen, schön.",W,True,True
+262,1,4,27,A,"Es tut gut, und mir tut´s auch gut sie zu behandeln (unv. 2 s.).",M,False,True
+263,1,5,27,B,"Auch, wie ich dich liebe, dann liebe ich auch deine Verwandtschaft, und die sind bei mir immer willkommen. ",W,True,True
+264,1,6,27,A,"So viel hab ich ja nicht (lacht) ja außer Rainer mit seiner Schwester hab ich ja keine nähere Verwandtschaft, kennengelernt hast du. Freunde und Bekannte, da sind wir uns nicht ganz einig.  ",M,False,True
+265,1,7,27,B,"Was heißt das wir, also Freunde und Bekannte (…) man soll ja nur positiv reden. ",W,True,True
+266,1,8,27,A,"Ja. Attraktivität, dass ich dich gut finde, das sage ich dir ja immer wieder, dass ich deine Figur gut finde, dein Aussehen gut finde, (unv. 3 s.).",M,False,True
+267,1,9,27,B,Findest du das immer gut oder nur wenn ich dich reize und du mit mir ins Bett gehen möchtest (lacht)[A. unv. 2s].,W,True,True
+268,1,10,27,A,"Die Frage ist überflüssig. Das habe ich nicht nötig, irgendwas vorzuspielen, nur damit ich irgendwas erreiche. Finanzielle Unbesorgtheit: ich will, dass du dir keine Sorgen machen musst über finanzielle (unv. 3s).",M,False,True
+269,1,11,27,B,"Ich hab das auch so schön, ich hab kein Bedürfnis, ich hab keine großen Wünsche, ich möchte nur meine Gesundheit und glücklich mit dir sein. Ich hab eigentlich gar keine großen Wünsche mehr. Ich bin zufrieden mit dem was ich hab.",W,True,True
+270,1,12,27,A,"(unv. 5 s.) soweit sie erfüllbar sind, macht es mir Spaß (A klatscht in die Hände) sie zu erfüllen.",M,False,True
+271,1,13,27,B,"Wenn ich mit dir glücklich bin, dann kommt mir alles andere auch nicht so schwer. Es ist alles leichter zu bewältigen wenn wir einfach glücklich sind zusammen, es ist schön. Es gibt dann für mich dann auch keine Schwierigkeiten und keine Hürden. Ich weiß dann alles wird so wie wir es wollen. Ja?",W,True,True
+272,1,14,27,A,"Vertrauen? Gegenseitiges. Also ich vertraue dir voll, das weißt du, dass ich da nie irgendwelche Bedenken habe. ",M,False,True
+273,1,15,27,B,"Es ist schön auch zu spüren, dass du mir vertraust, und ja das gibt mir auch einfach ein gutes Gefühl, würde ich auch nie missbrauchen ja.",W,True,True
+274,1,16,27,A,"Mein Vertrauen, wie ist es mit deinem Vertrauen? ",M,False,True
+275,1,17,27,B,"Ich vertraue dir auch ganz arg. Aber ich möchte trotzdem alles sagen was ich denke. Ich vertraue dir ganz arg und es ist schön einfach zu spüren da ist jemand da, der dich so nimmt wie du bist, mit dem man sagt es ist schön zu vertrauen.   ",W,True,True
+276,1,18,27,A,"Ehrlich, Ehrlichkeit,",M,False,True
+277,1,19,27,B,"Es ist schön, dass du Vertrauen und Ehrlichkeit hat mir was Gemeinsames zu tun und (…)",W,True,True
+278,1,20,27,A,"Ehrlichkeit heißt dass wir nicht muffelig sind, weil man über alles redet wichtiges.",M,False,True
+279,1,21,27,B,Ja. Ja. Ja. Schön.,W,True,True
+280,1,22,27,A,"Ich denke dass du ehrlich bist und das finde ich auch gut, ist auch wichtig, [B: Mmh, Mmh] als Baustelle einer Partnerschaft, ganz wichtig. Verbundenheit, ja gut, verbunden sind wir uns ja, danke ich. [B: Mmh, Mmh]",M,False,True
+281,1,23,27,B,"Ja, und wenn wir fort sind.",W,True,True
+282,1,24,27,A,Ich bin dir verbunden.,M,False,True
+283,1,25,27,B,Ja? Verbunden mit viel Humor wenn wir ausgehen.,W,True,True
+284,1,26,27,A,Ist ja egal.,M,False,True
+285,1,27,27,B,Ja? Ist doch schön wenn wir (unv. 3 s.),W,True,True
+286,1,28,27,A,Gewährung persönlicher Freiheiten. Das ist auch gut.,M,False,True
+287,1,29,27,B,Das ist auch gut.,W,True,True
+288,1,30,27,A,"Dass du mir meinen Freiraum lässt, dass du mich das machen lässt was ich gerne tue. Und ich ja vielleicht auch (…)",M,False,True
+289,1,31,27,B,"Positiv, ja? Positiv. ",W,True,True
+290,1,32,27,A,"Ja, aber, Ja, loben, Ja. Besonders schön finde ich, wenn (…).",M,False,True
+291,1,33,27,B,"Was würdest du jetzt erzählen wenn ich nicht bei dir wäre? Die Erinnerungen, positive. Wenn du jetzt über die Susanne deinem Freund erzählen würdest, oder Bekannten. ",W,True,True
+292,1,34,27,A,"Viele positive, viele.",M,False,True
+293,1,35,27,B,Ja? Was wär das?,W,True,True
+294,1,36,27,A,"Zum Beispiel, wenn Du mir Freiheit lässt. Zum Beispiel dass du mich auch gut findest, in deinen Erzählungen zumindest. Ja gut, wir hatten ja schöne Momente, wir hatten schöne Urlaube, wir hatten schöne Erlebnisse ja auch zuhause, man muss ja nirgendwohin. Spazieren gehen, oder essen gehen, und (unv. 4 s.) war doch schön auch an sich. Das sind schöne Momente für mich. Müssen jetzt gar nicht so großartig sein, oder Geld kosten oder was, irgendwas.",M,False,True
+295,1,37,27,B,"Die Momente, nicht die Länge, sondern das intensive, ist sehr wichtig von mir, äh, für mich. Schön, ja? Und das machen wir ja. Dass man, wenn wir was machen, das intensiv genießen, das ist schön, oder wir lassen es ganz bleiben.",W,True,True
+296,1,38,27,A,"Sexualität, ist auch ein Thema. ",M,False,True
+297,1,39,27,B,Ja (…).,W,True,True
+298,1,40,27,A,"Das würde ich natürlich nicht Freunden erzählen, auch genießen, diese Sexualität mit dir. ",M,False,True
+299,1,41,27,B,Ja? ,W,True,True
+300,1,42,27,A,"Weil du mich immer anmachst. Du machst mich einfach immer an. Gestern Abend auch. Wenn ich das merke vor allen Dingen, wenn du mir das zeigst, dass ich dich anmache.",M,False,True
+301,1,43,27,B,"Also, wenn du lieb zu mir bist, und der Umgang so schön ist, dann machst du mich immer an, dann hast du keine Probleme. Frauen ticken anders wie Männer (lacht), ja? der Umgang. Ja",W,True,True
+302,1,44,27,A,"Das macht mich an, wenn (unv. 3 s) Wenn du mich verwöhnst mit deinem Mund, das ist was Schönes. Die Wärme, die Nähe. So nah zu sein, das ist schön mit Dir. ",M,False,True
+303,1,45,27,B,"Mit dir ebenso, [A: Treue]. ich brauche die Wärme, die Liebe. Es sind für mich Grundbedürfnisse für´s Leben. Was nützt mir das schönste Haus wenn die Liebe nicht wäre, und die Liebe, das bereichert mich, wärmt mich, gibt mir Energie und macht mich glücklich. Die Liebe, deine Liebe strahlt unheimlich viel aus, in mir. Lässt mich alles Negative vergessen, meine Vergangenheit, meine Ängste, deine Liebe bereichert mich unheimlich, und ich bin dann froh, dass ich dich hab.",W,True,True
+304,1,46,27,A,"Und ich bin froh, dass ich dich hab, möchte dich nicht missen. Treue, drum, bin ich auch froh, dass ich mir da keine Sorgen machen muss, dass du mir treu bist, das ist auch wichtig.",M,False,True
+305,1,47,27,B,Ich hab mich entschieden wieder reinzuwagen.,W,True,True
+306,0,0,29,A,"Gut, fangen wir mal an. ",M,False,True
+307,0,1,29,B,"Ja, fang du mal an.",W,False,True
+308,0,2,29,A,"Emotionale Offenheit des Partners. Ich finde du bist sehr emotional offen, und lässt mich alle deine Gefühle wissen, das finde ich sehr positiv, und da bin ich sehr froh darüber. ",M,False,True
+309,0,3,29,B,"Da weiß ich jetzt gar nicht was ich darauf sein, (beide lachen) weil ich mir das auch sehr wünschen würde von dir, dass du offen bist. Davon hängt es auch ab ob ich nachher noch mit essen gehe oder nicht. Ja, Thema Ehrlichkeit.  Was ich bei dir schön finde, wenn es dir gut geht, dann bist du zärtlich, dann bist du, das mag ich einfach, das finde ich positiv. Aber es wird immer durch den Scheiß unterbrochen, das ist jetzt nicht positiv was ich sage, aber das kann ich mir nicht aus den Fingern saugen. Aber das positive an dir ist, dass du Phasen hast die werden allerdings immer schneller durchbrochen im Moment, wo du, gestern zum Beispiel, gut drauf warst, und dann denke ich „Boah, ist das alles schön!“. Dann bist du humorvoll, bist nett, bist zugewandt, und ja dann freue ich mich. Und wenn du irgendeinen Mist gebaut hast, dann kriegst du garantiert auch heute Nacht, wie auch immer, oder Mittag, gepennt, dann könntest du ja auch diese Offenheit beibehalten aber toppst du das noch in dem du sagt „ah und du“. So, jetzt bist du mal wieder dran, ist genug.",W,False,True
+310,0,4,29,A,Gut. Berufliche Zufriedenheit.,M,False,True
+311,0,5,29,B,"Ja, du legst mal los.",W,False,True
+312,0,6,29,A,"Ja, beruflich, das Thema hat sich erledigt da wir ja beide nicht mehr berufstätig sind.",M,False,True
+313,0,7,29,B,Ich bin zwar noch ein bisschen.,W,False,True
+314,0,8,29,A,"Ja, hm, ja, okay, für mich hat sich das erledigt. 	",M,False,True
+315,0,9,29,B,"Es soll ja was positives sein. Also Beruf muss ich sagen, das ist sehr positiv für uns, weil ich, für mich hat es sich noch nicht ganz erledigt, und ich hab so das Gefühl wenn ich wollte könnte ich noch, weil ja auch immer wieder Anfragen kommen, die ich häufig mittlerweile immer wieder ablehne, und die Chance Anfragen in meinem Job abzulehnen in der heutigen Zeit das ist super, also das ist, ja, das gibt mir ein wunderbares Gefühl von, ja, dass mein Berufsleben total befriedigend war. ",W,False,True
+316,0,10,29,A,"Ja, ich hab auch so das Gefühl dass du sehr glücklich warst in deinem Beruf und es dir viel Spaß gemacht hat. ",M,False,True
+317,0,11,29,B,"Ja, ich denke schon ich hab das Privileg das zu finden, dass das perfekt war für mich. Es war am Anfang High-Risk mich darauf einzulassen, aber es hat gepasst, fleißig war ich auch, zuverlässig war ich, das A und O in dem Job, und dann wurde ich letztendlich überschüttet mit Erfolg und das macht glücklich. Und außerdem was ich ganz positiv finde, sind unsere Kinder, das ist für mich das allerwichtigste.",W,False,True
+318,0,12,29,A,Das auch nicht so in die Rubrik „Berufliche Zufriedenheit“.,M,False,True
+319,0,13,29,B,"Nein, nein. Das sind bloß so Gedanken, dass wir was Positives sagen, nur dass wir reden und mir fällt unsere Kinder ein, und ich denke mir das sind so ein Segen, diese beiden Kinder, und jetzt noch das Enkelkind dazu, ich denke das ist einfach ein Geschenk des Himmels, ja, bei all dem anderen Scheiß da, den du fabrizierst, finde ich das einfach einen Genuss und bin da total dankbar meinem Schicksal dadurch, ich möchte mich immer wieder daran erinnern darauf zurückgreifen.",W,False,True
+320,0,14,29,A,"Ja. Ja, finde ich auch, das ist wirklich ein großes Glück und ein großer Segen, ja.",M,False,True
+321,0,15,29,B,Willst du noch ein bisschen mehr? (beide lachen),W,False,True
+322,0,16,29,A,"Ja, also mehr denke ich gibt es zu dem Thema nicht zu sagen.",M,False,True
+323,0,17,29,B,Ne?,W,False,True
+324,0,18,29,A,Ne.,M,False,True
+325,0,19,29,B,Zu dem Thema Kind und Enkelkind hast du nichts mehr zu sagen?,W,False,True
+326,0,20,29,A,Ne.,M,False,True
+327,0,21,29,B,"Also für mich gibt es da schon viel zu sagen, weil ich denke dass die Lea eine sehr ausgeprägte Persönlichkeit ist und für mich letzte Woche wirklich, ich hab schon drei Leuten erzählt wie die Lea den Armin von dem Kissen weggeschubst hat, um mich da hinzuzitieren.",W,False,True
+328,0,22,29,A,Ja.,M,False,True
+329,0,23,29,B,"Das war wie so ein Erfolg, das war wie, das war toll, wo ich mir gedacht hab „Jetzt bin ich als Oma etabliert“, wenn sie den Vater einfach fortschickt.",W,False,True
+330,0,24,29,A,Ja.,M,False,True
+331,0,25,29,B,"Das fand ich schon irgendwie, das fand ich ganz Klasse. Und vor allem mit so einer Klarheit, mit so einem Element, wo ich denke das Mädel, die ist für mich nicht erpressbar. Ja und dann freu ich mich dass nach der Krise wieder, was mir damals so zugesetzt hat, dass sich das alles wieder so schön entwickelt hat.",W,False,True
+332,0,26,29,A,Ja.,M,False,True
+333,0,27,29,B,"Ja und (unv. 2 s. vll. Name des Sohnes) wieder zusammen, das ist mein Glück. Also ich hab so das Gefühl er ist grundsätzlich zufrieden und ich finde den halt schon ein bisschen komplizierter in seiner Persönlichkeit, aber was mich da glücklich macht ist dass ich, kurz so im Schnitt, zwei Stunden die Woche mit dem schwätze, und ich glaube dass das nicht häufig der Fall ist, beim Sohn.",W,False,True
+334,0,28,29,A,"Ja. Ja, das ist denke ich schon ein echtes Geschenk, und liegt eben mit auch an deinen Fähigkeiten mit ihm umzugehen. ",M,False,True
+335,0,29,29,B,Ja und Interesse? Am aufrichtigen Interesse am anderen? An mir und meiner Offenheit?,W,False,True
+336,0,30,29,A,Ja.,M,False,True
+337,0,31,29,B,"Komm, was positives (beide lachen). Ich rutsche sonst ganz leicht in was anderes. ",W,False,True
+338,0,32,29,A,"Ja. Okay, gut.",M,False,True
+339,0,33,29,B,Ist für mich im Moment nicht so einfach.,W,False,True
+340,0,34,29,A, Gut. Teilen wir die Haushaltsaufgaben? ,M,False,True
+341,0,35,29,B,"Ja, du ist ja im Moment klar.",W,False,True
+342,0,36,29,A,Ja.,M,False,True
+343,0,37,29,B,"Da ist jetzt kein Problem bei dir, oder?",W,False,True
+344,0,38,29,A,"Ja, ne, hab gar kein Problem.",M,False,True
+345,0,39,29,B,"Ja, du (lacht) staubsaugst, stopfst deine Socken selber. Also ich war jetzt nicht so nach dem Motto „Der könnte auch was im Haushalt tun“. Das war mein Thema nicht. Mein Thema war eher „er könnte mal ordentlich was mit seinem Job tun“, aber wenn wiederrum bis zwei im Bett liegst, dann ist der Job auch nichts. Machen wir gleich so.",W,False,True
+346,0,40,29,A,Gut.,M,False,True
+347,0,41,29,B,"(unv. 2 s.). Aber es soll was positives sein, such du doch was Positives. Ich hab jetzt eh schon wieder mehr geredet. ",W,False,True
+348,0,42,29,A,"Du, ich finde du hast im Haushalt wirklich mehr gemacht als ich, wenn wir beim Thema Haushaltsaufgaben bleiben, und ja, fand ich, find ich natürlich schön, ist klar (lacht). Ich habe eigentlich nicht das Gefühl gehabt ich habe dich hängen lassen, in der Arbeitsteilung du innen, ich außen, und ja, ist ganz gut gelungen, und ich denke ich habe im Haus ein bisschen was zumindest gemacht. ",M,False,True
+349,0,43,29,B,"Ja, ja, doch muss ich sagen. Das stimmt schon, ich hab den Haushalt, Wäsche, kochen, einkaufen, das habe alles ich gemacht, aber dafür hast du Garten, oder (unv. 2 s.), also das fand ich jetzt schon gerecht verteilt, da hast du dich um die Formalitäten gekümmert, also zunehmend lückenhafter. Ich hab dir das alles überlassen mit hohem Vertrauen, hätte mir gewünscht dass die Geschichte mit der Krankenkasse, gedacht „der wird das schon richtig machen“ bis ich das kapiert habe war es zu spät also, deine Teile, also ich fand die Verteilung in Ordnung, bloß dass du dann deine Teile (…) zunehmend vernachlässigt hast. Also es ging mit jetzt nicht um die Teilung, dass du mehr Haushalt, sondern dass was du übernommen hattest, dass Verantwortung, das auch verantwortlich zu machen, das war dann eben nicht der Fall. Also, ansonsten, ja gut, du hast das eine mit dem Staubsauger (unv. 2.) ich hab jetzt letztens eine Mail gekriegt (lacht), da war ein Mann in Rente gegangen und da hat er gesagt er will jetzt mal Ordnung machen und ein bisschen staubsaugen (beide lachen), da hat er die Frau gefragt „wo steht denn der?“ (unv. 6 s.) und dann kam er „der ist kaputt“, sie sagt „der ist gestern noch gegangen“ und er sagt der springt nicht an und dann hast du gesehen wie er an dem Kabel zieht, um ihn wie so einen Rasenmäher anspringen zu lassen. So ähnlich war es bei uns auch.",W,False,True
+353,1,0,47,A,Erzähl mir was.,M,False,True
+355,1,2,47,B,"Also wir müssen die Fragen jetzt nicht alle so…Also positives, also ganz toll gefällt mir dass alles was wir in der Freizeit machen auch gemeinsam bestimmen.",W,True,True
+356,1,3,47,A,"Ja das find ich auch gut, muss ich ganz ehrlich sagen.",M,False,True
+357,1,4,47,B,Also nicht dass es befohlen oder bestimmt wir,W,True,True
+358,1,5,47,A," vorher, ne? ",M,False,True
+359,1,6,47,B,"Ja, und das jeder erfreut wird um zu gehen und nicht dass er geht weil er gehen muss.",W,True,True
+360,1,7,47,A,Ja und im Sommer das ist wirklich… sitzen und diskutieren mal ´ne Stunde oder zwei.,M,False,True
+361,1,8,47,B,"Ja, ich find das auch.",W,True,True
+364,1,11,47,A,"Verbundenheit, ja also ich fühl mich sehr verbunden zu dir muss ich sagen, toll.",M,False,True
+365,1,12,47,B,Ja ich fühl mich auch.,W,True,True
+366,1,13,47,A,olles Mädchen.,M,False,True
+367,1,14,47,B,Ja und ganz toll find ich auch dass ich alles erzählen kann und du mir zuhörst und nicht sagst ‚Mensch was erzählt sie für einen Mist‘. ,W,True,True
+368,1,15,47,A,Offenheit.,M,False,True
+369,1,16,47,B,"Ja, und ehrlich.",W,True,True
+370,1,17,47,A,"Das ist gut, das ist, ja d mit der Studie  uper. Da eben ab und zu Malfinde ich gut dass du ",M,False,True
+371,1,18,47,B,Humor. Dass wir über alle lachen können.,W,True,True
+373,1,20,47,A,bin ich tol zufrieden.,M,False,True
+374,1,21,47,A,Rückenschmerzen wieder?,M,False,True
+375,1,22,47,B,"Nein, Rückenschmerzen nicht… und ja dass man jedem seine Freiheit lässt, dass er machen kann was er will, oder seine Hobbies gehen kann, da niemandem bestimmt ist.",W,True,True
+376,1,23,47,A,"Dass wir zusammen schaffen für den Urlaub. Gemeinsames für den Urlaub, das ist echt klasse. Brauchen wir kein Geld von außen rum oder so, muss extra gespart werden. Das ist echt gut. ",M,False,True
+377,1,24,47,B,Ja und dass  für den Urlaub,W,True,True
+378,1,25,47,A,,M,False,True
+379,1,26,47,B,"Ja das ist, also das find ich auch ganz toll, dass wir auch wirklich da im Urlaub gleiche Interessen haben.",W,True,True
+380,1,27,47,A,"Ein Bierchen oder `ne Schorle trinken, ein Schäumchen.",M,False,True
+382,1,29,47,A,"Super, das ist gut, ja. ",M,False,True
+383,1,30,47,A,"Ohne Stress, das ist harmonisch von  sag ich, ",M,False,True
+385,1,32,47,B,"Ja. Ja gut, ich schätze das sehr, deine Zuverlässigkeit, wenn ich was brauche, wenn ich sag ‚Hilf mir mal‘ du 100% da stehst, schätze ich auch sehr an dir.",W,True,True
+386,1,33,47,A," das ist das tolle, ja.",M,False,True
+387,1,34,47,B,"Unsere läuft ja immer, was haben ja auch ziemlich die gleiche Vorstellun kein Problem.",W,True,True
+388,1,35,47,A,"Wenn ich jetzt schaff, in die Rente, ohne Bedenken",M,False,True
+389,1,36,47,B,Unsere Zeit zusammen genießen vor allen Dingen.,W,True,True
+390,1,37,47,B,"Treue, ja, bis jetzt hab ich da überhaupt nichts zu bemängeln.",W,True,True
+392,1,39,47,A,"Wenn´s geht, geht´s, ist alles okay.",M,False,True
+393,1,40,47,B,"Vertrauen, ja, blindes Vertrauen, ich weiß dass du ehrlich zu mir bist.",W,True,True
+394,1,41,47,A,"Bin ich auch, muss ich ehrlich sagen. Ich hab überhaupt keinen Grund dich da zu .",M,False,True
+395,1,42,47,B,"Ja, bin ich mir auch sicher.",W,True,True
+396,1,43,47,A,"Ist auch mit Ehrlichkeit. WennVertrauen, ist alles Scheiße.",M,False,True
+397,1,44,47,B,Was ich früher nie konnte 100 prozentig vertrauen aber ich vertraue dir 100 prozentig. ,W,True,True
+398,1,45,47,A,"Ich hab dir meine Lebensgeschichte erzählt und c´est la vie, das war´s, hab viel erlebt, du auch.",M,False,True
+399,1,46,47,B,"Finanzielle Unbesorgtheit, finanziell brauchen wir uns auch Sorgen zu machen. Wir sind beide sparsam.",W,True,True
+400,1,47,47,A,Auf jeden Fall…Sollen wir  ´ne Flasche holen?,M,False,True
+402,1,49,47,B,"Teilung der Haushaltsaufgaben, na ja, da ich noch berufstätig bin übernimmst du die meisten, bin ich ehrlich.",W,True,True
+403,1,50,47,A,"Das ,",M,False,True
+404,1,51,47,A,"Deine Brille ist verbogen, irgendwie.",M,False,True
+405,1,52,47,B,"Ne, das ist weil ich sie nicht ganz aufsetze.",W,True,True
+406,1,53,47,B,"Unterstützung in Krisen, ja, wo du da schon Unterstützung genug bist",W,True,True
+409,1,56,47,A,hört sich gut an.,M,False,True
+410,1,57,47,B,"Zärtlichkeit, a fehlt mir auch wirklich überhaupt nichts. Bei mir zum Beispiel, bin ich total zufrieden und glücklich.",W,True,True
+411,1,58,47,A,"Ich sag das wenn wir morgens aufwachen, guten Morgen sagen.",M,False,True
+412,1,59,47,B,Wenn du nett zueinander bist verläuft der Tag einfach besser.,W,True,True
+413,1,60,47,A,"Genau, das ist auch so, muss auch sein. Und zuversichtlich auf alle Fälle.",M,False,True
+414,1,61,47,B,"Ja und was ich auch gut finde, dass du gleich merkst wenn ich in die Luft falle. Und gleich auch dir Gedanken machst ‚wie kann ich sie jetzt rausholen?‘",W,True,True
+415,1,62,47,A," Ich weiß dass du das nicht…du kannst einfach wegschieben, ",M,False,True
+416,1,63,47,B,"Ja probier schon, oft klappt´s ja auch.",W,True,True
+417,1,64,47,A,"Klappt oft, ja.",M,False,True
+419,1,66,47,A,"gut viel unterwegsin de Nähe, das ist ja logisch.",M,False,True
+421,1,68,47,B,Ja gerne mal auf mein Hobby und mach mit dir .,W,True,True
+422,1,69,47,A,Ja ,M,False,True
+424,1,71,47,B,"Ja aber es gibt Menschen die sagen ‚ne‘, ich ziehe mein Ding durch.",W,True,True
+425,1,72,47,A,"Kennst ja das Beispiel, Skat spielen, Bier trinken, Frauen. Aber mittlerweile  Frauen mit dir, ist klar.",M,False,True
+427,0,0,58,A,Soll ich anfangen? Ich hab mir was überlegt.,W,False,True
+428,0,1,58,B,Erzähl,M,False,True
+429,0,2,58,A,"Also, was ich sehr nett fand war als wir bei deiner Oma waren und heimgefahren sind, und du das Croissant für mich gekauft hast, damit ich nicht böse werde, weil ich Hunger hab. Das war sehr nett weil ich sehr gerne Croissants esse und weil…Ich glaub ich muss lauter reden?",W,False,True
+430,0,3,58,B,"Ne, passt schon.",M,False,True
+431,0,4,58,A,Und weil Croissants ja auch für uns immer gut sind.,W,False,True
+433,0,6,58,B,"Äh das war… das hat mir auch gut gefallen, dass ich dich in dem Punkt gut analysiert habe, dass du an dem Punkt so ein bisschen hmm warst, aber schön dass du mitgekommen bist. Das war, das war gut, weil allein wäre ich wirklich glaub ich nicht so gerne gegangen, das wär doof.",M,False,True
+434,0,7,58,A,Du kennst mich mittlerweile sehr gut und weißt wann du wie gut reagieren kannst.,W,False,True
+435,0,8,58,B,Das freut mich.,M,False,True
+436,0,9,58,A,Und Croissants erinnern mich auch immer daran als wir in Paris Croissants gegessen haben.,W,False,True
+437,0,10,58,B,"Ja, das war schön.",M,False,True
+438,0,11,58,A,"Das wir den Laden nochmal gefunden haben, tatsächlich.",W,False,True
+439,0,12,58,B,Ich glaub ich würde den immer noch sofort finden.,M,False,True
+440,0,13,58,A,Ja?,W,False,True
+441,0,14,58,B,"Ich hab letztens mal wieder nachgeschaut weil jedem mit dem ich über Paris rede muss ich dieses kleine Stückchen Information dalassen, dass man dort den besten Kaffee und die Croissants bekommt. Aber ich freu mich auf Österreich, auf den Urlaub.",M,False,True
+442,0,15,58,A,Ja.,W,False,True
+443,0,16,58,B,"Das wird toll. Zeit zu verbringen. Ein bisschen jetzt, ein paar Tage zu entspannen. Ich freu mich. Aber ich finde es sehr gut wie du momentan mit der Stresssituation in der Uni umgehst. Dass du wirklich so progressiv bist, immer dran bleibst. Ich habe nie von dir mitbekommen, außer einem Mal dass du wirklich gar keine Lust mehr hattest und einfach wirklich aufhören wolltest, und das ist auch ein paar Jahre her. Das finde ich wirklich beeindruckend, wie motiviert du dahinter bist, und wie viel Lernen du da reinsteckst, und wie viel du da wirklich dahinter sitzt und das ist auch motivierend für mich, weil ich versuche auch auf einem gewissen Level jetzt motiviert zu sein.",M,False,True
+444,0,17,58,A,Das machst dusehr gut dass du jetzt,W,False,True
+445,0,18,58,B, super.,M,False,True
+446,0,19,58,A,Dass wir dann zusammen hingehen…,W,False,True
+447,0,20,58,B,War eine gute Idee von dir und eine gute Idee von mir…Ja. Klappt mittlerweile echt solide.,M,False,True
+448,0,21,58,A,Schön.,W,False,True
+449,0,22,58,B,"Das ist so, das find ich super dass wir ein sehr, sehr gutes Team sind.",M,False,True
+450,0,23,58,A,"Du nimmst mir auch viel Arbeit ab, Haushalt, wir haben zusammen gespült, neulich.",W,False,True
+451,0,24,58,B,"Natürlich, sehr gut dass wir da beide, ich finde, ein gutes System haben wie wir das aufteilen, dass wir immer uns unterstützen und jetzt nicht böse werden wenn die andere Person was schleifen lässt, weil man weiß dass es getan wird. Dass man dieses Vertrauen hatdas man nicht auf Kosten des anderen lebt, sondern es ernst nimmt und sagt ‚hey ich bin jetzt in der Situation und deswegen achte ich darauf und mach das‘ sehr gut. ir sind schon ein verdammt gutes Team, find ich.",M,False,True
+452,0,25,58,A,Ja?,W,False,True
+454,0,27,58,A,Ich schau mal auf die Liste.,W,False,True
+456,0,29,58,A,"Ah, ich finde es auch sehr gut wie du dich mit meiner Familie verstehst, dass du gut mit klar kommst. Als ich total erschöpft eingeschlafen bin  und du dann mit meiner Mama noch gequatscht hast, mittlerweile ihr zweites Kind bist. ",W,False,True
+458,0,31,58,A,"Dass du auch mit meinem Papa gut klar kommst, große Familie, dass du auch mit auf Feste gehst und dich da nicht langweilst oder ausklinkst, sondern einfach dich integrierst und dem offen .",W,False,True
+459,0,32,58,B,"Ja, das finde ich wirklich schön, weil bei deiner Familie ist es eher so noch meine zweite Familie zu haben, weil bei meiner lief’s ja nicht immer so, läuft es immer noch nicht so super gut, aber da hast du mir gut geholfen, warst eine unglaubliche Stütze in der Zeit und hast mir sehr, sehr geholfen; teilweise warst du wütender als ich, was ich sehr unterhaltsam finde, immer noch finde.  mit dir, wie du da, ja, wie es einfach gut läuft, ich weiß nicht, grad ist wirklich super, ich fühl mich wirklich wohl. Ich hab mich noch nie so wohl gefühlt in einer Situation wie in der Zeit, weil einfach alles läuft. Dass du auch so verständnisvoll warst mit dem Heim Team, klar, es war nicht einfach, dass du mich unterstützt hast, auch die Sachen ernst genommen hast, meine Wünsche, meine Zeit in der Situation eigentlich auch akzeptiert hast, schätze ich sehr. Es war nicht einfach, ich meine, es sind zahlreiche Beziehungen in der Zeit kaputt gegangen in unserem Team.",M,False,True
+462,0,35,58,B,"Ich finde es super wie viel Zeit wir zusammen verbringen, dass wir einfach jeden Abend miteinander haben, dass wir nicht sondern dass wir einfach wirklich zusammen abends essen, immer, na ja, super viel.",M,False,True
+463,0,36,58,A,"Zumindest eine Mahlzeit am Tag die wir zusammen einnehmen, oder auch spazieren gehen… ",W,False,True
+464,0,37,58,B,Ist schon ,M,False,True
+465,0,38,58,A,Wobei wir doch mal wieder zum alten gehen sollten.,W,False,True
+466,0,39,58,B,Ich find den immer noch mit dem Eis ziemlich teuer.,M,False,True
+467,0,40,58,A,Man muss ja auch den alten ein bisschen unterstützen.,W,False,True
+468,0,41,58,B,"Aber ja, das find ich wirklich gut, dass wir nicht jeden Abend auf dem Sofa verbringen und schauen wirklich was machen und gemeinsam Aktivitäten haben wie spazieren gehen, was zwar furchtbar klingt aber wirklich Spaß macht mit dir.",M,False,True
+469,0,42,58,A,"Ist auch gesund, spazieren zu gehen.",W,False,True
+470,0,43,58,B,"Und wie wir uns immer über den Tag unterhalten, was wir machen, was wir tun, was wir getan haben, was gut war, was schlecht war,",M,False,True
+471,0,44,58,A,"Aber auch dass wir nicht immer aufeinander hocken müssen, sondern auch unsere eigene",W,False,True
+472,0,45,58,B,"Ja und du dann einfach sagst, ich mach das dann halt auch und bin dir nicht böse.",M,False,True
+473,0,46,58,A,"Das find ich sehr gut, weil ich ja, mein Freundeskreis ja eigentlich alle in Heidelberg hatte, und jetzt auch aber nicht mich fühle als wenn da war verloren gehen könnte, sondern sich das gut ergänzt.",W,False,True
+474,0,47,58,B,Das freut mich,M,False,True
+476,0,49,58,A,Morgen früh kommt Amira zum Frühstück,W,False,True
+477,0,50,58,B,Soll ich schon wieder verschwinden?,M,False,True
+478,0,51,58,A,Du musst eh lernen!,W,False,True
+479,0,52,58,B,Ich weiß,M,False,True
+481,0,54,58,B,Ok. ,M,False,True
+483,0,56,58,B,"Ich weiß gar nicht ob ich morgen nochmal Uni hab. Sag dann wie’s war. Wieder ein Tag wie heute, aber ist ok. Dann nervt mich mal, dass ich Grund hab zu lernen, du auch die meiste Zeit deines Tages lernst, das motiviert.",M,False,True
+485,0,58,58,A,"Begabung und Talent, ich finde es sehr gut dass du immer wenn ich ein bisschen in Panik gerate oder die Spur verliere weil irgendwelche Dinge nicht so klappen wie ich es mir vorgestellt hatte, oder es Informationen sind die ich nicht einschätzen kann du dann ruhig bleibst und den Überblick behältst, als wie zum Beispiel den Koffer verloren hatten am Flughafen in Athen und ich nicht sagen konnte was da drin ist weil ich zu aufgeregt war und nicht wusste was in meinem Koffer ist, aber du beschreiben konntest wie mein Koffer aussieht.",W,False,True
+486,0,59,58,B,"In Athen an die Situation denke ich auch immer mal, das war echt lustig, vor allem, irgendwie, das find ich super dass wir uns super ergänzen, weil manchmal bin ich auch…so als Entspannung, so irgendwie mit deiner Familie, oder woanders wo es mir zu stressig wird, entspann ich mich bei dir, und ich kann dich beruhigen, das find ich super.",M,False,True
+487,0,60,58,A,"Du beruhigst mich sehr, wenn du meinen Kopf kraulst beim inschlafen, Sachen…",W,False,True
+488,0,61,58,B,Und das mach ich gerne,M,False,True
+489,1,0,60,A,"Wenn´s positiv geht, dann wird es nicht laut, Peter. So… Ungewohnte Übung für uns, ja?",W,True,True
+490,1,1,60,B,Allerdings. ,M,False,True
+491,1,2,60,A,"Ich find es schon gut wie du dich um deine Mutter kümmerst. Das ist schon auch bewundernswert. Auch wenn ich dir schon ein bisschen zu kurz komme, das ist schon ganz klar. ",W,True,True
+492,1,3,60,B,Danke.,M,False,True
+493,1,4,60,A,"Meine Bedürfnisse kommen dabei zu kurz. Aber deine Mutter wird gut versorgt von dir und das finde ich gut, und ich find es auch gut, dass du mitfährst, wenn ich nach meiner Mutter guck. Oder das wenn ich allein fahr, du das dann so unterstützt, und dich um dich selber kümmerst, am Wochenende, wo wir ja eher wenig Zeit zusammen haben. Aber das ist ganz gut.",W,True,True
+494,1,5,60,B,Ich denke du könntest das auch so machen wie ich wenn halt nicht so viel räumliche Distanz wäre zwischen dir und deiner Mutter. ,M,False,True
+495,1,6,60,A,"Na ja, meine Mutter geht es nicht so schlecht wie deiner und dann macht es Sinn. Wobei es ist natürlich schon auch für uns beide Belastung. ",W,True,True
+496,1,7,60,B,"Ja, klar, ich bin die ganze Woche weg und dann oft das Wochenende noch an andere Dinge geht, dann bleibt wenig für uns.",M,False,True
+497,1,8,60,A,"Ich find´s schade, das war wenig. Ja. Ich find´s auch gut, dass du dich so an den Haushaltsaufgaben beteiligst und freitags dann in der Stadt einliegst, wobei für mich bleibt da immer noch genug übrig, wenn ich da Wäsche gewaschen hab und gebügelt hab.",W,True,True
+498,1,9,60,B,"Kostet mich auch ziemlich Kraft, der ganze Freitag.",M,False,True
+499,1,10,60,A,"Ja, ja, ja (unv. 1 s)",W,True,True
+500,1,11,60,B,"Zwischen Keller und Dachgeschoss, den Spagat zu machen. ",M,False,True
+501,1,12,60,A,"Gut, können wir das Arbeitszimmer in den Keller verlegen.  ",W,True,True
+502,1,13,60,B,Das wird freitags hell werden.,M,False,True
+503,1,14,60,A,Gell. Den anderen Tag aber weniger.  Von daher ist das schon ok. ,W,True,True
+504,1,15,60,B,"Das war damals ´ne gute Idee von dir, dass da oben die Dachgaube zu legen zum Schlafzimmer.",M,False,True
+505,1,16,60,A,"Da würde ich dich ja gar nicht mehr sehen, wenn du dein Arbeitszimmer ins Souterrain aufstellst. Was sind da noch so Themen?",W,True,True
+506,1,17,60,B,"Ja, sollen wir uns gegenseitig für finanzielle Unbesorgtheit loben? Ich find es toll dass du ein eigenes Einkommen hast.",M,False,True
+507,1,18,60,A,"Das kann ich mir vorstellen dass du das toll findest, dass ich ein eigenes Einkommen hab. Ich bin auch froh dass du Einkommen hast, von daher…",W,True,True
+508,1,19,60,B,Das Thema war eigentlich schon erschöpfend behandelt.,M,False,True
+509,1,20,60,A,"Ja, aber ich meine, wenn ich jetzt aufhören würde zu arbeiten hätte ich kein Einkommen mehr, da würdest du glaub ich auch nett aussehen. ",W,True,True
+510,1,21,60,B,Ja das wäre…,M,False,True
+511,1,22,60,A,Ich glaub das wäre für dich eine große Umstellung. ,W,True,True
+512,1,23,60,B,"Ja, aber das ist ja, wäre ja zeitlich begrenzt, absehbar.",M,False,True
+513,1,24,60,A,Na ja. ,W,True,True
+514,1,25,60,B,Bist du mal im Ruhestand…,M,False,True
+515,1,26,60,A,Sind noch 5 Jahre.,W,True,True
+516,1,27,60,B,Könnte man aber hinkriegen. ,M,False,True
+517,1,28,60,A,"Also so ist das nicht, aber du möchtest mich unterstützen wenn ich mich, sollte ich jetzt entscheiden ganz aufhören zu arbeiten bevor ich in den Ruhestand gehen kann krankheitsbedingt. ",W,True,True
+518,1,29,60,B,Ja.,M,False,True
+519,1,30,60,A,"Den Friseur würdest du bezahlen, alle 5 Wochen. ",W,True,True
+521,1,32,60,B,Das halte ich immer noch für einen völlig übertriebenen Luxus. ,M,False,True
+522,1,33,60,A,Wieso?,W,True,True
+523,1,34,60,B,"Ich geh alle 10 Wochen, für einen Bruchteil von deinen Kosten, von daher.",M,False,True
+524,1,35,60,A,lachend Ja du musst auch nicht mit deinen Struppelhaare (unv. 3 s) ,W,True,True
+525,1,36,60,B,"Ja, das stimmt.",M,False,True
+526,1,37,60,A,"Also von daher, grau werden wollt ich jetzt nicht. Die Kröte musst du schlucken. Das ist schon toll, okay… sonst.",W,True,True
+527,1,38,60,A,"Für Geduld kann ich dich nicht loben, weil Geduld hast du relativ wenig, muss ich dir schon sagen.",W,True,True
+528,1,39,60,B,Mhm.,M,False,True
+529,1,40,60,A,"Und Verständnis für meine Krankheit hast du auch nicht so richtig viel, weil es dir nicht so richtig als Krankheit vorkommt.",W,True,True
+530,1,41,60,B,Das ist leider auch wahr.,M,False,True
+531,1,42,60,A,Ja.,W,True,True
+532,1,43,60,B,Wie viele Minuten müssen wir?,M,False,True
+533,1,44,60,A,10.,W,True,True
+534,1,45,60,B,Wie viel haben wir noch?,M,False,True
+535,1,46,60,A,Keiner hat auf die Uhr geguckt. ,W,True,True
+537,1,48,60,A,"Ich mein, was in unserer Partnerschaft gut läuft ist, dass wir uns gegenseitig relativ viel Freiheit lassen. Das ist schon okay. Aber manchmal denke ich ein bisschen mehr gemeinsam machen und weniger Freiheit wäre auch nicht gut…wäre auch nicht schlecht.",W,True,True
+538,1,49,60,B,Ja. Ich hab nie Stress gemacht wenn du mit jemandem in den Urlaub fahren wolltest.,M,False,True
+539,1,50,60,A,"Ah ja, aber ich hab auch nicht Stress gemacht wenn du zuhause bleiben wolltest und nicht in den Urlaub fahren wolltest. Ich würde auch lieber mit dir fahren, als was weiß ich, mit der *Name*. Das muss man schon sehen. Ja, von daher ist das zwar schon Lob, aber auch mit der Handschräge ",W,True,True
+540,1,51,60,B,Gut.,M,False,True
+541,1,52,60,A,"Was ist gut finde, dass du dich um deine Gesundheit kümmerst, also was weiß ich, regelmäßig zum Arzt gehst und deine Medikamente nimmst, und gleichzeitig mach ich mir natürlich Sorgen und denke ``der Kerl könnte ein bisschen weniger essen‘‘.",W,True,True
+542,1,53,60,B,Ja.,M,False,True
+543,1,54,60,A,"Und sich mehr bewegen, aber auf dem Ohr bist du ja taub.",W,True,True
+544,1,55,60,B,"das ist kein Ohrproblem, es ist nicht dass ich das nicht höre.",M,False,True
+545,1,56,60,A,"Das ist schon klar. Ein Sprachliches Bild, hören tust du.",W,True,True
+546,1,57,60,A,"Ja… Was ich auch noch loben kann ist, dass du sehr zuverlässig bist, eigentlich. Man kann sich so in der Regel auf dich verlassen, wenn du was sagst. ",W,True,True
+547,1,58,60,B,Ja.,M,False,True
+548,1,59,60,A,Aber du sagst natürlich auch nicht alles zu sondern nur was daliegend ist. ,W,True,True
+549,1,60,60,B,"Ja, das ist ein Teil von der Zuverlässigkeit.",M,False,True
+550,1,61,60,B,"Ich fand´s gut damals, das ist zwar ´ne Weile her, aber ich find es immer noch gut… ähm… wie du mir zur Seite gestanden bist als ich so lange arbeitslos war.",M,False,True
+551,1,62,60,A,Das ist aber schon 100 Jahre her.,W,True,True
+552,1,63,60,B,Ja aber ich finde es immer noch gut.,M,False,True
+555,1,66,60,A,"Ich geh mal davon aus, dass du ehrlich bist, aber du sagst nur die Hälfte von dem was du denkst und weißt, vielleicht auch nur ein Viertel…",W,True,True
+556,1,67,60,B,Ja. Aber das stimmt dann auch.,M,False,True
+557,1,68,60,A,"Genau. (unv. 1 s., reden gleichzeitig)",W,True,True
+558,1,69,60,B,Ich sag ja nicht Dinge die ich… es ist halt viel mehr alles so interessant als dass ich´s gleich sagen	 kann. ,M,False,True
+559,1,70,60,A,Genau. Ich sollte dich dafür loben dass du so gut schweigen kannst.,W,True,True
+560,1,71,60,B,Ja!,M,False,True
+561,1,72,60,A,"Wobei ich es mir schon wünsche, dass du ein bisschen mehr sagst. ",W,True,True
+562,1,73,60,B,So.,M,False,True
+563,1,74,60,A,Weiß nicht ob die 10 Minuten schon um sind? Ich glaub nicht.,W,True,True
+564,1,75,60,B,ich glaube nicht.,M,False,True
+565,1,76,60,A,"denkt nach, schaut auf Blatt. Deine Toleranz ist schon so ausgeprägt, so für meine Besonderheit, aber meine für deine auch.",W,True,True
+566,1,77,60,B,Ja.,M,False,True
+567,1,78,60,A,Ja. Muss man schon sagen,W,True,True
+568,1,79,60,B,kann mich da nicht beklagen.,M,False,True
+569,1,80,60,A,"Wir lassen uns da gegenseitig schon auch in Ruhe (seufst). Und dein Humor, wenn du den mal zeigst, find ich auch gut. Den zeigst du in letzter Zeit relativ selten weil wir viel zu viel Stress hatten, muss ich ehrlich sagen.",W,True,True
+570,1,81,60,B,Ja. Ist leider so. ,M,False,True
+571,1,82,60,A,"Bei unserem Weg liegt leider was auf der Strecke, und das finde ich ganz schön schade… Jetzt fällt mir nichts mehr ein was ich noch loben könnte. Hier, fällt dir noch was ein?",W,True,True
+573,1,84,60,B,Hmmm,M,False,True
+574,1,85,60,A,"Soll ich dich schon mal loben dass wenn du jetzt Semesterferien hast, man mehr gemeinsame Freiheit hat, mehr gemeinsame Freizeit gestalten können, wenn nicht zu viel gearbeitet wird.",W,True,True
+575,1,86,60,B,"Hmmm, Vorsicht, Vorsicht. Also wenn wir beide (reden kurz gleichzeitig, 1s) zusammen den ganzen Tag zuhause sind, und nicht gerade die Hitze so am Brutzeln sind, wie die letzten Tage denk ich schon…",M,False,True
+576,1,87,60,A,"Dass wir das Fahrrad reparieren lassen und gucken dass wir die mal so ein bisschen bewegen, so im frühen Morgen, oder am späten Abend, das würde uns beiden guttun. Wollen wir uns das mal in Angriff nehmen?",W,True,True
+577,1,88,60,B,Mhm. Das kann man mal machen. ,M,False,True
+578,1,89,60,A,"Wenn die überhaupt noch zu reparieren sind, die stehen jetzt 10 Jahre in der Garage und sind nicht bewegt. ",W,True,True
+579,1,90,60,B,Ja die werden halt platt sein aber sonst nicht viel.,M,False,True
+580,1,91,60,A,Kümmerst du dich drum? Du guckst ganz begeistert.,W,True,True
+581,1,92,60,B,"Jaaa, klar…",M,False,True
+582,1,93,60,A,Die brauchen neue Reifen.,W,True,True
+583,1,94,60,B,Hab ich ein Schild auf dem Rücken? Ladet eure Probleme bei mir ab. ,M,False,True
+584,1,95,60,A,Das sind keine Probleme.,W,True,True
+585,1,96,60,B,"Kümmerst du dich drum. Satz, den ich am meisten hören. ",M,False,True
+587,0,0,81,A,Ich dachte wir reden darüber wie wir die erste Wohnung gesucht haben.,W,False,True
+588,0,1,81,B,Erste Wohnung? ,M,False,True
+589,0,2,81,A,"Ja, ich dachte das ist ein nettes Thema, oder?",W,False,True
+590,0,3,81,B,Ja.,M,False,True
+591,0,4,81,A,"Ich fand das süß, wie du erst angefangen hast nach einer Wohnung zu suchen, heimlich (B spricht)",W,False,True
+592,0,5,81,B,[SO ganz unauffällig].,M,False,True
+593,0,6,81,A,"Das war richtig süß. Und dann, keine Ahnung, dann (…) ich muss mich irgendwie konzentrieren, sonst schau ich immer auf deine Nase (Beide lachen).",W,False,True
+594,0,7,81,B,Du kannst auch gerne auf meine Nase schauen. ,M,False,True
+595,0,8,81,A,"Genau, na ja, das war voll süß.",W,False,True
+596,0,9,81,B,"Ich hab das voll unauffällig so gemacht, und ich find das voll toll, du hast die ganze Zeit irgendwie nichts dazu gesagt und irgendwie hast du das dann einfach dir selber überlegt und bemerkt, und hast voll gut gemerkt, dass ich daran gedacht hab und hast dann an dem Moment wo es für dich gut war hast du gesagt „Ja klar“ mich dafür verurteilt dass ich so früh gesucht hab. ",M,False,True
+597,0,10,81,A,Natürlich nicht.,W,False,True
+598,0,11,81,B,Du sollst nicht darauf schauen.,M,False,True
+599,0,12,81,A,"Doch, aber ich kann ja runterschauen, wenn was ist kann ich ja runterschauen. Ja dann hast du, hast du gesagt wie groß es sein muss und dann haben wir ausgerechnet wie viel es kosten darf und haben uns ganz viele Wohnungen angeschaut. ",W,False,True
+600,0,13,81,B,Hört sich richtig gut an. Es hat voll gut funktioniert.,M,False,True
+601,0,14,81,A,Weißt du noch welche die erste Wohnung war die wir angeschaut haben? ,W,False,True
+602,0,15,81,B,"Die erste Wohnung war in Kirchheim, da der, in Kirchheim Süd, diese bekackte mit dem Balkon der außen rumging.",M,False,True
+603,0,16,81,A,"War das die erste? Ja stimmt, die war richtig, mit dem hässlichen Klo und (lacht).",W,False,True
+604,0,17,81,B,Voll negativ.,M,False,True
+605,0,18,81,A,"Wie wir beide versucht haben gegenüber dem anderen zu sagen dass die Wohnung voll schön ist, obwohl wir sie eigentlich nicht wollten.",W,False,True
+606,0,19,81,B,Wir wollten einfach voll zusammenziehen.,M,False,True
+607,0,20,81,A,"Ja, und dann war sie auch voll schön. ",W,False,True
+608,0,21,81,B,"Wir wollten einfach, wir wollten einfach nur gern zusammenziehen.",M,False,True
+609,0,22,81,A,"Genau, und dann.",W,False,True
+610,0,23,81,B,Eine Wohnung mit dir haben.,M,False,True
+611,0,24,81,A,Ich weiß.,W,False,True
+612,0,25,81,B,Weil du toll bist.,M,False,True
+613,0,26,81,A,"Und dann ähm, ist schwierig nicht wegzuschauen. Dann (…) wollte ich noch darüber reden, dann, welche haben wir uns noch angeschaut? Ach ja, die hässliche ohne Küche (lacht) mit dem Makler, genau, und dann haben wir das überlegt, wie das wäre morgens zusammen zu frühstücken, wenn wir einen Frühstückstisch hätten, zum Frühstücken, will ich unbedingt irgendwann mal haben.",W,False,True
+614,0,27,81,B,"Mhm, (unv. 2 s.) ganz kurz hier noch mal reingucken, ja?",M,False,True
+615,0,28,81,A,Ja:,W,False,True
+617,0,30,81,A,"Weißt du noch, als wir eingekauft haben, an deinem Geburtstag. An deinem Geburtstag, als wir vor deinem Geburtstag eingekauft haben, das war richtig schön.",W,False,True
+618,0,31,81,B,Ja,M,False,True
+619,0,32,81,A,"Wollten wir schon zusammen wohnen, voll schön was eingekauft, auch voll schön die Entscheidung zu treffen, hat voll geholfen fand ich.",W,False,True
+620,0,33,81,B,"Ja. Das stimmt, es war voll schön. Und seit wir die Wohnung haben kann ich jeden Morgen aufwachen und hab dich im Arm, ich find das voll schön. Und Umarmung, und ich find das voll toll dass du immer knuddelst wenn ich knuddeln möchte, das ist voll super von dir. ",M,False,True
+621,0,34,81,A,Ich finde es auch voll schön einfach gerade so einzuschlafen abends.,W,False,True
+622,0,35,81,B,"Oh, ja.",M,False,True
+623,0,36,81,A,Es ist das allerbeste finde ich am zusammen wohnen. ,W,False,True
+624,0,37,81,B,Geht der ganze Stress einfach weg.,M,False,True
+625,0,38,81,A,"Und sich abends einzurollen, gemeinsam schlafen, vor allem jetzt im Winter, wenn es dann wieder kalt wird und so viel gemütlicher ist zum kuscheln, ist richtig schön (beide lachen), ist voll schön. Ansonsten, das (unv 2 s.) was sie dir zum Geburtstag geschenkt haben, die Wanderung zu deinen Eltern. Das war richtig richtig schön, da hoch zu stapfen. Ich fand das auch immer voll toll, dass du es richtig positiv fandst hast, obwohl der Weg eingeschneit war.",W,False,True
+626,0,39,81,B,"Ich fand es gerade deswegen super, ich finde es voll toll, einfach so Sachen,  wenn so Sachen passieren und wir sind uns da voll einig und ich finde das voll toll, diese Ruhe und dieser Schnee und Natur und einfach, ich find das voll toll, dass wir so Sachen gemeinsam machen können und wenn wir sie gemeinsam machen dann ist es einfach super. Und dann können wir",M,False,True
+627,0,40,81,A,"Ich genieß es auch dass wir immer gemeinsam in die Uni gehen können, wenn es weiterhin nicht stört dass wir quasi die ganze Zeit miteinander rumhängen.",W,False,True
+628,0,41,81,B,"Ich find das voll toll (A redet unv. 2 s.). Ich find das voll toll immer, manchmal denk ich, ich hab manchmal so Momente da denk ich „Ach, jetzt hockt man viel zusammen“ weißt du? Und dann warst du mal irgendwie für einen Nachmittag weg und ich denk mir so „Oh, komm wieder“.",M,False,True
+629,0,42,81,A," „Komm wieder“ (beide lachen), ist echt so. Die ersten 5 Minuten bin ich so „Boah, cool, Ruhe“ und 5 Minuten später bin ich so „(unv. 2s).",W,False,True
+630,0,43,81,B,Nein ich bin immer so „komm jetzt schaue ich mir einen Film an“ und nach 5 Minuten so „ohne dich ist das voll doof“ (beide lachen).,M,False,True
+631,0,44,81,A,"Filme, ist irgendwie auch scheiße, oder ich leg mich in die Badewanne, aber was wenn jetzt was Gruseliges passiert?  Und dann so, komm wieder zurück. ",W,False,True
+632,0,45,81,B,Genau.,M,False,True
+633,0,46,81,A,Und wenn ich frage „kommst du wieder zurück?“ Dann kommst du auch wieder.,W,False,True
+634,0,47,81,B,"Was wir noch darüber geredet haben, das erste worüber wir geredet haben was die Zukunftsvorstellungen angeht, und uns voll einig waren und meinten ja und (unv. 2s.) 2 Kinder.",M,False,True
+635,0,48,81,A,Und bald ein Hund. Nicht mehr lange.,W,False,True
+636,0,49,81,B,(Guckt überrascht),M,False,True
+637,0,50,81,A,"Wieso? Wir haben gesagt wenn wir einen Job haben und das Finanzielle haben, dann holen wir uns einen Hund, oder eine Katze. ",W,False,True
+638,0,51,81,B,Eine Katze.,M,False,True
+639,0,52,81,A,Vielleicht ist eine Katze besser. ,W,False,True
+640,0,53,81,B,Zuerst eine Katze.,M,False,True
+641,0,54,81,A,Zuerst eine Katze. Wann denn? ,W,False,True
+642,0,55,81,B,"Also ja noch so ein Jahr für den Master, ja. Aber lass uns noch die Gleitschirmflieger- Ausbildung machen, da sind wir noch länger weg. ",M,False,True
+643,0,56,81,A,"Stell dir vor, eine gemeinsame Katze die abends auf uns wartet, Katzenbaby was spielt. Willst du eher einen Kater oder eine Katze?",W,False,True
+644,0,57,81,B,"Ist mir völlig Wurst. Ein Straßenkater, keine Ahnung.",M,False,True
+645,0,58,81,A,"Dann haben wir einen Kater gemeinsam, ein rot gestreiften oder einen schwarzen.",W,False,True
+646,0,59,81,B,Oder einen schwarzen.,M,False,True
+647,0,60,81,A,"Einen schwarzen Kater. Dann spiele wir mit dem abends, ist bestimmt voll schön, kommen wir abends nachhause und dann sitzt da der Kater und dann können wir mit dem spielen. Und dann haben wir einen Kamin irgendwann, können wir zusammen vor dem Kamin sitzen. ",W,False,True
+648,0,61,81,B,(nickt und lächelt).,M,False,True
+649,0,62,81,A,Genau.,W,False,True
+650,0,63,81,B,"Ne, das finde ich voll schön. ",M,False,True
+651,0,64,81,A,"Weißt du noch als wir uns das erste Mal getroffen haben und du den Arm um mich gelegt hat (lacht) das war so toll, ist richtig schön, hab mich nicht bewegt, ich fand das richtig schön. Es war richtig schön.",W,False,True
+652,0,65,81,B,Das war voll gruselig (beide lachen).,M,False,True
+653,0,66,81,A,"Ich fand es auch voll toll, dass es dir einfach nicht peinlich war und wir darüber geredet haben. „das ist halt so, ich bin manchmal ein bisschen clumsy“ und das war irgendwie schön. ",W,False,True
+654,0,67,81,B,"Ich find das voll schön dass ich da immer so mit dir darüber reden kann und du mich voll akzeptierst und mich da unterstützt und das voll einsiehst und was du auch erzählst dass du das toll findest (unv. 2s.). Ich hab dir Sachen erzählt, die habe ich keinem anderen Menschen vorher erzählt, und durch dich bin ich auch besser geworden auf die Themen und du bringst mich dazu lauter Sachen auszuprobieren und das find ich voll schön, das ist voll toll, Sachen die ich mich vorher nicht getraut hätte und dann sind sie voll toll.",M,False,True
+655,0,68,81,A,"Was traust du dich denn nicht, du traust dich doch alles?",W,False,True
+656,0,69,81,B,"Na ja, so Sachen ausprobieren, es kann schon sein, dass ich die von selber nicht machen würde, weißt du? ",M,False,True
+657,0,70,81,A,"(unv. 6 s.) das war richtig cool. Als die geschlossen hatte und wir keine Lust hatten zu warten bis die wieder aufmachen (beide lachen). Und weißt du im (unv. 1s.) die letzten Tage, das war so schön. ",W,False,True
+658,0,71,81,B,"Obwohl es voll stressig war, war es dann zusammen voll schön. ",M,False,True
+659,0,72,81,A,"Ja, es hat mich auch voll glücklich gemacht, die gemeinsamen Momente wenn man so froh ist, dass du sowas auch machst und dann Spaß hast.",W,False,True
+660,0,73,81,B,Natürlich.,M,False,True
+661,0,74,81,A,Finde ich richtig richtig toll. ,W,False,True
+662,0,75,81,B,"Ist ja andersrum genauso, dass du Sachen machst, wo ich niemals erwartet hätte dass du dich da irgendwie dafür interessierst, und weil ich mich so darüber freue, ist es tatsächlich sogar trotzdem so dass du Spaß hast, es ist nicht so nach dem Motto „Ja gut, ich schau das halt mit dir“ und daran Interesse findest, einfach nur weil ich es toll finde, das ist voll schön.",M,False,True
+663,0,76,81,A,Ist echt voll schön. Was ich auch voll schön fand ist als du mich das erste Mal so gehalten hast-,W,False,True
+664,0,77,81,B,Ja so ganz zärtlich.,M,False,True
+665,0,78,81,A,"Fand ich richtig richtig toll. (unv, 3 s.)",W,False,True
+666,0,79,81,B,Jetzt kriege ich Krämpfe (beide lachen),M,False,True
+667,0,80,81,A,"Weißt du noch bei Deva, als wir den Bus verspasst haben, ich fand es einfach voll schö,n dass du trotzdem pur (unv. 2 s.)",W,False,True
+668,0,81,81,B,"Ich hab voll, ich war irgendwie voll, ich war mit dir zusammen und ich wusste das wird schon noch funktionieren mit dir und hätte ich alleine gestanden hätte ich voll die Krise bekommen, aber mit dir (A spricht).",M,False,True
+669,0,82,81,A,"[Richtig toll dass du noch ein bisschen was gemacht hast, dass du den Rucksack für mich getragen hast, danke dafür].",W,False,True
+670,0,83,81,B,Selbstverständlich. ,M,False,True
+671,0,84,81,A,"weißt du noch die Brauseherzchen, die wir da dabei hatten? Dann hab ich dir immer Brauseherzchen zurückgesteckt, das war richtig schön. ",W,False,True
+672,0,85,81,B,Voll cool war das. Ich wird jetzt kur hier einmal drauf gucken. Gemeinsame Freizeitgestaltung!,M,False,True
+673,0,86,81,A,Freizeit?,W,False,True
+674,0,87,81,B,"Das ist das coole, dass wenn wir irgendwo hingehen immer selbstverständlich ist dass wir zu zweit gehen. ",M,False,True
+675,0,88,81,A,Ist auch schön. Lieber mit dir als ohne (B spricht).,W,False,True
+676,0,89,81,B,[Ich finde das voll super.] ,M,False,True
+677,0,90,81,A,"Ich finde das auch irgendwie voll normal. Ich finde es voll schön dass es bei uns auch so funktionier, dass es nicht so ist das jemand sagt „Ich brauche meinen Freiraum, geh weg“.",W,False,True
+678,0,91,81,B,"Es wäre wahrscheinlich, die Sache ist, wenn ich mal Freiraum möchte, möchte ich so viel, dass du noch da bist. Ich möchte vielleicht was machen für mich, aber ich möchte dass du noch da bist. ",M,False,True
+679,0,92,81,A,„Ich möchte Freiraum“ „Komm wir kuscheln“ jetzt ist der Freiraum auch erreicht. (Beide lachen). Ist richtig schön. (Unv. 7 s. ) Dass du die blöden youtube Videos mit mir schaust wenn ich am prokrastiniere.,W,False,True
+680,0,93,81,B,"Ja aber ich hab dich im Arm, ist voll schön. ",M,False,True
+681,0,94,81,A,(unv. 2 s.),W,False,True
+682,0,95,81,B,"Mhm, ist voll schön. Vor allem, dass du überhaupt kein Problem damit hast dass ich manchmal auch schwach bin und nicht an dich ran knuddel (A spricht unv. 2 s.). Dass du mich in den Arm nimmst und für mich da bist und mich voll lieb streichelst gerade rauf, das ist so toll. ",M,False,True
+683,0,96,81,A,"Ja aber wäre ja auch schade, wenn nicht jeder mal positiv, wenn nicht jeder Mal stark sein könnte.",W,False,True
+684,0,97,81,B,"Ja, aber das ist nicht bei allen Leuten so!",M,False,True
+685,0,98,81,A,"Ja aber es soll, wenn nicht ist einfach doof. ",W,False,True
+686,0,99,81,B,(lacht) Dass du immer Sachen mit mir ausprobierst.,M,False,True
+687,0,100,81,A,"Ich bin auch voll froh dass du, was wollte ich sagen, hab ich vergessen. Ja, dass du, nein, nein, ich hab es vergessen, ist egal. (Beide lachen).",W,False,True
+688,0,101,81,B,Weißt du was ich auch toll finde?,M,False,True
+689,0,102,81,A,Hm?,W,False,True
+690,0,103,81,B,Dass Du richtig gut aussiehst (beide lachen).,M,False,True
+691,0,104,81,A,"Ich find auch die Farbe steht dir richtig gut, passt richtig gut zu deinem Bart.",W,False,True
+692,0,105,81,B,Dankeschön.,M,False,True
+693,0,106,81,A,Sieht (unv 2 s.) mit dem Bart und den Haaren.,W,False,True
+694,0,107,81,B,"Ich bin auch viel selbstbewusster durch dich, weil du mit immer sagst dass ich gut aussehe und dann mach ich so ein bisschen was an mir und dann hab ich auch wirklich selber das Gefühl dass ich gut aussehe. Weißt du sonst ist es ja so nach dem Motto „ist ja eh scheissegal, interessiert ja keinen“.",M,False,True
+695,0,108,81,A,"Mich interessiert das schon. (Zeitgleiches Sprechen, unv. 3 s.). Und dein Bart und dein Hemdkragen passt zu deinen Augen und das ist irgendwie so voll schön farbig und herbstlich und es ist dann irgendwie so Herbst und Herbstblätter.",W,False,True
+696,0,109,81,B,"Weißt du was auch das coole ist? Wenn man sich so fragt „welche Jahreszeit ist die schönste?“ dann denke ich immer Winter ist voll cool, weil da kann ich mit Sarah knuddeln, mit Kerzen, ski laufen mit Sarah.",M,False,True
+697,0,110,81,A,Weihnachten.,W,False,True
+698,0,111,81,B,"Dann denk ich mir so „Weihnachten“, da denk ich mir so „Herbst ist voll cool, weil, da kann ich mit Sarah im Regen stehen, spazieren gehen.",M,False,True
+699,0,112,81,A,Ja. ,W,False,True
+700,0,113,81,B,"Sommer ist voll cool, weil da ich mit Sarah ins Freibad gehen kann, oder Frühling ist voll cool, weil da sind überall Blumen und da kann ich mit Sarah picknicken gehen. Und dann ist das so, warum ist ist alles cool? Weil Sarah da ist. ",M,False,True
+701,0,0,87,A,Wie lang?,M,False,True
+702,0,1,87,B,10 Minuten,W,False,True
+703,0,2,87,A,"Okay, dann fang mal an.",M,False,True
+704,0,3,87,B,"Amm… Ich fand es schön als du gestern gesagt hast… wenn ich… wegen dem  Wochenende, zum Papa.",W,False,True
+705,0,4,87,A,Mhm.,M,False,True
+706,0,5,87,B,"Wenn ich mich… wenn ich, ich würde mich freuen… oh Gott.",W,False,True
+708,0,7,87,B,Weißt du was ich meine?,W,False,True
+709,0,8,87,A,"Dass du, wenn du gerne hättest…",M,False,True
+710,0,9,87,B,"Genau, wenn ich gerne hätte dass du dabei bist, dass du mitkommst, dann würdest du da mitkommen.",W,False,True
+711,0,10,87,A,"Natürlich, ja.",M,False,True
+712,0,11,87,B,Auch wenn meine Familie anstrengend ist.,W,False,True
+713,0,12,87,A,"Ja aber… man gewöhnt sich ja dran mit den Jahren. Find ich schön, dass du das jetzt gesagt hast, und wenn ich jetzt den einen Punkt von der Liste mal auftreibe mit dem Haushalt, ich finde es gut dass du mir da in den Hintern trittst, dass jeder seinen Teil erledigt, dass du da so ein Auge drauf hast. Ja.",M,False,True
+714,0,13,87,B,"Ich find´s gut, dass du, dass du es gut findest, dass ich dir, also dass du mir auch erlaubst, dass ich dir da in den Hintern treten darf.",W,False,True
+715,0,14,87,A,"Ja, es war ja abgemacht wer was macht und dann sollten wir uns dran halten. Und wenn einer was nicht macht dann können wir den ja dran erinnern, mehr oder weniger stark. ",M,False,True
+716,0,15,87,A,"Ich find´s gut, wo wir es jetzt über den Haushalt haben, dass du so ordentlich bist, jetzt grad wenn ich an früher denke, da sah es jetzt nicht unbedingt so aus, und das doch, dass wir das mit der Wohnung so eigentlich doch ganz gut hinbekommen.",M,False,True
+717,0,16,87,B,"Ja ich weiß ja wie wichtig dir das ist und das ist ja auch, ist ja schon schöner.",W,False,True
+718,0,17,87,A,Das ist schön dass du da meine Marotten akzeptierst mit Ordnung und so. Dass die Gewürze alphabetisch sortiert sind.,M,False,True
+720,0,19,87,B,Ja das ist ja wirklich in Ordnung.,W,False,True
+721,0,20,87,A,Ja. Ich guck mal kurz auf die Liste.,M,False,True
+722,0,21,87,A,"Deine Großzügigkeit, wenn ich das grad lese, weil du mir immer gerade Beträge zurückgibst, egal ob es viel ist oder nicht.",M,False,True
+723,0,22,87,B,Okay. Lacht. Meinst du das jetzt darauf bezogen?,W,False,True
+724,0,23,87,A,"Ja, also, du bist schon großzügig, du hast da nicht das klassische Männer-Frauen Bild, dass der Mann die Frau einladen muss, ich mein, du lädst mich auch oft genug zum Essen ein, und so, und das finde ich gut.",M,False,True
+726,0,25,87,A,"Gemeinsame Urlaube, dass wir so viel rumreisen.",M,False,True
+727,0,26,87,B,"Ja, dass wir da immer was finden, dass uns beiden, beziehungsweise dass du da schon auch eher auf meine Wünsche Rücksicht nimmst, oder einfach das so akzeptierst, so…ja, du hast ja so nichts gegen meine… gegen meine Reisewünsche.",W,False,True
+728,0,27,87,A,"Ja das ist eben was du gesagt hast du möchtest zu deinem Vater, wenn dich das glücklich macht, dann mach ich das. Ob ich da Interesse hab oder nicht, sei es da hingestellt, dann macht es mir auch nichts aus, und wenn dich das freut, und ich müsste mir dafür kein Bein abhacken oder so, dann mach ich das halt. Weil das für mich einfach dazu gehört für den anderen Sachen zu machen, auch wenn man selbst kein Interesse dran hat.",M,False,True
+729,0,28,87,B,Mhm.,W,False,True
+730,0,29,87,A,"Wenn ich da Familie lese, ich find´s toll, dass du so ein cooles Verhältnis zu deiner Familie hast, auch wenn sie…",M,False,True
+731,0,30,87,B,"Anders sind als du, als du es kennt?",W,False,True
+732,0,31,87,A,"Auch wenn sie, wenn´s etwas aufgedreht und so manchmal ist.",M,False,True
+733,0,32,87,B,Ist halt ´ne größere Familie. ,W,False,True
+734,0,33,87,A,Ja.,M,False,True
+735,0,34,87,B,Und ich find´s auch schön dass du dich mit meinen Geschwistern so gut verstehst.,W,False,True
+736,0,35,87,A,Ja.,M,False,True
+737,0,36,87,B,Mit der *Name*.,W,False,True
+738,0,37,87,A,"Ja, mit den anderen ja auch.",M,False,True
+739,0,38,87,B,Ja.,W,False,True
+740,0,39,87,A,Die sind halt nicht so…präsent.,M,False,True
+741,0,40,87,B,Flippig.,W,False,True
+742,0,41,87,A,Ja. Das wird’s ja jetzt noch nicht gewesen sein mit den guten Dingen. ,M,False,True
+743,0,42,87,B,"Ich find´s schön, dass du durch mich zum Kochen gekommen bist. Das kann man ja schon so sagen, oder?",W,False,True
+744,0,43,87,A,"Ja, weg von Tüten und so.",M,False,True
+745,0,44,87,B,Ja.,W,False,True
+746,0,45,87,A,"Ich find´s gut, dass du alles eigentlich isst. Dass man nicht darauf achten muss, das isst du nicht, das isst du nicht. Dass man im Prinzip egal was es jetzt gibt, dass es keine Sachen gibt bei denen du, wie bei mir zum Beispiel mit irgendwelchem Stinkekäse dass du da sagst, ``ne, dass esse ich jetzt nicht‘‘, sondern dass du alles isst.",M,False,True
+747,0,46,87,B,Ja. ,W,False,True
+748,0,47,87,A,"Und das mit der Verbundenheit zu deiner Familie, ich find´s auch toll, du fährst ja auch recht oft, wenn du jetzt du deinem Vater fährst, oder zur Oma, oder zur Kathrin, das ist ja auch ´ne weite Strecke, und dass du das trotzdem auch so auf dich nimmst. Und, was mich auch sehr freut ist, dass, ähm, berufliche Zufriedenheit, dass du dich jetzt da so einlebst, auch wenn du natürlich oft meckerst, aber das ist im Gegensatz zum Anfang doch erheblich besser geworden ist. Dass du nicht mehr heulend nachhause kommst vom neuen Job, sondern, dass du jetzt einfach nur noch genervt von den Leuten bist. ",M,False,True
+749,0,48,87,B,"Von den Mitarbeitern, ja.",W,False,True
+751,0,50,87,B,"Ja. Ja, da hast du mich ja auch sehr, sehr gut unterstützt, und mir beigestanden und mir gut zugeredet und",W,False,True
+752,0,51,87,A,Ja.,M,False,True
+753,0,52,87,B,"Oder die Kathrin gebeten, mich mal anzurufen. ",W,False,True
+754,0,53,87,A,"Das kann sein, dass ich das vielleicht mal gemacht hab. ",M,False,True
+755,0,54,87,B,Weißt du nicht mehr?,W,False,True
+758,0,57,87,A,"Ich find´s gut, dass du jetzt wieder zum Sport gehst. Also, einfach so, um sich körperlich auszupowern oder so.",M,False,True
+759,0,58,87,B,Ja. Im Sommer war mir das zu anstrengend.,W,False,True
+760,0,59,87,A," Soll´s ja sein, aber na ja. ",M,False,True
+761,0,60,87,B,Ja. ,W,False,True
+762,0,61,87,B,"Ich find´s schön  - Thema Hobby - dass wir ein paar Tanzkurse zusammen gemacht haben, wo du auch am Anfang nicht wusstest, sondern gesagt hast ``ja, mach ich´s mal mit‘‘. Lacht",W,False,True
+763,0,62,87,A,"Ja, hab ich mal mitgemacht. Ist ja auch gut wenn man zumindest den Disco Fox kann.",M,False,True
+764,0,63,87,A,Ich denke wir sind immer ehrlich zueinander. ,M,False,True
+765,0,64,87,B," ja, ja.",W,False,True
+766,0,65,87,A,"Also vielleicht sagt man manchmal Sachen wenn man will nicht, aber es ist nicht so dass man sich anlügt, auch so auf Treue bezogen.",M,False,True
+767,0,66,87,B,Ja.,W,False,True
+768,0,67,87,A,"Würde ich jetzt einfach mal so, schätze ich mal dass du ziemlich treu bist.",M,False,True
+769,0,68,87,B,"Ja, bin ich.",W,False,True
+771,0,70,87,A,"Ich find´s cool dass wir das hier zusammen machen. Ist auch irgendwie so eine Art von Freizeitbeschäftigung. Und das ist jetzt… dass du nicht so sehr genervt bist von meinem, von meiner Fußballsucht, sei es jetzt selbst spielen, oder schauen.",M,False,True
+772,0,71,87,B,"Na ja, nicht so genervt… ",W,False,True
+773,0,72,87,A,"Anfangs war es, also beziehungsweise…",M,False,True
+774,0,73,87,B,Ich kann jetzt besser damit umgehen.,W,False,True
+775,0,74,87,A,"Dass du gerne…schon mal auch gerne mitgehst, auf Fußballspiele, das freut mich auch sehr.",M,False,True
+777,0,76,87,B,Was steht denn…lies mal noch ein paar Punkte.,W,False,True
+778,0,77,87,A,"Berufliche Zufriedenheit, ich schätze da sind wir beide zufrieden.",M,False,True
+779,0,78,87,B,Bist du zufrieden?,W,False,True
+780,0,79,87,A,"Ja. Der Job macht… Ja also es kann natürlich immer besser sein, aber es macht Spaß und es ist besser als wenn man mit Bauchweh",M,False,True
+782,0,81,87,B,Ich weiß nicht ob du dich so bewegen sollst. ,W,False,True
+783,0,82,87,A,"Oh, ja. Besser als wenn man mit Bauchweh jeden Tag ins Geschäft geht. Und auch finanzielle Unbesorgtheit, ich denk dass… wir haben jetzt auch keine, keine Mängel, ja, wir können uns leisten was wir wollen. Ja, wir können uns leisten was wir wollen.",M,False,True
+784,0,83,87,B,"Ja, ja das stimmt. ",W,False,True
+785,0,84,87,A,"Dann weiß ich nicht, aber ich find´s auch cool, dass du durch mich so ein bisschen zum Sparen gekommen bist. Dass man auch was auf die Seite legt.",M,False,True
+786,0,85,87,B,lacht Als hätte ich vorher alles ausgegeben.,W,False,True
+787,0,86,87,A,"Nein aber ich hab, ich hab nur so das Gefühl gehabt. ",M,False,True
+788,0,87,87,B,Ja.,W,False,True
+789,0,88,87,A,"Sexualität. Will ich jetzt nicht näher darauf eingehen, aber da kann ich mich jetzt absolut nicht beschweren.",M,False,True
+791,0,90,87,A,"Du bist sehr hilfsbereit, wenn es darum geht irgendwo beim Umzug zu helfen oder so bist du eigentlich wenn es die Zeit zulässt immer dabei.",M,False,True
+792,0,91,87,B,"Du machst es auch. Auch wenn du nicht so wirklich Lust dran hast, du machst es trotzdem.",W,False,True
+793,0,92,87,A,"Ja, weil ich denk das macht man, bei Freunden, Familie, da macht man das, auch wenn Umzug helfen jetzt nicht meine größte Leidenschaft ist, aber man macht es ja gerne, auch wenn man wie beim letzten Mal da 4 Mal oder 3 Mal dem in der Woche hilft, beim Umzug. ",M,False,True
+794,0,93,87,B,Ja.,W,False,True
+795,0,94,87,A,"Ich bin froh dass du es akzeptierst dass ich gerne Kappen trage, und mir jetzt doch ein paar noch gekauft hatte, und du dich nicht so sehr aufgeregt hast wie ich das erwartet hätte.",M,False,True
+796,0,95,87,B,Hab ich das? Schmunzelnd,W,False,True
+797,0,96,87,A,"Die neuen Schuhe die ich mir bestellt hab, hast du dich anfangs aufgeregt aber dann akzeptiert.",M,False,True
+798,0,97,87,B,Ja manchmal brauche ich halt ein bisschen.,W,False,True
+799,0,98,87,A,"Ja, aber es sind so Kleinigkeiten die mich dann einfach freuen. ",M,False,True
+800,0,99,87,B,"Ja schön. Ich find´s gut - wo wir jetzt gerade - ich find´s schön dass wir uns so Sachen sagen, weil ich find man sagt sich sowas viel zu selten.",W,False,True
+801,0,100,87,A,"Ja, wir sollten die Liste mit nachhause nehmen.",M,False,True
+803,0,102,87,A,"Ja ich find´s auch gut, dass man jetzt quasi gezwungen wird dem anderen positive Sachen zu sagen. ",M,False,True
+804,0,103,87,B,"Ja, sich nur über positives zu unterhalten.",W,False,True
+805,0,104,87,A,"Ja, stimmt. Negative Sachen wirft man sich oft nur an den Kopf… Ja…(Stille 9 s) Kommunikation über gemeinsame Gespräche, machen wir ja gerade.",M,False,True
+807,0,106,87,A,"Du bist witzig, du kannst witzig sein. Ich mag dein Lachen. Hübsch bist du.",M,False,True
+808,0,107,87,B,Danke.,W,False,True
+809,0,108,87,A,"Ja… Ich find´s gut, dass du ein Instrument spielst. Schon vorbei?",M,False,True

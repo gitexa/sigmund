@@ -12,7 +12,7 @@ from pipelinelib.extension import Extension
 class Tokenizer(Component):
     """
     Extracts words from texts. Stores the words and their count under
-    doc._.words and doc._.word_count respectively
+    doc._.tokens and doc._.token_count respectively
     """
 
     TOKENS = Extension("tokens", list())

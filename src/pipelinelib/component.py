@@ -36,6 +36,8 @@ class Component(metaclass=abc.ABCMeta):
         that automatically intialises declared extensions
         on the doc
         """
+        print(f"Executing {self.name}")
+
         for extension in filterfalse(lambda e: doc.has_extension(e.name), self.creates_extensions):
             doc.set_extension(
                 extension.name, default=extension.default_type)

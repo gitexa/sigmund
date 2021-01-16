@@ -8,6 +8,7 @@ from utils.corpus_manager import DialogueCorpusManager
 from utils.dialogue_parser import DialogueParser
 
 from pipelinelib.pipeline import Pipeline
+from pipelinelib.text_body import TextBody
 from sigmund.classification import qda
 from sigmund.features import words as fwords
 from sigmund.preprocessing import syllables as psyllables
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 
     y_train = ds["is_depressed"]
     for index, doc in enumerate(
-        ds.apply(lambda p: pipeline.execute(p.raw_text),
+        ds.apply(lambda p: pipeline.execute(p.raw_text, body=TextBody.DOCUMENT),
                  axis=1)):
         x_train[index, :] = [doc._.liwc_scores.get("Posemo"), doc._.liwc_scores.get(
             "Negemo"), doc._.liwc_scores.get("Inhib")]
@@ -65,7 +66,9 @@ if __name__ == "__main__":
         .add_component(fwords.LiwcScores("./data/German_LIWC2001_Dictionary.dic")) \
         .add_component(qda.QDA_ON_LIWC(X_train=x_train, y_train=y_train))
 
-    for doc in paragraphs.apply(lambda p: pipeline.execute(p.raw_text), axis=1):
+    for doc in paragraphs.apply(
+            lambda p: pipeline.execute(p.raw_text, body=TextBody.DOCUMENT),
+            axis=1):
         print(len(doc), doc._.liwc_scores.get("Inhib", 0.0),
               f"qda_prediction: {doc._.QDA_ON_LIWC}")
     # print("\n".join(map(str, [doc._.words, doc._.word_count, doc._.liwc_scores])))

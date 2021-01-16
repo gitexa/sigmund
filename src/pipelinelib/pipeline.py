@@ -1,8 +1,10 @@
 import operator
 from itertools import filterfalse
-from typing import Any, Dict
+from typing import Any, Dict, List, Union
 
 from spacy.tokens import Doc
+
+from pipelinelib.text_body import TextBody
 
 from .component import Component
 from .extension import Extension
@@ -30,7 +32,7 @@ class Pipeline:
             for pipe_name in self._model.pipe_names:
                 self._model.remove_pipe(pipe_name)
 
-    def add_component(self, component: Component):
+    def add_component(self, component: Component) -> Pipeline:
         """
         Add a component to the pipeline, with checks
         """
@@ -40,17 +42,27 @@ class Pipeline:
 
         return self
 
-    def execute(self, text: str) -> Doc:
+    def execute(self, text: str, body: TextBody) -> List[Doc]:
         """
         Execute the pipeline with the registered components
         """
         print(f"=== Starting pipeline with {self._model.pipe_names} ===")
-        ret = self._model(text)
+        ret = None
+
+        if body == TextBody.DOCUMENT:
+            ret = [self._model(text)]
+        elif body == TextBody.PARAGRAPH:
+            ret = [self._model(paragraph) for paragraph in self._read_paragraphs(text)]
+        elif body == TextBody.SENTENCE:
+            ret = [self._model(sentence) for sentence in self._read_sentences(text)]
+        else:
+            raise Exception(f"Unknown text body: {body}")
+
         print("=== Finished pipeline execution ===")
 
         return ret
 
-    def _is_compatible(self, component: Component):
+    def _is_compatible(self, component: Component) -> bool:
         """
         Check that the component will not overwrite a preregistered extension,
         or if it depends on an extension that has not been declared yet

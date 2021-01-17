@@ -47,19 +47,26 @@ class AgreementScoreExtractor(Component):
                 if len( list( filterfalse( string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))) > 5:
                     tokens = [x.lower() for x in list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))[:5]]
 
+                    flag = False
                     for category in disagreement_cat:
                         if Counter(category for token in tokens for category in parse(token))[category] >= 1:
+                        
                             print(x, y, category, tokens)
-                            agr_score[0] += 1
+                            if flag == False: agr_score[0] += 1
+                            flag = True
                 else:
                     tokens = [x.lower() for x in list(filterfalse( string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))]
                     
+                    flag = False
                     for category in disagreement_cat:
                      if Counter(category for token in tokens for category in parse(token))[category] >= 1:
-                         print(x, y, category, tokens)
-                         agr_score[0] += 1
+
+                        print(x, y, category, tokens)
+                        if flag == False: agr_score[0] += 1
+                        flag = True
 
         doc._.agreementscore = round(agr_score[0] / agr_score[1], 2)
+        print(agr_score)
         return doc
 
 def tokenize(text):

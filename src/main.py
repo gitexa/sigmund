@@ -1,5 +1,3 @@
-import json
-import os
 from os import getcwd
 
 import liwc
@@ -13,17 +11,11 @@ from pipelinelib.pipeline import Pipeline
 from pipelinelib.text_body import TextBody
 from sigmund.classification import qda
 from sigmund.features import agreement_score as fagree
+from sigmund.features import flesch_reading_ease as fflesch
 from sigmund.features import talk_turn as ftalkturn
 from sigmund.features import words as fwords
 from sigmund.preprocessing import syllables as psyllables
 from sigmund.preprocessing import words as pwords
-
-<< << << < HEAD
-
-== == == =
-
->>>>>> > 854a22e(Implementation of agreement_score now delivers final score per diolag using liwc categorys)
-
 
 if __name__ == "__main__":
     nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
@@ -37,18 +29,12 @@ if __name__ == "__main__":
     dialogue = DialogueParser(
         doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
         depressed=True, remove_annotations=True)
-    # path2file = "/home/benji/Documents/Uni/heidelberg/01/text-analytics/sigmund/src/data/Paargespräche_text/Paar 47_T1_IM_FW.docx"
-    # with open(os.path.join(os.getcwd(), 'config.json'), 'r') as configfile:
-    #    config = json.load(configfile)
-    #path2file = os.path.join(config['path_to_transcripts'], 'Paar 47_T1_IM_FW.docx'),
 
-    # dialogue = DialogueParser(
-    # doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
-    # depressed=True, remove_annotations=True)
+    paragraphs = dialogue.get_sentences()
+    fulltext = dialogue.get_fulltext()
 
-    corpus_file_path = 'all_preprocessed.csv'
-    full_dataset = DialogueCorpusManager(corpus_file=corpus_file_path, nlp=nlp)
-    ds = full_dataset.get_paragraphs()
+    pipeline_fulltext = Pipeline(model=nlp) \
+        .add_component(fflesch.FleschExtractor())
 
     paragraphs = dialogue.get_paragraphs()
     fulltext = dialogue.get_all_paragraphs()

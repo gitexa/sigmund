@@ -122,9 +122,9 @@ class DialogueParser:
 
     def get_sentences(self, query=None):
         """
-                Get sentences of Dialogue as Dataframe, Meta-Data and raw text
-                :type query: additional filter for sentences to get, example: get all paragraphs of speaker A
-                """
+        Get sentences of Dialogue as Dataframe, Meta-Data and raw text
+        :type query: additional filter for sentences to get, example: get all paragraphs of speaker A
+        """
         if query:
             return self.sentence_frame.query(query)
         return self.sentence_frame

@@ -59,7 +59,7 @@ class Pipeline:
         else:
             raise Exception(f"Unknown text body: {body}")
 
-        print(f"{text_bodies}")
+        # print(f"{text_bodies}")
         ret = [self._model(d) for d in text_bodies["raw_text"]]
 
         print("=== Finished pipeline execution ===")

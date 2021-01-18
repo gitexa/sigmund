@@ -3,6 +3,7 @@ from itertools import filterfalse
 from typing import Any, Dict, List, Union
 
 from spacy.tokens import Doc
+from utils.dialogue_parser import DialogueParser
 
 from pipelinelib.text_body import TextBody
 
@@ -32,7 +33,7 @@ class Pipeline:
             for pipe_name in self._model.pipe_names:
                 self._model.remove_pipe(pipe_name)
 
-    def add_component(self, component: Component) -> Pipeline:
+    def add_component(self, component: Component) -> "Pipeline":
         """
         Add a component to the pipeline, with checks
         """
@@ -42,21 +43,24 @@ class Pipeline:
 
         return self
 
-    def execute(self, text: str, body: TextBody) -> List[Doc]:
+    def execute(self, parser: DialogueParser, body: TextBody) -> List[Doc]:
         """
         Execute the pipeline with the registered components
         """
         print(f"=== Starting pipeline with {self._model.pipe_names} ===")
-        ret = None
 
+        text_bodies = None
         if body == TextBody.DOCUMENT:
-            ret = [self._model(text)]
+            text_bodies = parser.get_fulltext()
         elif body == TextBody.PARAGRAPH:
-            ret = [self._model(paragraph) for paragraph in self._read_paragraphs(text)]
+            text_bodies = parser.get_paragraphs()
         elif body == TextBody.SENTENCE:
-            ret = [self._model(sentence) for sentence in self._read_sentences(text)]
+            text_bodies = parser.get_sentences()
         else:
             raise Exception(f"Unknown text body: {body}")
+
+        print(f"{text_bodies}")
+        ret = [self._model(d) for d in text_bodies["raw_text"]]
 
         print("=== Finished pipeline execution ===")
 

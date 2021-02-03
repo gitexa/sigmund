@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis, LinearDiscriminantAnalysis
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from spacy.tokens import Doc
 
 from pipelinelib.component import Component

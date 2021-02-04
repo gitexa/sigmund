@@ -10,25 +10,37 @@ We examine transcripts of couple conversations from a current [research project]
 * Benjamin Sparks (3664690) | Applied Informatics (M.Sc.) | benjamin.sparks@protonmail.com
 
 ### Contributions for the Milestone
+#### Fist milestone (16.12.2020)
 * Data acquisition: speech-to-text and docx-extraction
 * Implementation of the pipeline architecture
 * Implementation of a demo text mining workflow contained in the branch *demonstration*
 * Implementation of demo components
 * [Collection of possible metrics](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing) from literature 
 * Basic statistics of the data set and first iteration of feature engineering (got the data on 15.12.2020)
+#### Second milestone (04.02.2021)
+* Implementation of features into the pipeline
+* Implementation of classifiers into the pipeline
+* Extensive feature testing and summary of the results in *feature_summary.ipynb*
+* Summary of the feature insights in a [presentation](https://drive.google.com/file/d/11y0URs2Jyc4s6zUTcpzpSDF0oWK-ttOv/view?usp=sharing)
+
 
 ### Existing Code Fragments
-We do not use existing code fragments so far.
+* LIWC (https://github.com/chbrown/liwc-python) --> library extended *src/utils/liwc.py*
 
 ### Utilized Libraries
 We use several libraries for the project, including:
-* Spacy
-* sklearn
-* NLTK Stemmer
-* SentiWS
+* Numpy 
 * Pandas
+* sklearn
+* matplotlib
+* Spacy
+* NLTK
+* SentiWS
+* pyphen
+* liwc-python
+* gensim
 * Stanford Parser Toolkit 
-* Streamlit to build a simple front-end for the insitute
+* Streamlit to build a simple front-end
 * Seaborn for visualisation
 * LIWC library with german dictionary (https://pypi.org/project/liwc/)
 * German news dataset (https://spacy.io/models/de)
@@ -37,14 +49,11 @@ The libraries and versions are specified in the Pipfile.
 
 ## Project State
 
-### Planning State
-We planned to get 150 transcripts of couple conversations from the Institute of Medical Psychology. As the audio quality was quite bad, they could not use automatic speech-to-text programs and had to create the transcripts by hand. We therefore spent a considerable amount of time in trying to get transcripts from the audio files, which turned out to be not possible with the given signal. We finally received 10 transcripts from the Institute of Medical Psychology on 15.12.2020, which is only a small subset of the 150 available conversations. In the case of promising results, they offered to provide resources for transcribing further conversations. Upon receiving the transcripts, we started with some basic statistics which are included in the *data_description.ipynb*. We additionally collected different feature engineering approaches from literature which are summarized [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing). Furthermore, we set up a modular text analytics pipeline and implemented first components for every step of the pipeline.
-
 ### Future Planning
 The next steps are to implement the features from our research and evaluate how well they are able to detect depression patterns and how well they serve towards classifying transcripts. 
-* 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources).
-* 05.02. Summary of results
-* 08.02. Second "official" feedback round with supervisor
+* 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources). -> DONE
+* 05.02. Summary of results -> DONE 
+* 04.02. Second "official" feedback round with supervisor -> DONE
 * 25.02. Second milestone: Code and presentation due
 * 15.03. Third milestone: Report deadline 
 
@@ -70,9 +79,16 @@ The structure of the repository is as follow:
 │   ├── pipeline.py
 ├── sigmund
 │   ├── classification
-│   │   └── qda.py
+│   │   ├── qda.py
+│   │   ├── logistic_regression.py
+│   │   └── naive_bayes.py
 │   ├── features
+│   │   ├── agreement_score.py
+│   │   ├── flesch_reading_ease.py
+│   │   ├── liwc.py
 │   │   ├── pos.py
+│   │   ├── talk_turn.py
+│   │   ├── tfidf.py
 │   │   └── words.py
 │   └── preprocessing
 │       ├── syllables.py
@@ -82,6 +98,7 @@ The structure of the repository is as follow:
     ├── corpus_manager.py
     ├── dialogue_parser.py
     ├── feature_annotator.py
+    ├── liwc.py
     └── statistics.py
 ```
 
@@ -112,40 +129,45 @@ We implemented preprocessing steps, including:
 * Extracting Text-Data from docx
 * Removal of "annotations" like "(spricht unverständlich")
 * Removal of Stop-Words
-* Lemmatisation using German
+* Lemmatisation 
 * Stemming
 
 ### Feature Engineering
-Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing). We started the implementation with the following features.
+Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing).
 
-#### Structural Features
+### Classiciation
+Besides finding metrics to describe transcripts in terms of their textual depression-related content, we also classify the transcripts based on the found features. 
+* 2-class classification: depressed couple vs. non-depressed couple
+* regression: Hamilton depression score 
 
-##### Complexity of speech | Flesch reading-ease score
+<!--- #### Structural Features --->
+
+<!---##### Complexity of speech | Flesch reading-ease score
 Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
-where higher values indicate less complex speech:
+where higher values indicate less complex speech: --->
 
-<img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">
+<!---<img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">-->
 
-##### Talking Turns
+<!---##### Talking Turns
 To represent the talking turns each paragraph for each person is count together. 
 The ratio of both numbers describes the dialog distribution. Is the ratio closer to 1, the dialog is
 distributed more evenly between the partners.
 However shorter sentences indicating only an agreement or disagreement are not counted in, as they are 
-not really talking over the speech.
+not really talking over the speech.--->
 
-##### Agreement-Score
+<!---##### Agreement-Score
 The Agreement-Score shows how often the partners agree oder disagree to each other. 
 This feature is extracted by analizing the words in the first sentence of a paragraph. 
 If the words show disagreement like in: "nein, trotzdem, aber" the paragraph is counted as 1 disagreement. 
-At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.
+At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.--->
 
-#### Content Features
+<!---#### Content Features--->
 
-##### Part-of-Speech
-Assigns a tag to each token (e.g. noun, adjective, ...). We use Spacy's POS feature.
+<!---##### Part-of-Speech
+Assigns a tag to each token (e.g. noun, adjective, ...). We use Spacy's POS feature.--->
 
-##### Term-frequency Inverse-document-frequency (TFIDF)
-To find the most important words, we use TFIDF.
+<!---##### Term-frequency Inverse-document-frequency (TFIDF)
+To find the most important words, we use TFIDF.--->
 
 
 

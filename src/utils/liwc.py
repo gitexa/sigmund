@@ -69,6 +69,7 @@ class Liwc():
     def parse_with_index(self, tokens):
         """
 
+        Input: tokens is a list of all tokens with (word, idx_paragraph_in_doc, idx_word_in_paragraph) to enable inverse search 
         idx_paragraph_in_doc
         idx_word_in_paragraph
         """
@@ -79,11 +80,48 @@ class Liwc():
             # Find in which categories this token falls, if any
             cats = self.search(token['word'])
             for cat in cats:
-                cat_idx[cat].append(
-                    (token['idx_paragraph_in_doc'],
-                     token['idx_word_in_paragraph']))
+                cat_idx[cat].append({
+                    'idx_paragraph_in_doc': token['idx_paragraph_in_doc'],
+                    'idx_word_in_paragraph': token['idx_word_in_paragraph']
+                })
+                ''' 
+                (token['idx_paragraph_in_doc'],
+                token['idx_word_in_paragraph']))
+                '''
 
         return cat_idx
+
+    def get_word_and_paragraph_by_liwc_key(
+            self, liwc_keys, liwc_scores_with_index, words_with_index, paragraphs):
+        """
+        Inverse search - get words and corresponding paragraphs by LIWC keys using index (idx) of idx_paragraph_in_document and idx_word_in_paragraph 
+        (CAVE: not very efficient, needs optimization!)
+        :param tokens:
+        - list with liwc_keys
+        - dict with liwc_scores_with_index ('Posemo': {paragraph_in_document, word_in_paragraph})
+        - dict words_with_index ({word, idx_paragraph_in_document, idx_word_in_paragraph})
+        - a list with all paragraphs of the conversation (paragraph0, paragraph1, ...)
+        :return: a dict with all words and paragraphs counted for the input liwc_keys
+        """
+        word_and_paragraph_by_liwc_key = collections.defaultdict(list)
+
+        for key in liwc_keys:
+            # print key
+            # print(key)
+            # get words for all indices
+            for liwc_words in liwc_scores_with_index[key]:
+                # get indexes
+                idx_paragraph_in_doc = liwc_words['idx_paragraph_in_doc']
+                idx_word_in_paragraph = liwc_words['idx_word_in_paragraph']
+                # get words and origial paragraph by index
+                for word in words_with_index:
+                    if ((word['idx_paragraph_in_doc'] == idx_paragraph_in_doc) and (word['idx_word_in_paragraph'] == idx_word_in_paragraph)):
+                        word = word['word']
+                        paragraph = paragraphs[idx_paragraph_in_doc]
+                        #print(f'Wort: {word} | {paragraph}')
+                        word_and_paragraph_by_liwc_key[key].append((word, paragraph))
+            # print('-'*10)
+        return word_and_paragraph_by_liwc_key
 
     def _load_dict_file(self, filepath):
         liwc_file = open(filepath)

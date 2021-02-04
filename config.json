@@ -2,70 +2,70 @@
     "path_to_transcripts": "/media/alexander/18B1-126F/01_Lectures/Informatik/TextMining/03_Project/03_Data",
     "transcripts": [
         {
-            "transcript_id": "Paar 27_T1_IM_FW.docx",
+            "transcript_id": "Paar 27_T1_IM_FW_corrected.docx",
             "couple_id": 27,
             "group": 1,
             "female_label": "B",
             "depression": true
         },
         {
-            "transcript_id": "Paar 29_T1_IM_FW.docx",
+            "transcript_id": "Paar 29_T1_IM_FW_corrected.docx",
             "couple_id": 29,
             "group": 0,
             "female_label": "B",
             "depression": false
         },
         {
-            "transcript_id": "Paar 47_T1_IM_FW.docx",
+            "transcript_id": "Paar 47_T1_IM_FW_corrected.docx",
             "couple_id": 47,
             "group": 1,
             "female_label": "B",
             "depression": true
         },
         {
-            "transcript_id": "Paar 58_T1_IM_FW.docx",
+            "transcript_id": "Paar 58_T1_IM_FW_corrected.docx",
             "couple_id": 58,
             "group": 0,
             "female_label": "A",
             "depression": false
         },
         {
-            "transcript_id": "Paar 60_T1_IM_FW.docx",
+            "transcript_id": "Paar 60_T1_IM_FW_corrected.docx",
             "couple_id": 60,
             "group": 1,
             "female_label": "A",
             "depression": true
         },
         {
-            "transcript_id": "Paar 81_T1_IM_FW.docx",
+            "transcript_id": "Paar 81_T1_IM_FW_corrected.docx",
             "couple_id": 81,
             "group": 0,
             "female_label": "A",
             "depression": false
         },
         {
-            "transcript_id": "Paar 87_T1_IM_FW.docx",
+            "transcript_id": "Paar 87_T1_IM_FW_corrected.docx",
             "couple_id": 87,
             "group": 0,
             "female_label": "B",
             "depression": false
         },
         {
-            "transcript_id": "Paar 105_T1_IM_FW.docx",
+            "transcript_id": "Paar 105_T1_IM_FW_corrected.docx",
             "couple_id": 105,
             "group": 1,
             "female_label": "B",
             "depression": true
         },
         {
-            "transcript_id": "Paar 138_T1_IM_FW.docx",
+            "transcript_id": "Paar 138_T1_IM_FW_corrected.docx",
             "couple_id": 138,
             "group": 1,
             "female_label": "A",
             "depression": true
         },
         {
-            "transcript_id": "Paar 182_T1_IM_FW.docx",
+            "transcript_id": "Paar 182_T1_IM_FW_corrected.docx",
             "couple_id": 182,
             "group": 0,
             "female_label": "A",

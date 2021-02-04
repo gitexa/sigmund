@@ -1,11 +1,11 @@
 import operator
 
 import pandas as pd
+from spacy.tokens import Doc
+
 from pipelinelib.component import Component
 from pipelinelib.extension import Extension
 from sigmund.preprocessing.words import WordExtractor
-from spacy.tokens import Doc
-
 from src.sigmund.preprocessing.pos import PartOfSpeechTags
 
 
@@ -86,11 +86,10 @@ class PronominalisationIndex(Component):
             creates_extensions=[PronominalisationIndex.PRON_INDEX]
         )
 
-
     def apply(self, doc: Doc) -> Doc:
-        pron_count = operator.attrgetter(PartOfSpeechTags.PRON_COUNT)(doc._)
-        noun_count = operator.attrgetter(PartOfSpeechTags.NOUN_COUNT)(doc._)
-        propn_count = operator.attrgetter(PartOfSpeechTags.PROPN_COUNT)(doc._)
+        pron_count = operator.attrgetter(PartOfSpeechTags.PRON_COUNT.name)(doc._)
+        noun_count = operator.attrgetter(PartOfSpeechTags.NOUN_COUNT.name)(doc._)
+        propn_count = operator.attrgetter(PartOfSpeechTags.PROPN_COUNT.name)(doc._)
 
         doc._.pron_index = pron_count / (pron_count + noun_count + propn_count)
         return doc

@@ -1,11 +1,12 @@
 import operator
 from itertools import filterfalse
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from spacy.tokens import Doc
 from utils.dialogue_parser import DialogueParser
 
 from pipelinelib.text_body import TextBody
+from sigmund.adapter import Adapter
 
 from .component import Component
 from .extension import Extension
@@ -83,15 +84,18 @@ class Pipeline:
                 f"Unable to apply {component.name} to pipeline: missing extensions " +
                 f"from Doc object:\n{', '.join(missing_extensions)}")
 
-        # read names from Extensions
-        names = map(operator.attrgetter("name"),
-                    component.creates_extensions)
-        # would overwrite pre-existing Extensions
-        overwritten_extensions = list(filter(self._extensions.__contains__, names))
-        if overwritten_extensions:
-            raise Exception(
-                f"Unable to apply {component.name} to pipeline: would overwrite extensions "
-                + f"in Doc object:\n{', '.join(overwritten_extensions)}")
+        # Exception case for adapter: should be allowed to overwrite fields
+        if component.name != Adapter.__name__:
+            # read names from Extensions
+            names = map(operator.attrgetter("name"),
+                        component.creates_extensions)
+
+            # would overwrite pre-existing Extensions
+            overwritten_extensions = list(filter(self._extensions.__contains__, names))
+            if overwritten_extensions:
+                raise Exception(
+                    f"Unable to apply {component.name} to pipeline: would overwrite extensions "
+                    + f"in Doc object:\n{', '.join(overwritten_extensions)}")
 
     def _register_extensions(self, component: Component):
         """

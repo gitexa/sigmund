@@ -8,6 +8,7 @@ from pipelinelib.extension import Extension
 
 import string
 
+
 class SyllableExtractor(Component):
     """
     Extracts syllables from text and stores these under doc._.syllables

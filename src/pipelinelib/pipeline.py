@@ -1,8 +1,11 @@
 import operator
 from itertools import filterfalse
-from typing import Any, Dict
+from typing import Any, Dict, List, Union
 
 from spacy.tokens import Doc
+from utils.dialogue_parser import DialogueParser
+
+from pipelinelib.text_body import TextBody
 
 from .component import Component
 from .extension import Extension
@@ -30,7 +33,7 @@ class Pipeline:
             for pipe_name in self._model.pipe_names:
                 self._model.remove_pipe(pipe_name)
 
-    def add_component(self, component: Component):
+    def add_component(self, component: Component) -> "Pipeline":
         """
         Add a component to the pipeline, with checks
         """
@@ -40,13 +43,30 @@ class Pipeline:
 
         return self
 
-    def execute(self, text: str) -> Doc:
+    def execute(self, parser: DialogueParser, body: TextBody) -> List[Doc]:
         """
         Execute the pipeline with the registered components
         """
-        return self._model(text)
+        print(f"=== Starting pipeline with {self._model.pipe_names} ===")
 
-    def _is_compatible(self, component: Component):
+        text_bodies = None
+        if body == TextBody.DOCUMENT:
+            text_bodies = parser.get_fulltext()
+        elif body == TextBody.PARAGRAPH:
+            text_bodies = parser.get_paragraphs()
+        elif body == TextBody.SENTENCE:
+            text_bodies = parser.get_sentences()
+        else:
+            raise Exception(f"Unknown text body: {body}")
+
+        # print(f"{text_bodies}")
+        ret = [self._model(d) for d in text_bodies["raw_text"]]
+
+        print("=== Finished pipeline execution ===")
+
+        return ret
+
+    def _is_compatible(self, component: Component) -> bool:
         """
         Check that the component will not overwrite a preregistered extension,
         or if it depends on an extension that has not been declared yet

@@ -134,7 +134,7 @@ We implemented preprocessing steps, including:
 ### Feature Engineering
 Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing).
 
-### Classiciation
+### Classification
 Besides finding metrics to describe transcripts in terms of their textual depression-related content, we also classify the transcripts based on the found features. 
 * 2-class classification: depressed couple vs. non-depressed couple
 * regression: Hamilton depression score 

@@ -51,8 +51,8 @@ The libraries and versions are specified in the Pipfile.
 
 ### Project Planning
 * 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources). -> DONE
-* 05.02. Summary of results -> DONE 
 * 04.02. Second "official" feedback round with supervisor -> DONE
+* 05.02. Summary of results -> DONE 
 * 25.02. Second milestone: Code and presentation due
 * 15.03. Third milestone: Report deadline 
 

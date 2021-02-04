@@ -4,6 +4,7 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/settings.json
 
 # virtualenv files
 .venv/
@@ -28,3 +29,24 @@ TODO.md
 src/data/*
 !src/data/.gitkeep
 all_preprocessed.csv
+all_preprocessed_old.csv
+
+TODOs
+# LDA stuff
+cmusphinx-voxforge-de.dic
+lda_model.log
+lda_train.model
+lda_train.model.expElogbeta.npy
+lda_train.model.id2word
+lda_train.model.state
+mallet-2.0.8.zip
+mallet-2.0.8/
+nips12raw_str602.tgz
+
+# visualisations for presentation
+visualisations/
+
+*.tar.gz
+
+# idea
+.idea

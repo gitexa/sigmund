@@ -35,31 +35,31 @@ class TFIDF(Component):
         #liwc_counts = Counter(category for token in tokens for category in parse(token))
 
         # Tokenize Tokens inside of Doc
-        tokens = list(self._tokenize_and_lower(doc))
-        tfidf = get_tfidf(tokens)
-        doc._.tfidf = tfidf
+        tokens = __tokenize_and_lower(doc)
+        doc._.tfidf = __get_tfidf(tokens)
 
         return doc
 
-    def _tokenize_and_lower(self, doc: Doc):
-        getter = operator.attrgetter(WordExtractor.WORDS.name)
-        return [word.lower() for word in getter(doc._)]
 
-    def get_tfidf(dataframe):
+def __tokenize_and_lower(self, doc: Doc):
+    getter = operator.attrgetter(WordExtractor.WORDS.name)
+    return [word.lower() for word in getter(doc._)]
 
-        # get vectors with frequencies for the words in the lines; each line is considered a document; remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
-        count_vectorizer = CountVectorizer(min_df=5)
-        count_vectorized = count_vectorizer.fit_transform(dataframe)
 
-        # transform the vector-frequency matrix in tfidf
-        tfidf_transformer = TfidfTransformer(use_idf=True)
-        tfidf = tfidf_transformer.fit_transform(count_vectorized)
+def __get_tfidf(tokens):
+    # get vectors with frequencies for the words in the lines; each line is considered a document; remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
+    count_vectorizer = CountVectorizer(min_df=5)
+    count_vectorized = count_vectorizer.fit_transform(tokens)
 
-        # create new dataframe with tfidfs and the feature names; calculate the mean tfidf over all lines/documents
-        df_tfidf = pd.DataFrame(
-            tfidf.T.todense(),
-            index=count_vectorizer.get_feature_names())
-        df_tfidf['mean'] = df_tfidf.mean(axis=1)
-        df_tfidf = df_tfidf.sort_values('mean', ascending=False)
+    # transform the vector-frequency matrix in tfidf
+    tfidf_transformer = TfidfTransformer(use_idf=True)
+    tfidf = tfidf_transformer.fit_transform(count_vectorized)
 
-        return df_tfidf['mean']
+    # create new dataframe with tfidfs and the feature names; calculate the mean tfidf over all lines/documents
+    df_tfidf = pd.DataFrame(
+        tfidf.T.todense(),
+        index=count_vectorizer.get_feature_names())
+    df_tfidf['mean'] = df_tfidf.mean(axis=1)
+    df_tfidf = df_tfidf.sort_values('mean', ascending=False)
+
+    return df_tfidf['mean']

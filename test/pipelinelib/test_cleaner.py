@@ -24,7 +24,7 @@ class Cleaner(unittest.TestCase):
         paragraphs = list(map(lambda tup: tup[1], zip(range(3), df["lemmatized"])))
 
         for paragraph in paragraphs:
-            doc = self.pipeline.execute(paragraph)
+            doc = self.pipeline.execute_on(paragraph)
             print(paragraph)
             print(doc._.cleaned)
 

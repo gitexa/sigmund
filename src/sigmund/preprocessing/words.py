@@ -5,8 +5,8 @@ from itertools import filterfalse
 from nltk.stem.snowball import GermanStemmer
 from spacy.tokens import Doc
 
-from pipelinelib.component import Component
-from pipelinelib.extension import Extension
+from src.pipelinelib.component import Component
+from src.pipelinelib.extension import Extension
 
 
 class Tokenizer(Component):

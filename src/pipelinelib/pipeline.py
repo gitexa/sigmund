@@ -3,10 +3,10 @@ from itertools import filterfalse
 from typing import Any, Dict, List
 
 from spacy.tokens import Doc
-from utils.dialogue_parser import DialogueParser
 
-from pipelinelib.text_body import TextBody
-from sigmund.adapter import Adapter
+from src.pipelinelib.text_body import TextBody
+from src.sigmund.adapter import Adapter
+from src.utils.dialogue_parser import DialogueParser
 
 from .component import Component
 from .extension import Extension
@@ -70,7 +70,7 @@ class Pipeline:
     def execute_on(self, text: str) -> Doc:
         print(f"=== Starting pipeline with {self._model.pipe_names} ===")
         ret = self._model(text)
-        
+
         print("=== Finished pipeline execution ===")
         return ret
 

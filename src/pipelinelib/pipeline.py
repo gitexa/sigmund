@@ -67,6 +67,13 @@ class Pipeline:
 
         return ret
 
+    def execute_on(self, text: str) -> Doc:
+        print(f"=== Starting pipeline with {self._model.pipe_names} ===")
+        ret = self._model(text)
+        
+        print("=== Finished pipeline execution ===")
+        return ret
+
     def _is_compatible(self, component: Component) -> bool:
         """
         Check that the component will not overwrite a preregistered extension,

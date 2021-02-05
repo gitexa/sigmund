@@ -43,6 +43,15 @@ class Pipeline:
         self._register_pipe(component)
 
         return self
+    
+    def add_components(self, components: List[Component]) -> "Pipeline":
+        """
+        Assemble components for features to the pipeline
+        """
+        for component in components:
+            self.add_component(component)
+
+        return self
 
     def execute(self, parser: DialogueParser, body: TextBody) -> List[Doc]:
         """

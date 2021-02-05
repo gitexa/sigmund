@@ -13,6 +13,7 @@ from pipelinelib.extension import Extension
 
 nlp = spacy.load("de_core_news_md")
 
+
 class AgreementScoreExtractor(Component):
     """
     Extracts the Agreement-Score turn from text and stores these under doc._.agreementscore
@@ -30,7 +31,7 @@ class AgreementScoreExtractor(Component):
         # Load LIWC Dictionary provided by path
         parse, category_names = liwc.load_token_parser(self._dictionary_path)
         # neg : negate(7) ,negemo(16),  23	Discrep,  45	Excl
-        disagreement_cat = ['Negate','Negemo', 'Discrep', 'Excl']
+        disagreement_cat = ['Negate', 'Negemo', 'Discrep', 'Excl']
 
         tmp = doc.text.split("$")
         tmp = [tmp[0].split("|"), tmp[1].split("|")]
@@ -44,30 +45,49 @@ class AgreementScoreExtractor(Component):
                 #print(list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y])))))
                 #print(len(list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))))
 
-                if len( list( filterfalse( string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))) > 5:
-                    tokens = [x.lower() for x in list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))[:5]]
+                if len(
+                    list(
+                        filterfalse(
+                            string.punctuation.__contains__,
+                            map(str, nlp(tmp[x][y]))))) > 5:
+                    tokens = [
+                        x.lower()
+                        for x in list(
+                            filterfalse(
+                                string.punctuation.__contains__,
+                                map(str, nlp(tmp[x][y]))))[: 5]]
 
                     flag = False
                     for category in disagreement_cat:
-                        if Counter(category for token in tokens for category in parse(token))[category] >= 1:
-                        
+                        if Counter(category for token in tokens
+                                   for category in parse(token))[category] >= 1:
+
                             print(x, y, category, tokens)
-                            if flag == False: agr_score[0] += 1
+                            if flag == False:
+                                agr_score[0] += 1
                             flag = True
                 else:
-                    tokens = [x.lower() for x in list(filterfalse( string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))]
-                    
+                    tokens = [
+                        x.lower()
+                        for x in list(
+                            filterfalse(
+                                string.punctuation.__contains__,
+                                map(str, nlp(tmp[x][y]))))]
+
                     flag = False
                     for category in disagreement_cat:
-                     if Counter(category for token in tokens for category in parse(token))[category] >= 1:
+                        if Counter(category for token in tokens
+                                   for category in parse(token))[category] >= 1:
 
-                        print(x, y, category, tokens)
-                        if flag == False: agr_score[0] += 1
-                        flag = True
+                            print(x, y, category, tokens)
+                            if flag == False:
+                                agr_score[0] += 1
+                            flag = True
 
         doc._.agreementscore = round(agr_score[0] / agr_score[1], 2)
         print(agr_score)
         return doc
+
 
 def tokenize(text):
     # you may want to use a smarter tokenizer

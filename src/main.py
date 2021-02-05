@@ -21,14 +21,13 @@ if __name__ == "__main__":
     nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
 
     #path2file = r"/home/rise/Schreibtisch/Sigmund/Paardialog_text/Paar 47_T1_IM_FW.docx"
-    path2file = r"/home/rise/Schreibtisch/Sigmund/Paardialog_text/Paar 81_T1_IM_FW.docx"
-    liwc_dict_path = r"/home/rise/Schreibtisch/Sigmund_git/sigmund/data/German_LIWC2001_Dictionary.dic"
+    path2file = r"./data/texts/Paar 81_T1_IM_FW.docx"
+    liwc_dict_path = r"/data/German_LIWC2001_Dictionary.dic"
 
     #parse, category_names = liwc.load_token_parser(liwc_dict_path)
 
     dialogue = DialogueParser(
-        doc_file=path2file, group="DEPR", couple_id=105, female_label="B",
-        depressed=True, remove_annotations=True)
+        file=path2file, nlp=nlp, clean_comments=True)
 
     paragraphs = dialogue.get_sentences()
     fulltext = dialogue.get_fulltext()

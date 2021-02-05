@@ -20,13 +20,15 @@ class LiwcOneHot(Component):
 
     def apply(self, doc: Doc) -> Doc:
         liwc_scores = dict.fromkeys(self._cat_names)
+
+        without_puncs = filter(lambda token: not token.is_punct, doc)
         categories = dict(Counter(
-            category for token in doc if not token.is_punct
+            category for token in without_puncs
             for category in self._parse(token.text.lower())
         ))
 
         liwc_counts = {**liwc_scores, **categories}
-        liwc_counts = {key: item if item else 0 for key, item in liwc_counts.items()}
+        liwc_counts = {key: item or 0 for key, item in liwc_counts.items()}
 
         doc._.loh = liwc_counts
         return doc

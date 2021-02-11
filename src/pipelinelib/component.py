@@ -1,9 +1,9 @@
 import abc
-import operator
-from itertools import filterfalse
-from typing import Iterable, Union
+from typing import Dict, Iterable, Tuple, Union
 
+import pandas as pd
 from spacy.tokens import Doc
+from utils.querying import Queryable
 
 from .extension import Extension
 
@@ -30,22 +30,17 @@ class Component(metaclass=abc.ABCMeta):
         self.required_extensions = required_extensions
         self.creates_extensions = creates_extensions
 
-    def _internal_apply(self, doc: Doc) -> Doc:
+    def _internal_apply(self, storage: Dict[str, pd.DataFrame],
+                        queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
-        Wrapper around the abstract apply method 
-        that automatically intialises declared extensions
-        on the doc
+        Wrapper around the abstract apply method with output
         """
         print(f"Executing {self.name}")
-
-        for extension in filterfalse(lambda e: doc.has_extension(e.name), self.creates_extensions):
-            doc.set_extension(
-                extension.name, default=extension.default_type)
-
-        return self.apply(doc)
+        return self.apply(storage=storage, queryable=queryable)
 
     @abc.abstractmethod
-    def apply(self, doc: Doc) -> Doc:
+    def apply(self, storage: Dict[str, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
         Implement this method in derivatives of this class to perform
         a step in the analytics pipeline

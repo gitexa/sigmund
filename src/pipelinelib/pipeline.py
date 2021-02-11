@@ -1,12 +1,12 @@
 import operator
 from itertools import filterfalse
-from typing import Any, Dict, List
+from typing import Dict, List, Set
 
-from spacy.tokens import Doc
+import pandas as pd
+from utils.querying import Queryable
 
-from src.pipelinelib.text_body import TextBody
+from pipelinelib import Component
 from src.sigmund.adapter import Adapter
-from src.utils.dialogue_parser import DialogueParser
 
 from .component import Component
 from .extension import Extension
@@ -18,21 +18,24 @@ class Pipeline:
 
     Attributes
     ----------
-    _model
-        the spacy model to be trained
+    _queryable: Queryable
+        convenience class to query panda dataframes containing the text to train
 
-    _extensions: dict
+    _components: List[Component]
+        all pipeline steps that will be executed in storage order
+
+    _extensions: Set[Extension]
         a collection of extensions that the pipeline will create on
         spacy's Doc instance.
     """
 
-    def __init__(self, model, empty_pipeline=False):
-        self._model = model
-        self._extensions: Dict[str, Any] = dict()
+    def __init__(self, queryable: Queryable, empty_pipeline=False):
+        self._queryable = queryable
+        self._extensions: Set[Extension] = set()
+        self._components: List[Component] = list()
 
         if empty_pipeline:
-            for pipe_name in self._model.pipe_names:
-                self._model.remove_pipe(pipe_name)
+            self._remove_all_pipes()
 
     def add_component(self, component: Component) -> "Pipeline":
         """
@@ -43,7 +46,7 @@ class Pipeline:
         self._register_pipe(component)
 
         return self
-    
+
     def add_components(self, components: List[Component]) -> "Pipeline":
         """
         Assemble components for features to the pipeline
@@ -53,35 +56,27 @@ class Pipeline:
 
         return self
 
-    def execute(self, parser: DialogueParser, body: TextBody) -> List[Doc]:
+    def execute(self) -> Dict[str, pd.DataFrame]:
         """
         Execute the pipeline with the registered components
         """
-        print(f"=== Starting pipeline with {self._model.pipe_names} ===")
+        pipe_names = [component.name for component in self._components]
+        print(f"=== Starting pipeline with {pipe_names} ===")
 
-        text_bodies = None
-        if body == TextBody.DOCUMENT:
-            text_bodies = parser.get_fulltext()
-        elif body == TextBody.PARAGRAPH:
-            text_bodies = parser.get_paragraphs()
-        elif body == TextBody.SENTENCE:
-            text_bodies = parser.get_sentences()
-        else:
-            raise Exception(f"Unknown text body: {body}")
-
-        # print(f"{text_bodies}")
-        ret = [self._model(d) for d in text_bodies["raw_text"]]
+        curr = dict()
+        for component in self._components:
+            result = component._internal_apply(
+                storage=curr, queryable=self._queryable)
+            if result:
+                for extension, df in result:
+                    extension.store_to(curr, df)
 
         print("=== Finished pipeline execution ===")
+        return curr
 
-        return ret
-
-    def execute_on(self, text: str) -> Doc:
-        print(f"=== Starting pipeline with {self._model.pipe_names} ===")
-        ret = self._model(text)
-
-        print("=== Finished pipeline execution ===")
-        return ret
+    # TODO: FIND A WAY TO SIMPLY PASS TEXT TO THE PIPELINE!
+    # def execute_on(self, text: str) -> dict:
+    #    pass
 
     def _is_compatible(self, component: Component) -> bool:
         """
@@ -103,8 +98,7 @@ class Pipeline:
         # Exception case for adapter: should be allowed to overwrite fields
         if component.name != Adapter.__name__:
             # read names from Extensions
-            names = map(operator.attrgetter("name"),
-                        component.creates_extensions)
+            names = map(lambda e: e.name, component.creates_extensions)
 
             # would overwrite pre-existing Extensions
             overwritten_extensions = list(filter(self._extensions.__contains__, names))
@@ -117,11 +111,27 @@ class Pipeline:
         """
         Register extensions declared in component
         """
-        for extension in component.creates_extensions:
-            self._extensions[extension.name] = extension.default_type
+        self._extensions.update(component.creates_extensions)
 
     def _register_pipe(self, component: Component):
         """
         Add the transformation declared by the component to the pipeline
         """
-        self._model.add_pipe(component._internal_apply, name=component.name)
+        self._components.append(component)
+
+    def _remove_pipe(self, component: Component):
+        # Compare by name, grab index
+        names = enumerate(map(lambda c: c.name, self._components))
+        with_same_names = filter(
+            lambda index_name: index_name[1] == component.name, names)
+        index, _ = next(with_same_names, default=(None, None))
+
+        # Not found, don't delete
+        if not index:
+            return
+
+        # Remove from list
+        self._components.pop(index)
+
+    def _remove_all_pipes(self):
+        self._components.clear()

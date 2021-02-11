@@ -1,31 +1,27 @@
-import operator
+from typing import Dict
 
-from spacy.tokens import Doc
+import pandas as pd
 
 
 class Extension:
     """
     A class to represent an extension member of spacy's
-    DocInstance type
+    DocInstance type.
+
+    Implements utility methods to read and store data frames to your
+    desired storage container.
 
     Attributes
     ----------
     name: str
         identifier of the extension
-
-    default_type:
-        instance of type that the extension shall be
-        initialised with.
-        This should not change during runtime
     """
 
-    def __init__(self, name: str, default_type):
+    def __init__(self, name: str):
         self.name = name
-        self.default_type = default_type
 
-    def load_from(self, doc: Doc):
-        return operator.attrgetter(self.name)(doc._)
+    def load_from(self, storage: Dict[str, pd.DataFrame]):
+        return storage[self.name]
 
-    def store_to(self, doc: Doc, value):
-        # TODO: operator.attrsetter version
-        doc._[self.name] = value
+    def store_to(self, storage: Dict[str, pd.DataFrame], df: pd.DataFrame):
+        storage[self.name] = df

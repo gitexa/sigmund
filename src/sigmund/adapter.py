@@ -1,7 +1,10 @@
 import operator
 from copy import deepcopy
+from typing import Dict, Iterable, Tuple
 
+import pandas as pd
 from spacy.tokens import Doc
+from utils.querying import Queryable
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
@@ -21,8 +24,7 @@ class Adapter(Component):
         self.old = old
         self.new = new
 
-    def apply(self, doc: Doc) -> Doc:
-        getter = operator.attrgetter(self.old.name)
-        setattr(doc._, self.new.name, deepcopy(getter(doc._)))
-
-        return doc
+    def apply(self, storage: Dict[str, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+        df = self.old.load_from(storage=storage)
+        return {self.new: df.copy(deep=True)}

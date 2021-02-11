@@ -1,34 +1,38 @@
-import operator
 import string
-from itertools import filterfalse
+from typing import Dict
 
+import pandas as pd
 from nltk.stem.snowball import GermanStemmer
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.pipelinelib.text_body import TextBody
+from src.sigmund.extensions import LEMMATIZED, STEMMED, TOKENS
+from src.utils.querying import Queryable
 
 
 class Tokenizer(Component):
     """
-    Extracts words from texts. Stores the words and their count under
-    doc._.tokens and doc._.token_count respectively
+    Extracts tokens without punctuation from texts.
     """
-
-    TOKENS = Extension("tokens", list())
-    TOKEN_COUNT = Extension("token_count", int())
 
     def __init__(self):
         super().__init__(Tokenizer.__name__, required_extensions=[],
-                         creates_extensions=[
-                             Tokenizer.TOKENS, Tokenizer.TOKEN_COUNT
-        ])
+                         creates_extensions=[TOKENS])
 
-    def apply(self, doc: Doc) -> Doc:
-        tokens = map(str, doc)
-        doc._.tokens = list(filterfalse(string.punctuation.__contains__, tokens))
-        doc._.token_count = len(doc._.tokens)
-        return doc
+    def apply(self, storage: Dict[str, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+        sentences = queryable.execute(level=TextBody.SENTENCE)
+
+        tokens = (
+            (sid, token) for sid, sentence in sentences[["uid", "text"]]
+            for token in sentence)
+        tokens = list((sid, token) for(sid, token) in tokens
+                      if not any(p in token for p in string.punctuation))
+
+        tokens_df = pd.DataFrame(tokens, columns=("sentence_id", "token"))
+        return {TOKENS: tokens_df}
 
 
 class Stemmer(Component):
@@ -36,60 +40,42 @@ class Stemmer(Component):
     Performs stemming on the tokens
     """
 
-    STEMMED = Extension("stemmed", list())
-
     def __init__(self, stemmer=GermanStemmer()):
         super(
             Stemmer, self).__init__(
-            Stemmer.__name__, required_extensions=[Tokenizer.TOKENS],
-            creates_extensions=[Stemmer.STEMMED])
+            Stemmer.__name__, required_extensions=[TOKENS],
+            creates_extensions=[STEMMED])
         self._stemmer = stemmer
 
-    def apply(self, doc: Doc) -> Doc:
-        doc._.stemmed = self._apply(doc)
-        return doc
+    def apply(self, storage: Dict[str, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+        tokens_df = TOKENS.load_from(storage=storage)
+        stemmed_df = tokens_df.copy()
 
-    def _apply(self, doc: Doc) -> list:
-        return [self._stemmer.stem(token) for token in doc._.tokens]
+        stemmed_df["token"].apply(self._stemmer.stem)
+        return {STEMMED: stemmed_df}
 
 
 class Lemmatizer(Component):
     """
     Lemmatizes the tokens
     """
-    LEMMATIZED = Extension("lemmatized", list())
 
     def __init__(self):
         super(
             Lemmatizer, self).__init__(
-            Lemmatizer.__name__, required_extensions=[Tokenizer.TOKENS],
-            creates_extensions=[Lemmatizer.LEMMATIZED])
+            Lemmatizer.__name__, required_extensions=[TOKENS],
+            creates_extensions=[LEMMATIZED])
 
-    def apply(self, doc: Doc) -> Doc:
-        doc._.lemmatized = self._apply(doc)
-        return doc
+    def apply(self, storage: Dict[str, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+        tokens_df = TOKENS.load_from(storage=storage)
+        lemma_df = tokens_df.copy()
 
-    def _apply(self, doc: Doc) -> list:
-        return [token.lemma_ if not token.pos_ == "PRON" else token.text for token in doc]
+        lemma_df["token"] = list(queryable.nlp()(" ".join(lemma_df["token"])))
+        lemma_df["token"] = lemma_df["token"].apply(self._f)
 
+        return {LEMMATIZED: lemma_df}
 
-class StemmedAndLemmatized(Component):
-    """
-    Stem and lemmatize the tokens
-    """
-    STEM_AND_LEMMATIZE = Extension("stem_and_lemma", list())
-
-    def __init__(self, stemmer=GermanStemmer()):
-        super(
-            StemmedAndLemmatized, self).__init__(
-            StemmedAndLemmatized.__name__, required_extensions=[],
-            creates_extensions=[StemmedAndLemmatized.STEM_AND_LEMMATIZE])
-        self._stemmer = stemmer
-
-    def apply(self, doc: Doc) -> Doc:
-        valid_tokens = filterfalse(
-            lambda t: string.punctuation.__contains__(t.text), doc)
-        doc._.stem_and_lemma = list(
-            self._stemmer.stem(token.lemma_) for token in valid_tokens
-        )
-        return doc
+    def _f(self, token: Token) -> list:
+        return token.lemma_ if not token.pos_ == "PRON" else token.text

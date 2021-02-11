@@ -1,13 +1,11 @@
-import operator
-from copy import deepcopy
-from typing import Dict, Iterable, Tuple
+from typing import Dict
 
 import pandas as pd
 from spacy.tokens import Doc
-from utils.querying import Queryable
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.utils.querying import Queryable
 
 
 class Adapter(Component):

@@ -3,7 +3,7 @@ from typing import Dict
 
 import pandas as pd
 from nltk.stem.snowball import GermanStemmer
-from spacy.tokens import Doc
+from spacy.tokens import Token
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension

@@ -5,7 +5,6 @@ from typing import Dict, List, Set
 import pandas as pd
 from utils.querying import Queryable
 
-from pipelinelib import Component
 from src.sigmund.adapter import Adapter
 
 from .component import Component

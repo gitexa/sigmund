@@ -56,14 +56,14 @@ class Pipeline:
 
         return self
 
-    def execute(self) -> Dict[str, pd.DataFrame]:
+    def execute(self) -> Dict[Extension, pd.DataFrame]:
         """
         Execute the pipeline with the registered components
         """
         pipe_names = [component.name for component in self._components]
         print(f"=== Starting pipeline with {pipe_names} ===")
 
-        curr = dict()
+        curr: Dict[Extension, pd.DataFrame] = dict()
         for component in self._components:
             result = component._internal_apply(
                 storage=curr, queryable=self._queryable)

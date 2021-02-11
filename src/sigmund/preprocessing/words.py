@@ -21,7 +21,7 @@ class Tokenizer(Component):
         super().__init__(Tokenizer.__name__, required_extensions=[],
                          creates_extensions=[TOKENS])
 
-    def apply(self, storage: Dict[str, pd.DataFrame],
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         sentences = queryable.execute(level=TextBody.SENTENCE)
 
@@ -47,7 +47,7 @@ class Stemmer(Component):
             creates_extensions=[STEMMED])
         self._stemmer = stemmer
 
-    def apply(self, storage: Dict[str, pd.DataFrame],
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         tokens_df = TOKENS.load_from(storage=storage)
         stemmed_df = tokens_df.copy()
@@ -67,7 +67,7 @@ class Lemmatizer(Component):
             Lemmatizer.__name__, required_extensions=[TOKENS],
             creates_extensions=[LEMMATIZED])
 
-    def apply(self, storage: Dict[str, pd.DataFrame],
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         tokens_df = TOKENS.load_from(storage=storage)
         lemma_df = tokens_df.copy()

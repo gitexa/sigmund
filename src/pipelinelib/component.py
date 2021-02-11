@@ -39,7 +39,7 @@ class Component(metaclass=abc.ABCMeta):
         return self.apply(storage=storage, queryable=queryable)
 
     @abc.abstractmethod
-    def apply(self, storage: Dict[str, pd.DataFrame],
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
         Implement this method in derivatives of this class to perform

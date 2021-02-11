@@ -51,4 +51,4 @@ visualisations/
 # idea
 .idea
 *.tar.gz
-*/.vscode/*
+.vscode/

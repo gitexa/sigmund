@@ -169,9 +169,9 @@ def _clean_comments(text: str) -> str:
         return " "
 
 
-def _split_sentences(text: str, nlp):
+def _split_sentences(text: str, nlp) -> list:
     if not text:
-        return ""
+        return []
     return [_clean_comments(sentence.text) for sentence in nlp(text).sents
             if sentence and sentence.text]
 

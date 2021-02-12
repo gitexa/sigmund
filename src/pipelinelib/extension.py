@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 
 import pandas as pd
 
@@ -20,8 +20,8 @@ class Extension:
     def __init__(self, name: str):
         self.name = name
 
-    def load_from(self, storage: Dict[str, pd.DataFrame]):
-        return storage[self.name]
+    def load_from(self, storage: Dict[str, pd.DataFrame]) -> Union[pd.DataFrame, None]:
+        return storage.get(key=self.name, default=None)
 
     def store_to(self, storage: Dict[str, pd.DataFrame], df: pd.DataFrame):
         storage[self.name] = df

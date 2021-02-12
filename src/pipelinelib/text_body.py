@@ -1,8 +1,8 @@
-from enum import OrderedEnum, unique
+# from enum import unique
 
 
-@unique
-class TextBody(OrderedEnum):
+# @unique
+class TextBody:
     DOCUMENT = 5
     PARAGRAPH = 4
     SENTENCE = 3

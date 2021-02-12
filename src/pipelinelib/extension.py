@@ -20,8 +20,11 @@ class Extension:
     def __init__(self, name: str):
         self.name = name
 
-    def load_from(self, storage: Dict[str, pd.DataFrame]) -> Union[pd.DataFrame, None]:
-        return storage.get(key=self.name, default=None)
+    def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
+        return storage.get(key=self, default=None)
 
-    def store_to(self, storage: Dict[str, pd.DataFrame], df: pd.DataFrame):
-        storage[self.name] = df
+    def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
+        storage[self] = df
+
+    def __hash__(self) -> int:
+        return hash(self.name)

@@ -3,6 +3,6 @@
 
 # @unique
 class TextBody:
-    DOCUMENT = 5
-    PARAGRAPH = 4
-    SENTENCE = 3
+    DOCUMENT = "Document"
+    PARAGRAPH = "Paragraph"
+    SENTENCE = "Sentence"

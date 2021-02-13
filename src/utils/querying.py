@@ -3,6 +3,7 @@ import re
 from typing import Callable, Dict, Iterable, Text, Tuple
 
 import docx
+import numpy as np
 import pandas as pd
 
 from src.pipelinelib.text_body import TextBody
@@ -37,19 +38,22 @@ class Parser:
         # Loads transcription metadata of institute
         self.metadata = pd.read_excel(metadata_path)
 
-        self.frame = pd.DataFrame(columns=[
-            Parser.DOCUMENT_ID,
-            Parser.PARAGRAPH_ID,
-            Parser.SENTENCE_ID,
-            Parser.COUPLE_ID,
+        self.schema = {
+            Parser.DOCUMENT_ID: np.int64,
+            Parser.PARAGRAPH_ID: np.int64,
+            Parser.SENTENCE_ID: np.int64,
+            Parser.COUPLE_ID: np.int64,
 
-            Parser.SPEAKER,
-            Parser.GENDER,
-            Parser.IS_DEPRESSED_GROUP,
-            Parser.DEPRESSED_PERSON,
+            Parser.SPEAKER: str,
+            Parser.GENDER: str,
+            Parser.IS_DEPRESSED_GROUP: np.bool_,
+            Parser.DEPRESSED_PERSON: str,
 
-            Parser.SENTENCE
-        ])
+            Parser.SENTENCE: str
+        }
+
+        self.frame = pd.DataFrame(columns=self.schema.keys()) \
+            .astype(dtype=self.schema)
 
     def read_from_files(self, paths: Iterable[str]):
         for path in paths:
@@ -128,7 +132,9 @@ class Parser:
             Parser.SENTENCE: sentences
         }
 
-        new_df = pd.DataFrame.from_dict(collected, orient="index").transpose()
+        new_df = pd.DataFrame.from_dict(
+            collected, orient="index").transpose().astype(
+            self.schema)
         self.frame = self.frame.append(new_df)
 
     def _read_csv_into_frame(self, path2file: str) -> None:
@@ -183,17 +189,14 @@ class Queryable:
         self.nlp = nlp
         self.query = list()
 
-        # Metadata option defaults
-        self.with_gender = True
-
     def nlp(self):
         return self.nlp
 
     def from_parser(parser: Parser) -> "Queryable":
         return Queryable(parser.frame, parser.nlp)
 
-    def is_depressed(self) -> "Queryable":
-        return self._extend_query_with(f"{Parser.DEPRESSED}")
+    def is_depressed(self, d: bool = True) -> "Queryable":
+        return self._extend_query_with(f"{Parser.IS_DEPRESSED_GROUP} == {d}")
 
     def by_couple_id(self, couple_id: int) -> "Queryable":
         return self._extend_query_with(f"{Parser.COUPLE_ID} == {couple_id}")
@@ -205,24 +208,19 @@ class Queryable:
     def add_custom_query(self, query: str) -> "Queryable":
         return self._extend_query_with(query=query)
 
-    def without_gender(self) -> "Queryable":
-        self.with_gender = False
-        return self
-
     def execute(self, level: TextBody, empty_query=True) -> pd.DataFrame:
+        # Join query together
+        preced = map(lambda q: f"({q})", self.query)
+        joined = " and ".join(preced)
+
+        print(
+            f"=== {Queryable.__name__} is executing on {level} level, query = '{joined}' ===")
+
         # Copy, feel free to modify as you like
         df = self._get_agged_frame(level=level)
 
-        # Join query together
-        preced = map(lambda q: f"({q})", self.query)
-        joined = " & ".join(preced)
-
         if joined:
-            self.df.query(joined, inplace=False)
-
-        # Metadata modifications, can occur inplace
-        if not self.with_gender:
-            df.drop(Parser.GENDER, inplace=True)
+            df.query(joined, inplace=True)
 
         # Reset query list
         if empty_query:

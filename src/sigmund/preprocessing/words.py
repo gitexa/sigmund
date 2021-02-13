@@ -9,7 +9,7 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import LEMMATIZED, STEMMED, TOKENS
-from src.utils.querying import Queryable
+from src.pipelinelib.querying import Queryable
 
 
 class Tokenizer(Component):

@@ -1,11 +1,10 @@
-import operator
 from itertools import filterfalse
 from typing import Dict, List, Set
 
 import pandas as pd
 
 from src.sigmund.adapter import Adapter
-from src.utils.querying import Queryable
+from src.pipelinelib.querying import Queryable
 
 from .component import Component
 from .extension import Extension

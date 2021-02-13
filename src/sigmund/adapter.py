@@ -1,11 +1,10 @@
 from typing import Dict
 
 import pandas as pd
-from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
-from src.utils.querying import Queryable
+from src.pipelinelib.querying import Queryable
 
 
 class Adapter(Component):

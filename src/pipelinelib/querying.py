@@ -169,7 +169,7 @@ def _clean_comments(text: str) -> str:
         # Remove Digits and Symbols
         # Remove whitespace
         text = re.sub(' +', ' ', text)
-        text = re.sub(r' \.', '.', text)
+        text = re.sub(r' \.', '../utils', text)
 
         return text
     else:

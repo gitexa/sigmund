@@ -1,3 +1,4 @@
+import functools
 import re
 from typing import Callable, Dict, Iterable, Text, Tuple
 
@@ -132,7 +133,7 @@ class Parser:
 
     def _read_csv_into_frame(self, path2file: str) -> None:
         # Treat these all as new documents, which means offsetting by the amount of assigned document ids
-        csv_df = pd.read_csv(path2file)[
+        csv_df = pd.read_csv(path2file, index_col=0)[
             Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
         self.frame = pd.concat(self.frame, csv_df)
 
@@ -209,40 +210,46 @@ class Queryable:
         return self
 
     def execute(self, level: TextBody, empty_query=True) -> pd.DataFrame:
+        # Copy, feel free to modify as you like
+        df = self._get_agged_frame(level=level)
+
         # Join query together
         preced = map(lambda q: f"({q})", self.query)
         joined = " & ".join(preced)
 
-        # Do not modify dataframe read from document!
-        df = self.df.query(joined, inplace=False)
-
-        # TODO: Merge columns that pertain to levels of
-        # TODO: information not included on the provided TextBody
-
-        # Document merging: Join all sentences of the document
-        # according to the level
-        if level == TextBody.DOCUMENT:
-            group_column, dropped = Parser.DOCUMENT_ID, (
-                Parser.PARAGRAPH_ID, Parser.SENTENCE_ID)
-        elif level == TextBody.PARAGRAPH:
-            group_column, dropped = Parser.PARAGRAPH_ID, (Parser.SENTENCE_ID)
-        else:  # level == TextBody.SENTENCE
-            group_column, dropped = Parser.SENTENCE_ID, ()
-
-        # TODO: Consider caching these to avoid recalculating these time we execute
-        df = df.groupby(group_column, as_index=False)[Parser.SENTENCE].agg(" ".join)
-        df.drop(dropped, axis=1, inplace=True)
+        if joined:
+            self.df.query(joined, inplace=False)
 
         # Metadata modifications, can occur inplace
-        # as we are working with an out-of-place copy
         if not self.with_gender:
-            df.drop(Parser.GENDER, axis=1, inplace=True)
+            df.drop(Parser.GENDER, inplace=True)
 
         # Reset query list
         if empty_query:
-            self.query.clear()
+            self.reset_query()
 
         return df
+
+    @functools.cache
+    def _get_agged_frame(self, level: TextBody) -> pd.DataFrame:
+        # Do not modify dataframe read from document!
+        if level == TextBody.DOCUMENT:
+            return self.df.groupby([Parser.DOCUMENT_ID], as_index=False).agg(
+                {Parser.COUPLE_ID: "first", Parser.IS_DEPRESSED_GROUP: "first", Parser.
+                 DEPRESSED_PERSON: "first", Parser.SENTENCE: ". ".join}
+            )
+        elif level == TextBody.PARAGRAPH:
+            return self.df.groupby([Parser.DOCUMENT_ID, Parser.PARAGRAPH_ID], as_index=False).agg({
+                Parser.COUPLE_ID: "first", Parser.SPEAKER: "first", Parser.GENDER: "first",
+                Parser.IS_DEPRESSED_GROUP: "first", Parser.DEPRESSED_PERSON: "first",
+                Parser.SENTENCE: ". ".join,
+            })
+        else:  # level == TextBody.SENTENCE
+            # self.df is always in sentence format, so just return df
+            return self.df.copy()
+
+    def reset_query(self):
+        self.query.clear()
 
     def _extend_query_with(self, query: str) -> "Queryable":
         self.query.append(query)

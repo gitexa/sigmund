@@ -30,6 +30,7 @@ src/data/*
 !src/data/.gitkeep
 all_preprocessed.csv
 all_preprocessed_old.csv
+data/transcripts/*
 
 TODOs
 # LDA stuff

@@ -228,7 +228,7 @@ class Queryable:
 
         return df
 
-    @functools.cache
+    @functools.lru_cache(maxsize=None)
     def _get_agged_frame(self, level: TextBody) -> pd.DataFrame:
         # Do not modify dataframe read from document!
         if level == TextBody.DOCUMENT:

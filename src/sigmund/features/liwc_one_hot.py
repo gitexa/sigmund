@@ -9,7 +9,7 @@ from src.utils.liwc import Liwc
 
 
 class LiwcOneHot(Component):
-    LIWC_ONE_HOT_VEC = Extension("loh", dict())
+        LIWC_ONE_HOT_VEC = Extension("loh", dict())
 
     def __init__(self, token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
         super(LiwcOneHot, self).__init__(

@@ -217,7 +217,7 @@ class Queryable:
             f"=== {Queryable.__name__} is executing on {level} level, query = '{joined}' ===")
 
         # Copy, feel free to modify as you like
-        df = self._get_agged_frame(level=level)
+        df = self._get_agged_frame(level=level).copy()
 
         if joined:
             df.query(joined, inplace=True)
@@ -244,7 +244,7 @@ class Queryable:
             })
         else:  # level == TextBody.SENTENCE
             # self.df is always in sentence format, so just return df
-            return self.df.copy()
+            return self.df
 
     def reset_query(self):
         self.query.clear()

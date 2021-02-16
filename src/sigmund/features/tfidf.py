@@ -8,10 +8,10 @@ import liwc
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from spacy.tokens import Doc
 
-from pipelinelib.component import Component
-from pipelinelib.extension import Extension
-from sigmund.preprocessing.syllables import SyllableExtractor
-from sigmund.preprocessing.words import WordExtractor
+from src.pipelinelib.component import Component
+from src.pipelinelib.extension import Extension
+from src.sigmund.preprocessing.syllables import SyllableExtractor
+from src.sigmund.preprocessing.words import WordExtractor
 
 
 class TFIDF(Component):

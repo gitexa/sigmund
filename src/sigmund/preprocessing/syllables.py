@@ -24,13 +24,12 @@ class SyllableExtractor(Component):
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        #for token in doc:
+        # for token in doc:
         #    if not str(token) in string.punctuation:
         #        doc._.syllables.extend(self.dic.inserted(str(token)).split("-"))
         #
         #    SYLLABLES.store_to(storage)
-        #return doc
+        # return doc
         SYLLABLES.load_from(storage)
-        
-        
-        return {self.new: }
+
+        return {self.new:}

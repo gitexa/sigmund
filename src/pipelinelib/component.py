@@ -3,7 +3,9 @@ from typing import Dict, Iterable, Tuple, Union
 
 import pandas as pd
 from spacy.tokens import Doc
-from utils.querying import Queryable
+
+#from utils.querying import Queryable
+from src.pipelinelib.querying import Queryable
 
 from .extension import Extension
 

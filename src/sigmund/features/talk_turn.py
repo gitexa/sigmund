@@ -1,13 +1,16 @@
 import string
 from itertools import filterfalse
+from typing import Dict
 
 import pandas as pd
 import pyphen
 import spacy
 from spacy.tokens import Doc
 
-from pipelinelib.component import Component
-from pipelinelib.extension import Extension
+from src.pipelinelib.component import Component
+from src.pipelinelib.extension import Extension
+from src.pipelinelib.querying import Queryable
+from src.pipelinelib.text_body import TextBody
 
 nlp = spacy.load("de_core_news_md")
 
@@ -16,14 +19,19 @@ class TalkTurnExtractor(Component):
     """
     Extracts Talk turn from text and stores these under doc._.talkturn
     """
-    talkturn = Extension(name="talkturn", default_type=list())
+    talkturn = Extension(name="talkturn")
 
     def __init__(self):
         super().__init__(name=TalkTurnExtractor.__name__, required_extensions=[],
                          creates_extensions=[TalkTurnExtractor.talkturn])
         self.dic = pyphen.Pyphen(lang='de')
 
-    def apply(self, doc: Doc) -> Doc:
+    # def apply(self, doc: Doc) -> Doc:
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+
+        docs = queryable.execute(level=TextBody.DOCUMENT)
+        display(docs)
         #parapgraphs = pd.DataFrame([{'raw_text':doc.text}])
 
         #parapgraphs['raw_text'] = parapgraphs['raw_text'].split('$')

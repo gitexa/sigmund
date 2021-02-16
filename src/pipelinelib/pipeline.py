@@ -3,8 +3,8 @@ from typing import Dict, List, Set
 
 import pandas as pd
 
-from src.sigmund.adapter import Adapter
 from src.pipelinelib.querying import Queryable
+from src.sigmund.adapter import Adapter
 
 from .component import Component
 from .extension import Extension
@@ -66,7 +66,7 @@ class Pipeline:
             result = component._internal_apply(
                 storage=curr, queryable=self._queryable)
             if result:
-                for extension, df in result:
+                for extension, df in result.items():
                     extension.store_to(curr, df)
 
         print("=== Finished pipeline execution ===")

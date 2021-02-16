@@ -1,15 +1,16 @@
 import string
-from typing import Dict
+from typing import Dict, List
 
 import pandas as pd
+import spacy
 from nltk.stem.snowball import GermanStemmer
 from spacy.tokens import Token
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import LEMMATIZED, STEMMED, TOKENS
-from src.pipelinelib.querying import Queryable
 
 
 class Tokenizer(Component):
@@ -23,16 +24,26 @@ class Tokenizer(Component):
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        sentences = queryable.execute(level=TextBody.SENTENCE)
 
-        tokens = (
-            (sid, token) for sid, sentence in sentences[["uid", "text"]]
-            for token in sentence)
-        tokens = list((sid, token) for(sid, token) in tokens
-                      if not any(p in token for p in string.punctuation))
+        tokens = queryable.execute(level=TextBody.SENTENCE)
+        tokens = tokens[['document_id', 'paragraph_id',
+                         'sentence_id', 'speaker', 'text']]
+        tokens['text'] = tokens['text'].apply(
+            tokenize_df, nlp=queryable.nlp())
 
-        tokens_df = pd.DataFrame(tokens, columns=("sentence_id", "token"))
-        return {TOKENS: tokens_df}
+        return {TOKENS: tokens}
+
+
+def tokenize_df(sentence: str, nlp) -> List[str]:
+    tokens = nlp(sentence)
+    res = []
+    # Go through tokens and check if it is inside the punctuation set
+    # If this is the case it will be ignored
+    for token in map(str, tokens):
+        if not any(p in token for p in string.punctuation):
+            res.append(token)
+
+    return res
 
 
 class Stemmer(Component):

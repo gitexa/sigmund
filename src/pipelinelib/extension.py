@@ -21,7 +21,7 @@ class Extension:
         self.name = name
 
     def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
-        return storage.get(key=self, default=None)
+        return storage.get(self, None)
 
     def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
         storage[self] = df

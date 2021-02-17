@@ -7,7 +7,7 @@ RAW_TEXT_WO_STOPWORDS = Extension("raw_text_wo_stopwords")
 
 # Preprocessing Levels
 TOKENS_SENTENCE = Extension("tokens_sentence")
-TOKENS_PARAGRAPH = Extension("tokens_paragraphs")
+TOKENS_PAdRAGRAPH = Extension("tokens_paragraphs")
 TOKENS_DOCUMENT = Extension("tokens_document")
 
 STEMMED_SENTENCE = Extension("stemmed_sentence")

@@ -1,7 +1,8 @@
 import string
 from itertools import filterfalse
-from typing import Dict
+from typing import Dict, List
 
+import numpy as np
 import pandas as pd
 import pyphen
 import spacy
@@ -11,6 +12,7 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
+from src.sigmund.extensions import TALKTURN, TOKENS
 
 nlp = spacy.load("de_core_news_md")
 
@@ -30,41 +32,44 @@ class TalkTurnExtractor(Component):
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
-        docs = queryable.execute(level=TextBody.DOCUMENT)
-        display(docs)
-        #parapgraphs = pd.DataFrame([{'raw_text':doc.text}])
+        # Can be replaced when access to TOKENS is clear
+        tokens = queryable.execute(level=TextBody.PARAGRAPH)
+        tokens = tokens[['document_id', 'paragraph_id', 'speaker', 'text']]
+        tokens['text'] = tokens['text'].apply(tokenize_df, nlp=queryable.nlp)
 
-        #parapgraphs['raw_text'] = parapgraphs['raw_text'].split('$')
-        #parapgraphs = parapgraphs.set_index().apply(pd.Series).stack()
+        doc_count = tokens['document_id'].max()
+        #paragraph_count_per_doc = tokens.groupby(['document_id'])['paragraph_id'].max()
 
-        # pd.concat(row['raw_text'].split('$')
-        #                                  for _, row in parapgraphs.iterrows()).reset_index()
-        # print(parapgraphs)
-        #tokens = map(str, doc)
-        #print(list(filterfalse(string.punctuation.__contains__, tokens)))
-        #print(' = ', doc.text)
-        tmp = doc.text.split("$")
-        tmp = [tmp[0].split("|"), tmp[1].split("|")]
+        tokens['text'] = tokens['text'].apply(len)
+        tokens['text'] = tokens['text'].apply(lambda x: 1 if x > 5 else 0)
+        tokens = tokens.groupby(['document_id', 'speaker'])['text'].sum()
+        tokens = tokens.to_dict()
 
-        # doc = doc.concat([Series( row['raw_text'].split('|'))
-        #                  for _, row in a.iterrows()]).reset_index()
+        talkturns = []
+        for x in range(doc_count+1):
+            talkturns.append(
+                round(
+                    tokens[(x, 'A')] / (tokens[(x, 'A')] + tokens[(x, 'B')]),
+                    2))
 
-        #print(' == ', len(tmp[0]), ', ', len(tmp[1]))
+        values = np.concatenate(
+            (np.arange(0, doc_count + 1).astype(int),
+             np.asarray(talkturns)),
+            axis=0).reshape((2, 10)).transpose()
 
-        talkturns = [0, 0]
-        for x in range(len(tmp)):
-            for y in range(len(tmp[x])):
-                # nlp(tmp[x][y])
-                #map(str, nlp(tmp[x][y]))
-                #print(list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y])))))
-                #print(len(list(filterfalse(string.punctuation.__contains__, map(str, nlp(tmp[x][y]))))))
+        talkturns = pd.DataFrame(values,
+                                 columns=['document_id', 'TalkTurn'])
 
-                if len(
-                    list(
-                        filterfalse(
-                            string.punctuation.__contains__,
-                            map(str, nlp(tmp[x][y]))))) > 5:
-                    talkturns[x] += 1
+        return {TALKTURN: talkturns}
 
-        doc._.talkturn = round(talkturns[0] / (talkturns[0]+talkturns[1]), 2)
-        return doc
+
+def tokenize_df(sentence: str, nlp) -> List[str]:
+    tokens = nlp(sentence)
+    res = []
+    # Go through tokens and check if it is inside the punctuation set
+    # If this is the case it will be ignored
+    for token in map(str, tokens):
+        if not any(p in token for p in string.punctuation):
+            res.append(token)
+
+    return res

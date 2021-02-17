@@ -24,3 +24,4 @@ SYLLABLES = Extension("syllabels")
 # Features
 TFIDF_DOCUMENT = Extension("tfidf")
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
+TALKTURN = Extension("talkturn")

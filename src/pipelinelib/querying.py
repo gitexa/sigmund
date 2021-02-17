@@ -1,5 +1,6 @@
 import functools
 import re
+from itertools import filterfalse
 from typing import Callable, Dict, Iterable, Text, Tuple
 
 import docx
@@ -164,23 +165,28 @@ def _clean_comments(text: str) -> str:
     :return: cleaned text
     """
     if text:
+        # Normalise whitespace
+        text = re.sub(r"\s{2,}", "", text)
+
+        # Remove comments
         text = re.sub(r"\(.*?\)", "", text)
         text = re.sub(r"\[.*?\]", "", text)
-        # Remove Digits and Symbols
-        # Remove whitespace
-        text = re.sub(' +', ' ', text)
-        text = re.sub(r' \.', '../utils', text)
 
         return text
     else:
-        return " "
+        return ""
 
 
 def _split_sentences(text: str, nlp) -> list:
     if not text:
         return []
-    return [_clean_comments(sentence.text) for sentence in nlp(text).sents
-            if sentence and sentence.text]
+
+    cleaned = _clean_comments(text)
+    sentences = nlp(cleaned).sents
+
+    # Remove empty tokens from cleaned
+    strs = map(str, sentences)
+    return list(filterfalse(lambda x: not x, strs))
 
 
 class Queryable:

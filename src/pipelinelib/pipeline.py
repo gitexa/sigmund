@@ -82,28 +82,23 @@ class Pipeline:
         or if it depends on an extension that has not been declared yet
         """
 
-        # differentiate between string and Extension instance
-        names = map(lambda x: x.name if isinstance(
-            x, Extension) else x, component.required_extensions)
-
         # depends on non-existent Extension
-        missing_extensions = list(filterfalse(self._extensions.__contains__, names))
+        missing_extensions = list(filterfalse(
+            self._extensions.__contains__, component.required_extensions))
         if missing_extensions:
             raise Exception(
-                f"Unable to apply {component.name} to pipeline: missing extensions " +
-                f":\n{', '.join(missing_extensions)}")
+                f"Unable to apply {component.name} to pipeline - missing extensions: " +
+                f"{', '.join(missing_extensions)}")
 
         # Exception case for adapter: should be allowed to overwrite fields
         if component.name != Adapter.__name__:
-            # read names from Extensions
-            names = map(lambda e: e.name, component.creates_extensions)
-
             # would overwrite pre-existing Extensions
-            overwritten_extensions = list(filter(self._extensions.__contains__, names))
+            overwritten_extensions = list(filter(
+                self._extensions.__contains__, component.creates_extensions))
             if overwritten_extensions:
                 raise Exception(
-                    f"Unable to apply {component.name} to pipeline: would overwrite extensions "
-                    + f"in Doc object:\n{', '.join(overwritten_extensions)}")
+                    f"Unable to apply {component.name} to pipeline: - would overwrite extensions: "
+                    + f"{', '.join(overwritten_extensions)}")
 
     def _register_extensions(self, component: Component):
         """

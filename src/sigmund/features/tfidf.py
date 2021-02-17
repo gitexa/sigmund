@@ -1,8 +1,5 @@
 import operator
 import re
-from src.pipelinelib.text_body import TextBody
-from src.pipelinelib.querying import Queryable
-from src.sigmund.extensions import TOKENS_SENTENCE, TFIDF
 import string
 from collections import Counter
 from itertools import filterfalse
@@ -10,11 +7,16 @@ from typing import Dict
 
 import liwc
 import pandas as pd
+from IPython.core.display import display
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.pipelinelib.querying import Queryable
+from src.pipelinelib.text_body import TextBody
+from src.sigmund.extensions import (LEMMATIZED, STEMMED_DOCUMENT, STEMMED_SENTENCE,
+                                    TFIDF, TOKENS_SENTENCE)
 from src.sigmund.preprocessing.syllables import SyllableExtractor
 from src.sigmund.preprocessing.words import WordExtractor
 
@@ -25,11 +27,17 @@ class FeatureTFIDF(Component):
     """
 
     def __init__(self):
-        super().__init__(TFIDF.__name__, required_extensions=[TOKENS_SENTENCE], creates_extensions=[TFIDF])
+        super().__init__(FeatureTFIDF.__name__, required_extensions=[
+            STEMMED_DOCUMENT], creates_extensions=[TFIDF])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+        # Get transcipts on document level stemmed
+        STEMMED_DOCUMENT.load_from(storage)
+        display(STEMMED_DOCUMENT)
 
+
+'''
         tokens = queryable.execute(level=TextBody.DOCUMENT)
         tokens = tokens[['document_id', 'paragraph_id',
                          'sentence_id', 'speaker', 'text']]
@@ -39,6 +47,7 @@ class FeatureTFIDF(Component):
         return {TOKENS_SENTENCE: tokens}
 
     POS = Extension("tfidf_scores", dict())
+    '''
 
 '''
     def __init__(self):

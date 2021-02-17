@@ -10,8 +10,9 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import (LEMMATIZED, STEMMED, TOKENS_DOCUMENT,
-                                    TOKENS_PARAGRAPHS, TOKENS_SENTENCE)
+from src.sigmund.extensions import (LEMMATIZED, STEMMED_DOCUMENT, STEMMED_PARAGRAPH,
+                                    STEMMED_SENTENCE, TOKENS_DOCUMENT, TOKENS_PARAGRAPH,
+                                    TOKENS_SENTENCE)
 
 
 class Tokenizer(Component):
@@ -21,7 +22,7 @@ class Tokenizer(Component):
 
     def __init__(self):
         super().__init__(Tokenizer.__name__, required_extensions=[],
-                         creates_extensions=[TOKENS_SENTENCE])
+                         creates_extensions=[TOKENS_SENTENCE, TOKENS_PARAGRAPH, TOKENS_DOCUMENT])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
@@ -45,7 +46,7 @@ class Tokenizer(Component):
         tokens_sent['text'] = tokens_sent['text'].apply(
             tokenize_df, nlp=queryable.nlp())
 
-        return {TOKENS_SENTENCE: tokens_sent, TOKENS_PARAGRAPHS: tokens_para, TOKENS_DOCUMENT: tokens_doc}
+        return {TOKENS_SENTENCE: tokens_sent, TOKENS_PARAGRAPH: tokens_para, TOKENS_DOCUMENT: tokens_doc}
 
 
 def tokenize_df(sentence: str, nlp) -> List[str]:
@@ -65,19 +66,34 @@ class Stemmer(Component):
     """
 
     def __init__(self, stemmer=GermanStemmer()):
-        super(
-            Stemmer, self).__init__(
-            Stemmer.__name__, required_extensions=[TOKENS_SENTENCE],
-            creates_extensions=[STEMMED])
+        super().__init__(
+            Stemmer.__name__,
+            required_extensions=[TOKENS_SENTENCE, TOKENS_PARAGRAPH, TOKENS_DOCUMENT],
+            creates_extensions=[STEMMED_DOCUMENT, STEMMED_PARAGRAPH, STEMMED_SENTENCE])
         self._stemmer = stemmer
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        tokens_df = TOKENS_SENTENCE.load_from(storage=storage)
-        stemmed_df = tokens_df.copy()
 
-        stemmed_df["text"] = stemmed_df["text"].apply(self._stemmer.stem)
-        return {STEMMED: stemmed_df}
+        # Document
+        df_tokens_document = TOKENS_DOCUMENT.load_from(storage=storage)
+        df_stemmed_document = df_tokens_document.copy()
+        df_stemmed_document["text"] = df_stemmed_document["text"].apply(
+            self._stemmer.stem)
+
+        # Paragraph
+        df_tokens_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
+        df_stemmed_paragraph = df_tokens_paragraph.copy()
+        df_stemmed_paragraph["text"] = df_stemmed_paragraph["text"].apply(
+            self._stemmer.stem)
+
+        # Sentence
+        df_tokens_sentence = TOKENS_SENTENCE.load_from(storage=storage)
+        df_stemmed_sentence = df_tokens_sentence.copy()
+        df_stemmed_sentence["text"] = df_stemmed_sentence["text"].apply(
+            self._stemmer.stem)
+
+        return {STEMMED_SENTENCE: df_stemmed_sentence, STEMMED_PARAGRAPH: df_stemmed_paragraph, STEMMED_DOCUMENT: df_stemmed_document}
 
 
 class Lemmatizer(Component):

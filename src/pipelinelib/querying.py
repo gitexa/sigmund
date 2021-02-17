@@ -192,11 +192,11 @@ def _split_sentences(text: str, nlp) -> list:
 class Queryable:
     def __init__(self, dataframe: pd.DataFrame, nlp):
         self.df = dataframe.copy(deep=True)
-        self.nlp = nlp
+        self._nlp = nlp
         self.query = list()
 
     def nlp(self):
-        return self.nlp
+        return self._nlp
 
     def from_parser(parser: Parser) -> "Queryable":
         return Queryable(parser.frame, parser.nlp)

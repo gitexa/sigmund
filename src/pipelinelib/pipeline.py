@@ -91,7 +91,7 @@ class Pipeline:
         if missing_extensions:
             raise Exception(
                 f"Unable to apply {component.name} to pipeline: missing extensions " +
-                f"from Doc object:\n{', '.join(missing_extensions)}")
+                f":\n{', '.join(missing_extensions)}")
 
         # Exception case for adapter: should be allowed to overwrite fields
         if component.name != Adapter.__name__:

@@ -12,7 +12,7 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import FLESCHREADINGEASE
+from src.sigmund.extensions import FLESCHREADINGEASE, TOKENS
 from src.utils.feature_annotator import reading_ease_german, syllable_counter
 
 
@@ -30,6 +30,8 @@ class FleschExtractor(Component):
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:  # Sentence
         # print(doc.text)
+        tokens_df = TOKENS.load_from(storage=storage)
+        display(tokens_df)
 
         # Can be replaced when access to TOKENS is clear
         fre = queryable.execute(level=TextBody.SENTENCE)

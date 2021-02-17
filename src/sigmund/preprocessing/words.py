@@ -25,7 +25,7 @@ class Tokenizer(Component):
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        '''
+
         # Document
         tokens_doc = queryable.execute(level=TextBody.DOCUMENT)
         tokens_doc = tokens_doc[['document_id', 'text']]
@@ -37,18 +37,15 @@ class Tokenizer(Component):
         tokens_para = tokens_para[['document_id', 'paragraph_id', 'text']]
         tokens_para['text'] = tokens_para['text'].apply(
             tokenize_df, nlp=queryable.nlp())
-        '''
 
         # Sentence
         tokens_sent = queryable.execute(level=TextBody.SENTENCE)
         tokens_sent = tokens_sent[['document_id', 'paragraph_id',
                                    'sentence_id', 'text']]
-        display(tokens_sent['text'])
         tokens_sent['text'] = tokens_sent['text'].apply(
-            tokenize_df, nlp=queryable.nlp(), axis=1)
+            tokenize_df, nlp=queryable.nlp())
 
-        # , TOKENS_PARAGRAPHS: tokens_para, TOKENS_DOCUMENT: tokens_doc
-        return {TOKENS_SENTENCE: tokens_sent}
+        return {TOKENS_SENTENCE: tokens_sent, TOKENS_PARAGRAPHS: tokens_para, TOKENS_DOCUMENT: tokens_doc}
 
 
 def tokenize_df(sentence: str, nlp) -> List[str]:
@@ -59,7 +56,6 @@ def tokenize_df(sentence: str, nlp) -> List[str]:
     for token in map(str, tokens):
         if not any(p in token for p in string.punctuation):
             res.append(token)
-
     return res
 
 

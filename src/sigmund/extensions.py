@@ -22,4 +22,4 @@ LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
 SYLLABLES = Extension("syllabels")
 
 # Features
-TFIDF = Extension("tfidf")
+TFIDF_DOCUMENT = Extension("tfidf")

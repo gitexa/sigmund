@@ -169,8 +169,8 @@ def _clean_comments(text: str) -> str:
         text = re.sub(r"\s{2,}", "", text)
 
         # Remove comments
-        text = re.sub(r"\(.*?\)", "", text)
-        text = re.sub(r"\[.*?\]", "", text)
+        text = re.sub(r"\(.*?\) ?", "", text)
+        text = re.sub(r"\[.*?\] ?", "", text)
 
         return text
     else:

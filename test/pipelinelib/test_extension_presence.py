@@ -5,15 +5,20 @@ import spacy
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.pipeline import Pipeline as PAPI
+from src.pipelinelib.querying import Parser, Queryable
 
-CLASHING_EXTENSION = Extension("clash-with-me", list())
+CLASHING_EXTENSION = Extension("clash-with-me")
 
 
 class Pipeline(unittest.TestCase):
     NLP = spacy.load("de_core_news_sm", disable=["ner", "parser"])
 
     def setUp(self):
-        self.pipeline = PAPI(model=Pipeline.NLP, empty_pipeline=True)
+        self.pipeline = PAPI(
+            queryable=Queryable.from_parser(
+                parser=Parser(
+                    nlp=Pipeline.NLP,
+                    metadata_path="./data/transcripts/Kopie von Transkriptionspaare_Daten.xls")))
 
     def test_trigger_overwrite_failure(self):
         """
@@ -54,7 +59,7 @@ class C2(Component):
         super().__init__(C2.__name__, required_extensions=[],
                          creates_extensions=[CLASHING_EXTENSION])
 
-    def apply():
+    def apply(self):
         pass
 
 

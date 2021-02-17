@@ -23,7 +23,7 @@ from src.sigmund.preprocessing.words import WordExtractor
 
 class FeatureTFIDF(Component):
     """
-    This component provides features for classification by using sklearn tfidf 
+    This component provides features for classification by using sklearn tfidf
     """
 
     def __init__(self):
@@ -38,6 +38,14 @@ class FeatureTFIDF(Component):
 
 
 '''
+=======
+        super().__init__(TFIDF.__name__, required_extensions=[
+              TOKENS_SENTENCE], creates_extensions=[TFIDF])
+
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+
+>>>>>>> 31da6ec (TFIDF Update - broken stuff)
         tokens = queryable.execute(level=TextBody.DOCUMENT)
         tokens = tokens[['document_id', 'paragraph_id',
                          'sentence_id', 'speaker', 'text']]
@@ -57,11 +65,11 @@ class FeatureTFIDF(Component):
 
     def apply(self, storage: Dict[Extension, pd.DataFrame]) -> Doc:
         # Load LIWC Dictionary provided by path
-        #parse, category_names = liwc.load_token_parser(self._dictionary_path)
+        # parse, category_names = liwc.load_token_parser(self._dictionary_path)
 
         # """ Calculate counts per word-category and divide by number of tokens, append dictionary of liwc-scores to document-
         # object """
-        #liwc_counts = Counter(category for token in tokens for category in parse(token))
+        # liwc_counts = Counter(category for token in tokens for category in parse(token))
 
         # Tokenize Tokens inside of Doc
         tokens = __tokenize_and_lower(doc)
@@ -92,4 +100,5 @@ def __get_tfidf(tokens):
     df_tfidf = df_tfidf.sort_values('mean', ascending=False)
 
     return df_tfidf['mean']
+<<<<<<< HEAD
 '''

@@ -8,7 +8,7 @@ from spacy.tokens import Doc
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
-from src.sigmund.extensions import SYLLABLES, TOKENS
+from src.sigmund.extensions import SYLLABLES, TOKENS_SENTENCE
 
 
 class SyllableExtractor(Component):
@@ -18,7 +18,7 @@ class SyllableExtractor(Component):
 
     def __init__(self):
         super().__init__(name=SyllableExtractor.__name__,
-                         required_extensions=list(TOKENS),
+                         required_extensions=list(TOKENS_SENTENCE),
                          creates_extensions=[SYLLABLES])
         self.dic = pyphen.Pyphen(lang='de')
 
@@ -30,6 +30,7 @@ class SyllableExtractor(Component):
         #
         #    SYLLABLES.store_to(storage)
         #return doc
+        SYLLABLES.load_from(storage)
         
         
         return {self.new: }

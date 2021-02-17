@@ -1,10 +1,15 @@
 import operator
 import re
+from src.pipelinelib.text_body import TextBody
+from src.pipelinelib.querying import Queryable
+from src.sigmund.extensions import TOKENS_SENTENCE, TFIDF
 import string
 from collections import Counter
 from itertools import filterfalse
+from typing import Dict
 
 import liwc
+import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from spacy.tokens import Doc
 
@@ -14,19 +19,34 @@ from src.sigmund.preprocessing.syllables import SyllableExtractor
 from src.sigmund.preprocessing.words import WordExtractor
 
 
-class TFIDF(Component):
+class FeatureTFIDF(Component):
     """
     This component provides features for classification by using sklearn tfidf 
     """
 
+    def __init__(self):
+        super().__init__(TFIDF.__name__, required_extensions=[TOKENS_SENTENCE], creates_extensions=[TFIDF])
+
+    def apply(self, storage: Dict[Extension, pd.DataFrame],
+              queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
+
+        tokens = queryable.execute(level=TextBody.DOCUMENT)
+        tokens = tokens[['document_id', 'paragraph_id',
+                         'sentence_id', 'speaker', 'text']]
+        tokens['text'] = tokens['text'].apply(
+            tokenize_df, nlp=queryable.nlp())
+
+        return {TOKENS_SENTENCE: tokens}
+
     POS = Extension("tfidf_scores", dict())
 
+'''
     def __init__(self):
         super().__init__(TFIDF.__name__,
                          required_extensions=[WordExtractor.WORDS],
                          creates_extensions=[TFIDF.tifidf_scores])
 
-    def apply(self, doc: Doc) -> Doc:
+    def apply(self, storage: Dict[Extension, pd.DataFrame]) -> Doc:
         # Load LIWC Dictionary provided by path
         #parse, category_names = liwc.load_token_parser(self._dictionary_path)
 
@@ -63,3 +83,4 @@ def __get_tfidf(tokens):
     df_tfidf = df_tfidf.sort_values('mean', ascending=False)
 
     return df_tfidf['mean']
+'''

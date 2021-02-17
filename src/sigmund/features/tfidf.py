@@ -15,7 +15,7 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import (LEMMATIZED, STEMMED_DOCUMENT, STEMMED_SENTENCE,
+from src.sigmund.extensions import (LEMMATIZED_SENTENCE, STEMMED_DOCUMENT, STEMMED_SENTENCE,
                                     TFIDF, TOKENS_SENTENCE)
 from src.sigmund.preprocessing.syllables import SyllableExtractor
 from src.sigmund.preprocessing.words import WordExtractor

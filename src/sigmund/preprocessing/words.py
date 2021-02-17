@@ -70,7 +70,6 @@ class Stemmer(Component):
             Stemmer.__name__,
             required_extensions=[TOKENS_SENTENCE, TOKENS_PARAGRAPH, TOKENS_DOCUMENT],
             creates_extensions=[STEMMED_DOCUMENT, STEMMED_PARAGRAPH, STEMMED_SENTENCE])
-
         self._stemmer = stemmer
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],

@@ -22,46 +22,17 @@ class Tokenizer(Component):
 
     def __init__(self):
         super().__init__(Tokenizer.__name__, required_extensions=[],
-<< << << < HEAD
                          creates_extensions=[TOKENS_SENTENCE, TOKENS_PARAGRAPH, TOKENS_DOCUMENT])
-
-
-== == == =
-                         creates_extensions = [TOKENS_SENTENCE])
->> >>>> > 31da6ec(TFIDF Update - broken stuff)
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        '''
+
         # Document
         tokens_doc = queryable.execute(level=TextBody.DOCUMENT)
         tokens_doc = tokens_doc[['document_id', 'text']]
         tokens_doc['text'] = tokens_doc['text'].apply(
             tokenize_df, nlp=queryable.nlp())
 
-<<<<<<< HEAD
-        # Document
-        tokens_doc = queryable.execute(level=TextBody.DOCUMENT)
-        tokens_doc = tokens_doc[['document_id', 'text']]
-        tokens_doc['text'] = tokens_doc['text'].apply(
-=======
-        # Paragraphs
-        tokens_para = queryable.execute(level=TextBody.PARAGRAPH)
-        tokens_para = tokens_para[['document_id', 'paragraph_id', 'text']]
-        tokens_para['text'] = tokens_para['text'].apply(
->>>>>>> 31da6ec (TFIDF Update - broken stuff)
-            tokenize_df, nlp=queryable.nlp())
-        '''
-
-        # Sentence
-        tokens_sent = queryable.execute(level=TextBody.SENTENCE)
-        tokens_sent = tokens_sent[['document_id', 'paragraph_id',
-                                   'sentence_id', 'text']]
-        display(tokens_sent['text'])
-        tokens_sent['text'] = tokens_sent['text'].apply(
-            tokenize_df, nlp=queryable.nlp(), axis=1)
-
-<<<<<<< HEAD
         # Paragraphs
         tokens_para = queryable.execute(level=TextBody.PARAGRAPH)
         tokens_para = tokens_para[['document_id', 'paragraph_id', 'text']]
@@ -76,10 +47,6 @@ class Tokenizer(Component):
             tokenize_df, nlp=queryable.nlp())
 
         return {TOKENS_SENTENCE: tokens_sent, TOKENS_PARAGRAPH: tokens_para, TOKENS_DOCUMENT: tokens_doc}
-=======
-        # , TOKENS_PARAGRAPHS: tokens_para, TOKENS_DOCUMENT: tokens_doc
-        return {TOKENS_SENTENCE: tokens_sent}
->>>>>>> 31da6ec (TFIDF Update - broken stuff)
 
 
 def tokenize_df(sentence: str, nlp) -> List[str]:
@@ -99,22 +66,15 @@ class Stemmer(Component):
     """
 
     def __init__(self, stemmer=GermanStemmer()):
-<<<<<<< HEAD
         super().__init__(
             Stemmer.__name__,
             required_extensions=[TOKENS_SENTENCE, TOKENS_PARAGRAPH, TOKENS_DOCUMENT],
             creates_extensions=[STEMMED_DOCUMENT, STEMMED_PARAGRAPH, STEMMED_SENTENCE])
-=======
-        super(
-            Stemmer, self).__init__(
-            Stemmer.__name__, required_extensions=[TOKENS_SENTENCE],
-            creates_extensions=[STEMMED])
->>>>>>> 31da6ec (TFIDF Update - broken stuff)
+
         self._stemmer = stemmer
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-<<<<<<< HEAD
 
         # Document
         df_tokens_document = TOKENS_DOCUMENT.load_from(storage=storage)
@@ -135,13 +95,6 @@ class Stemmer(Component):
             self._stemmer.stem)
 
         return {STEMMED_SENTENCE: df_stemmed_sentence, STEMMED_PARAGRAPH: df_stemmed_paragraph, STEMMED_DOCUMENT: df_stemmed_document}
-=======
-        tokens_df = TOKENS_SENTENCE.load_from(storage=storage)
-        stemmed_df = tokens_df.copy()
-
-        stemmed_df["text"] = stemmed_df["text"].apply(self._stemmer.stem)
-        return {STEMMED: stemmed_df}
->>>>>>> 31da6ec (TFIDF Update - broken stuff)
 
 
 class Lemmatizer(Component):

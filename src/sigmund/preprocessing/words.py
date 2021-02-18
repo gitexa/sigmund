@@ -30,20 +30,22 @@ class Tokenizer(Component):
 
         # Document
         tokens_doc = queryable.execute(level=TextBody.DOCUMENT)
-        tokens_doc = tokens_doc[['document_id', 'text']]
+        tokens_doc = tokens_doc[['couple_id', 'speaker',
+                                 'gender', 'is_depressed', 'document_id', 'text']]
         tokens_doc['text'] = tokens_doc['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
         # Paragraphs
         tokens_para = queryable.execute(level=TextBody.PARAGRAPH)
-        tokens_para = tokens_para[['document_id', 'paragraph_id', 'text']]
+        tokens_para = tokens_para[['couple_id', 'speaker', 'gender',
+                                   'is_depressed',  'document_id', 'paragraph_id', 'text']]
         tokens_para['text'] = tokens_para['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
         # Sentence
         tokens_sent = queryable.execute(level=TextBody.SENTENCE)
-        tokens_sent = tokens_sent[['document_id', 'paragraph_id',
-                                   'sentence_id', 'text']]
+        tokens_sent = tokens_sent[['couple_id', 'speaker', 'gender',
+                                   'is_depressed', 'document_id', 'paragraph_id', 'sentence_id', 'text']]
         tokens_sent['text'] = tokens_sent['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
@@ -76,20 +78,17 @@ class Stemmer(Component):
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
         # Document
-        df_tokens_document = TOKENS_DOCUMENT.load_from(storage=storage)
-        df_stemmed_document = df_tokens_document.copy()
+        df_stemmed_document = TOKENS_DOCUMENT.load_from(storage=storage)
         df_stemmed_document["text"] = df_stemmed_document["text"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
         # Paragraph
-        df_tokens_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
-        df_stemmed_paragraph = df_tokens_paragraph.copy()
+        df_stemmed_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
         df_stemmed_paragraph["text"] = df_stemmed_paragraph["text"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
         # Sentence
-        df_tokens_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-        df_stemmed_sentence = df_tokens_sentence.copy()
+        df_stemmed_sentence = TOKENS_SENTENCE.load_from(storage=storage)
         df_stemmed_sentence["text"] = df_stemmed_sentence["text"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
@@ -118,20 +117,17 @@ class Lemmatizer(Component):
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
         # Document
-        df_tokens_document = TOKENS_DOCUMENT.load_from(storage=storage)
-        df_lemmatized_document = df_tokens_document.copy()
+        df_lemmatized_document = TOKENS_DOCUMENT.load_from(storage=storage)
         df_lemmatized_document["text"] = df_lemmatized_document["text"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 
         # Paragraph
-        df_tokens_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
-        df_lemmatized_paragraph = df_tokens_paragraph.copy()
+        df_lemmatized_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
         df_lemmatized_paragraph["text"] = df_lemmatized_paragraph["text"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 
         # Sentence
-        df_tokens_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-        df_lemmatized_sentence = df_tokens_sentence.copy()
+        df_lemmatized_sentence = TOKENS_SENTENCE.load_from(storage=storage)
         df_lemmatized_sentence["text"] = df_lemmatized_sentence["text"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 

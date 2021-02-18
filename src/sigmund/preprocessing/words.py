@@ -30,22 +30,23 @@ class Tokenizer(Component):
 
         # Document
         tokens_doc = queryable.execute(level=TextBody.DOCUMENT)
-        tokens_doc = tokens_doc[['couple_id', 'speaker',
-                                 'gender', 'is_depressed', 'document_id', 'text']]
+        tokens_doc = tokens_doc[['couple_id',
+                                 'is_depressed_group', 'document_id', 'text']]
         tokens_doc['text'] = tokens_doc['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
         # Paragraphs
         tokens_para = queryable.execute(level=TextBody.PARAGRAPH)
         tokens_para = tokens_para[['couple_id', 'speaker', 'gender',
-                                   'is_depressed',  'document_id', 'paragraph_id', 'text']]
+                                   'is_depressed_group', 'document_id', 'paragraph_id', 'text']]
         tokens_para['text'] = tokens_para['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
         # Sentence
         tokens_sent = queryable.execute(level=TextBody.SENTENCE)
         tokens_sent = tokens_sent[['couple_id', 'speaker', 'gender',
-                                   'is_depressed', 'document_id', 'paragraph_id', 'sentence_id', 'text']]
+                                   'is_depressed_group', 'document_id', 'paragraph_id',
+                                   'sentence_id', 'text']]
         tokens_sent['text'] = tokens_sent['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 

@@ -18,6 +18,13 @@ LEMMATIZED_SENTENCE = Extension("lemmatized_sentence")
 LEMMATIZED_PARAGRAPH = Extension("lemmatized_paragraph")
 LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
 
+FRE_SENTENCE = Extension("fre_sentence")
+FRE_PARAGRAPH = Extension("fre_paragraph")
+FRE_DOCUMENT = Extension("fre_document")
+
+LOH_SENTENCE = Extension("LOH_sentence")
+LOH_PARAGRAPH = Extension("LOH_paragraph")
+LOH_DOCUMENT = Extension("LOH_paragraph")
 
 SYLLABLES = Extension("syllabels")
 
@@ -26,5 +33,3 @@ TFIDF_DOCUMENT = Extension("tfidf")
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
 TALKTURN = Extension("talkturn")
 AGREEMENTSCORE = Extension("agreementscore")
-FLESCHREADINGEASE = Extension("fleschreadingease")
-LIWCONEHOT = Extension("liwconehot")

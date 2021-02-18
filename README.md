@@ -24,16 +24,18 @@ We examine transcripts of couple conversations from a current [research project]
 * Summary of the feature insights in a [presentation](https://drive.google.com/file/d/11y0URs2Jyc4s6zUTcpzpSDF0oWK-ttOv/view?usp=sharing)
 
 
-### Existing Code Fragments
-* LIWC (https://github.com/chbrown/liwc-python) --> library extended *src/utils/liwc.py*
+<!-- ### Existing Code Fragments
+* LIWC (https://github.com/chbrown/liwc-python) -> library extended *src/utils/liwc.py* 
+-->
 
 ### Utilized Libraries
+
 We use several libraries for the project, including:
 * Numpy 
 * Pandas
 * sklearn
 * matplotlib
-* Spacy
+* Spacy + German News Dataset (https://spacy.io/models/de)
 * NLTK
 * SentiWS
 * pyphen
@@ -43,13 +45,14 @@ We use several libraries for the project, including:
 * Streamlit to build a simple front-end
 * Seaborn for visualisation
 * LIWC library with german dictionary (https://pypi.org/project/liwc/)
-* German news dataset (https://spacy.io/models/de)
 
 The libraries and versions are specified in the Pipfile.
 
 ## Project State
 
+
 ### Project Planning
+
 * 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources). -> DONE
 * 04.02. Second "official" feedback round with supervisor -> DONE
 * 05.02. Summary of results -> DONE 
@@ -57,48 +60,89 @@ The libraries and versions are specified in the Pipfile.
 * 15.03. Third milestone: Report deadline 
 
 ### High Level Architecture Description 
-To structure our pipeline, we built a pipline library on the basis of Spacy's pipeline which is contained in pipelinelib. It is defined by three parts: 
-* Component: every processing step of the pipeline is implemented as a component, inheriting from the abstract class Component. 
-* Extension: a class to represent an extension member of Spacy's DocInstance type
-* Pipeline: a class to represent a pipeline for training a model
 
-The pipeline itself contains 3 main parts, **preprocessing**, **features** and **classification**.
-* Preprocessing: as our features require different representations of the corpus, we provide a modular preprocessing pipeline. For that purpose, different layers of the text can be queried, ranging from character, to syllable, to word, to sentences, to paragraph, to document, to corpus. The preprocessing steps can be applied to the different layers. 
-* Feature Engineering: features can be added in a modular fashion as well. 
-* Classification: we finally use a classification model in order to classify the transcripts as depressed or non-depressed using the feature vector and report a loss value. The models can also be specified as components in the corresponding subfolder.
+For this project, we implemented a pipeline library, which is contained in [src.pipelinelib](src/pipelinelib).
 
-As the transcripts are not allowed on github-servers, we provide a config.json where the local path to the transcripts needs to be specified. We then use the path to create a document corpus with the raw text. The *corpus_manager* implements functionality to return different levels of the documents.
+The phase of importing and aggregating data is performed by two different classes:
+
+* [Parser](src/pipelinelib/querying.py#L16):
+Loads the provided transcripts into a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html), alongside the corresponding metadata, such as whether a transcript belongs to the depressive sample set.
+
+* [Queryable](src/pipelinelib/querying.py#L192)
+Provides a type-safe wrapper around queries that can be applied to the loaded DataFrame.
+Its capabilities include being able to aggregate the data on [differing corpus levels](src/pipelinelib/text_body.py), loading only transcript data from the depressed group, etc.
+
+Due to GDPR, the transcripts are not allowed to be uploaded to this repository.
+
+
+Classifying data from the loaded documents is implemented by three more classes:
+
+* [Pipeline](src/pipelinelib/pipeline.py#L13):
+Represents a pipeline for training a model.
+
+* [Component](src/pipelinelib/component.py#L13): 
+Every step in a pipeline, be it preprocessing, feature extraction or classification, is implemented as a derivate of this abstract class.
+
+* [Extension](src/pipelinelib/extension.py#L6): 
+The results of a Component instance are stored within a lookup structure for later Components to reuse.
+Each Extension is mapped to one result within said structure.
+
+The aforementioned classes all work in conjunction to deliver the requested results.
+Particularly, each Component declares in its constructor which Extensions it depends on.
+This allows a Pipeline instance, prior to execution, to check whether a Component's dependencies are satisfied, or whether they will overwrite other calculated results.
+
+
+The pipeline's steps for the [Sigmund](src/sigmund) project are implemented as Component derivates and can be split into 3 different parts:
+
+* [Preprocessing](src/sigmund/preprocessing): 
+As our features require different representations of the corpus, we provide a modular preprocessing pipeline. 
+For that purpose, different aspects of the text can be queried, ranging from plain tokenizing and syllable extraction, to stemming and lemmatization. 
+
+* [Feature Engineering](src/sigmund/features): 
+Features can be added in a modular fashion as well.
+Implemented features include Agreement Score, Talk Turn and TFIDF.
+Their inputs depend on applied preprocessing Components.
+
+* [Classification](src/sigmund/classification):
+Lastly, we use a classification model in order to categorize the transcripts as depressed or non-depressed.
+This is performed by combining select feature vectors from the aforementioned section and reporting a loss value.
+
+<!-- * Classification: we finally use a classification model in order to classify the transcripts as depressed or non-depressed using the feature vector and report a loss value. The models can also be specified as components in the corresponding subfolder.
+ -->
 
 The structure of the repository is as follow:
 
 ```
 ├── pipelinelib
+│   ├── adapter.py
 │   ├── component.py
 │   ├── extension.py
+│   ├── __init__.py
 │   ├── pipeline.py
+│   ├── querying.py
+│   └── text_body.py
 ├── sigmund
 │   ├── classification
-│   │   ├── qda.py
+│   │   ├── __init__.py
 │   │   ├── logistic_regression.py
-│   │   └── naive_bayes.py
+│   │   ├── naive_bayes.py
+│   │   └── qda.py
+│   ├── extensions.py
 │   ├── features
 │   │   ├── agreement_score.py
 │   │   ├── flesch_reading_ease.py
-│   │   ├── liwc.py
+│   │   ├── __init__.py
+│   │   ├── liwc_one_hot.py
 │   │   ├── pos.py
 │   │   ├── talk_turn.py
-│   │   ├── tfidf.py
-│   │   └── words.py
+│   │   └── tfidf.py
+│   ├── __init__.py
 │   └── preprocessing
+│       ├── cleaner.py
+│       ├── __init__.py
+│       ├── pos.py
 │       ├── syllables.py
 │       └── words.py
-└── utils
-    ├── corpus_builder.py
-    ├── corpus_manager.py
-    ├── dialogue_parser.py
-    ├── feature_annotator.py
-    ├── liwc.py
-    └── statistics.py
 ```
 
 We furthermore provide a simple front-end for the Institute of Medical Psychology to present the results and provide feature details. 
@@ -106,6 +150,7 @@ We furthermore provide a simple front-end for the Institute of Medical Psycholog
 ## Data Analysis
 
 ### Data Sources
+
 * 10 Transcripts of couple conversations as part of the "Enhancing Social Interaction in Depression" (SIDE) [study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6173246/).
 * The structure of the entire dataset of the SIDE study is described in detail in the project proposal, which can be found in the repository as well
 * The format of the transcripts is as follows:
@@ -124,15 +169,26 @@ At 16.12.2020 we had:
 More detailed statics of the transcripts are included in the data_description.ipynb.
 
 ### Pre-Processing
-We implemented preprocessing steps, including:
-* Extracting Text-Data from docx
-* Removal of "annotations" like "(spricht unverständlich")
-* Removal of Stop-Words
-* Lemmatisation 
+We implemented minor preprocessing steps during the parsing phase using regex, namely:
+* Removal of annotations like "(spricht unverständlich)", or "[A: Ja]"
+* Whitespace normalisation
+
+Further preprocessing requires more intensive computing with modules that are not part of the standard library, and as such, have been made available under the `preprocessing` section of the sigmund project. 
+Examples of this are:
 * Stemming
+* Lemmatization
+* Stop-Word removal
 
 ### Feature Engineering
-Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression. An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing).
+Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression.
+
+An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing).
+
+Currently implemented are:
+* Agreement Score:
+* Flesch Reading Ease:
+* LIWC One Hot:
+* Talk Turn: 
 
 ### Classification
 Besides finding metrics to describe transcripts in terms of their textual depression-related content, we also classify the transcripts based on the found features. 

@@ -37,7 +37,19 @@ class Component(metaclass=abc.ABCMeta):
         Wrapper around the abstract apply method with output
         """
         print(f"Executing {self.name}")
-        return self.apply(storage=storage, queryable=queryable)
+
+        results = self.apply(storage=storage, queryable=queryable)
+        dfs = results.values()
+
+        # Check that all column names in returned dataframes are unique
+        all_column_names = list(column_name for df in dfs for column_name in df.columns)
+        unique_column_names = set(all_column_names)
+
+        if len(unique_column_names) != len(all_column_names):
+            raise AttributeError(
+                f"{self.name} produced dataframes with an non-empty intersection of column names")
+
+        return results
 
     @abc.abstractmethod
     def apply(self, storage: Dict[Extension, pd.DataFrame],

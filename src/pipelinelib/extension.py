@@ -26,6 +26,9 @@ class Extension:
     def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
         storage[self] = df
 
+    def __str__(self):
+        return self.name
+
     def __eq__(self, o: object) -> bool:
         return isinstance(o, Extension) and self.name == o.name
 

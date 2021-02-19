@@ -4,7 +4,7 @@ from typing import Dict, List, Set
 import pandas as pd
 
 from src.pipelinelib.querying import Queryable
-from src.sigmund.adapter import Adapter
+from src.pipelinelib.adapter import Adapter
 
 from .component import Component
 from .extension import Extension
@@ -91,7 +91,7 @@ class Pipeline:
                 f"{', '.join(missing_extensions)}")
 
         # Exception case for adapter: should be allowed to overwrite fields
-        if component.name != Adapter.__name__:
+        if not isinstance(component, Adapter):
             # would overwrite pre-existing Extensions
             overwritten_extensions = list(filter(
                 self._extensions.__contains__, component.creates_extensions))

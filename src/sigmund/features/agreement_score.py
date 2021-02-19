@@ -20,12 +20,14 @@ from src.sigmund.extensions import AGREEMENTSCORE, TOKENS_PARAGRAPH
 
 class AgreementScoreExtractor(Component):
     """
-    Extracts the Agreement-Score turn from text and stores these under doc._.agreementscore
+    Extracts the Agreement-Score turn from text and stores these under AGREEMENTSCORE
     """
-    
+
     def __init__(self, dictionary_path="./data/German_LIWC2001_Dictionary.dic"):
-        super().__init__(name=AgreementScoreExtractor.__name__, required_extensions=list(),
-                         creates_extensions=[AGREEMENTSCORE])
+        super().__init__(
+            name=AgreementScoreExtractor.__name__,
+            required_extensions=[TOKENS_PARAGRAPH],
+            creates_extensions=[AGREEMENTSCORE])
         self.dic = pyphen.Pyphen(lang='de')
         self._dictionary_path = dictionary_path
 
@@ -44,7 +46,8 @@ class AgreementScoreExtractor(Component):
         # Get list of couple_ids
         couple_ids = tokens_par['couple_id'].unique()
 
-        paragraph_count_per_doc = tokens_par.groupby(['document_id'])['paragraph_id'].max()
+        paragraph_count_per_doc = tokens_par.groupby(
+            ['document_id'])['paragraph_id'].max()
 
         tokens_par = tokens_par.groupby(['document_id'])['text'].apply(list).to_dict()
 

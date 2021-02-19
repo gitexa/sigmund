@@ -23,8 +23,8 @@ class LiwcOneHot(Component):
     def __init__(self, token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
         super(LiwcOneHot, self).__init__(
             LiwcOneHot.__name__,
-            required_extensions=[TOKENS_PARAGRAPH, TOKENS_SENTENCE], 
-            creates_extensions=[LOH_PARAGRAPH, LOH_SENTENCE]
+            required_extensions=[TOKENS_PARAGRAPH, TOKENS_SENTENCE],
+            creates_extensions=[LOH_SENTENCE, LOH_PARAGRAPH, LOH_DOCUMENT]
         )
         # self.parse, self.category_names = liwc.load_token_parser(token_parser_path)#Liwc(token_parser_path)
 
@@ -32,8 +32,8 @@ class LiwcOneHot(Component):
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:  # Sentence
 
         tokens_sent = TOKENS_SENTENCE.load_from(storage=storage)
-        tokens_par  = TOKENS_PARAGRAPH.load_from(storage=storage)
-        tokens_doc  = TOKENS_PARAGRAPH.load_from(storage=storage)
+        tokens_par = TOKENS_PARAGRAPH.load_from(storage=storage)
+        tokens_doc = TOKENS_PARAGRAPH.load_from(storage=storage)
 
         doc_count = tokens_doc['document_id'].max()
         couple_ids = tokens_doc['couple_id'].unique()
@@ -41,61 +41,66 @@ class LiwcOneHot(Component):
         cat_per_tokens_sent = tokens_sent
         cat_per_tokens_par = tokens_par
         cat_per_tokens_doc = tokens_doc
-        parse, category_names = liwc.load_token_parser("./data/German_LIWC2001_Dictionary.dic")
-
-        display(cat_per_tokens_doc)
+        parse, category_names = liwc.load_token_parser(
+            "./data/German_LIWC2001_Dictionary.dic")
 
         cat_per_tokens_sent['text'] = cat_per_tokens_sent['text'].apply(
             liwc_parser, parse=parse, category=category_names)
-        cat_per_tokens_sent = cat_per_tokens_sent.rename(columns={'text': 'LOH_sentences'})
+        cat_per_tokens_sent = cat_per_tokens_sent.rename(
+            columns={'text': 'LOH_sentences'})
 
         cat_per_tokens_par['text'] = cat_per_tokens_par['text'].apply(
             liwc_parser, parse=parse, category=category_names)
-        cat_per_tokens_par = cat_per_tokens_par.rename(columns={'text': 'LOH_paragraph'})
+        cat_per_tokens_par = cat_per_tokens_par.rename(
+            columns={'text': 'LOH_paragraph'})
 
-        #display(cat_per_tokens_doc.groupby(['document_id', 'speaker'])['text'].to_dict())
-        #cat_per_tokens_doc = cat_per_tokens_doc[cat_per_tokens_doc.text != []]
-        indexNames = cat_per_tokens_doc[ cat_per_tokens_doc['text'] == [] ].index
-        #cat_per_tokens_doc = cat_per_tokens_doc.drop(cat_per_tokens_doc[cat_per_tokens_doc.text.empty].index)
-        fre_document_A_B = cat_per_tokens_doc.groupby(['document_id', 'speaker'])['text'].apply(list).apply(process_fre)#liwc_parser, parse=parse, category=category_names)
-        display(fre_document_A_B)
-        #fre_document_A_B = fre_document_A_B.groupby(['document_id', 'speaker'])['text'].apply( liwc_parser, parse=parse, category=category_names)
+        LOH_document_A_B = cat_per_tokens_doc.groupby(['document_id', 'speaker'])[
+            'text'].apply(list).apply(liwc_parser_doc, parse=parse,
+                                      category=category_names)
 
-        #display(fre_document_A_B)
-        #fre_document_AB = cat_per_tokens_doc.groupby(['document_id'])['text'].apply(
-        #    liwc_parser, parse=parse, category=category_names)
+        LOH_document_AB = cat_per_tokens_doc.groupby(['document_id'])[
+            'text'].apply(list).apply(liwc_parser_doc, parse=parse,
+                                      category=category_names)
 
-        #display(fre_document_A_B)
-        #display(fre_document_AB)
-        #fre_document_A_B = fre_document_A_B.to_numpy()
-        #fre_document_AB = fre_document_AB.to_numpy()
+        LOH_document_A_B = LOH_document_A_B.to_numpy()
+        LOH_document_AB = LOH_document_AB.to_numpy()
 
-        return {LOH_SENTENCE: cat_per_tokens_sent, LOH_PARAGRAPH: cat_per_tokens_par}
+        values = np.concatenate(
+            (np.arange(0, doc_count + 1, dtype=int),
+             np.array(couple_ids),
+             LOH_document_A_B[0:: 2],
+             LOH_document_A_B[1:: 2],
+             LOH_document_AB),
+            axis=0).reshape(
+            (5, 10)).transpose()
+
+        LOH_document = pd.DataFrame(
+            values, columns=['document_id', 'couple_id', 'LOH_A', 'LOH_B', 'LOH_AB'])
+        LOH_document['document_id'] = LOH_document['document_id'].astype(np.int64)
+        LOH_document['couple_id'] = LOH_document['couple_id'].astype(np.int64)
+
+        return {LOH_SENTENCE: cat_per_tokens_sent, LOH_PARAGRAPH: cat_per_tokens_par, LOH_DOCUMENT: LOH_document}
 
 
 def liwc_parser(tokens, parse, category):
-    # Gets category for each token
 
-    #print("per apply::::",tokens)
-    #tokens = np.array(tokens).flatten()
-    #print(tokens)
     liwc_cats = Counter(category for token in tokens for category in parse(token))
-    return liwc_cats
-
-def process_fre(text):
-    #for 
-    #text = np.array(text).flatten().flatten().flatten()
-    #print("per apply::::::::",text)
-    return text
+    return sorted(liwc_cats.items(), key=lambda item: item[1], reverse=True)
 
 
-def tokenize_df(sentence: str, nlp) -> List[str]:
-    tokens = nlp(sentence)
+def liwc_parser_doc(tokens, parse, category):
+
+    #counter = 0
+    # for x in range(len(tokens)):
+
+    #    x -= counter
+    #    if tokens[x] == []:
+    #        del tokens[x]
+    #        counter += 1
+    # print(tokens)
     res = []
-    # Go through tokens and check if it is inside the punctuation set
-    # If this is the case it will be ignored
-    for token in map(str, tokens):
-        if not any(p in token for p in string.punctuation):
-            res.append(token.lower())
+    for str_list in tokens:
+        res += str_list
 
-    return res
+    liwc_cats = Counter(category for token in res for category in parse(token))
+    return sorted(liwc_cats.items(), key=lambda item: item[1], reverse=True)

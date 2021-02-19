@@ -19,12 +19,13 @@ nlp = spacy.load("de_core_news_md")
 
 class TalkTurnExtractor(Component):
     """
-    Extracts Talk turn from text and stores these under doc._.talkturn
+    Extracts Talk turn from text and stores these under TALKTURN 
     """
     #talkturn = Extension(name="talkturn")
 
     def __init__(self):
-        super().__init__(name=TalkTurnExtractor.__name__, required_extensions=[TOKENS_PARAGRAPH],
+        super().__init__(name=TalkTurnExtractor.__name__,
+                         required_extensions=[TOKENS_PARAGRAPH],
                          creates_extensions=[TALKTURN])
         self.dic = pyphen.Pyphen(lang='de')
 
@@ -47,7 +48,8 @@ class TalkTurnExtractor(Component):
         for x in range(doc_count+1):
             talkturns.append(
                 round(
-                    tokens_par[(x, 'A')] / (tokens_par[(x, 'A')] + tokens_par[(x, 'B')]),
+                    tokens_par[(x, 'A')] /
+                    (tokens_par[(x, 'A')] + tokens_par[(x, 'B')]),
                     2))
 
         values = np.concatenate(

@@ -24,7 +24,7 @@ FRE_DOCUMENT = Extension("fre_document")
 
 LOH_SENTENCE = Extension("LOH_sentence")
 LOH_PARAGRAPH = Extension("LOH_paragraph")
-LOH_DOCUMENT = Extension("LOH_paragraph")
+LOH_DOCUMENT = Extension("LOH_document")
 
 SYLLABLES = Extension("syllabels")
 

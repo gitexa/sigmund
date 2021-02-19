@@ -33,3 +33,5 @@ TFIDF_DOCUMENT = Extension("tfidf")
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
 TALKTURN = Extension("talkturn")
 AGREEMENTSCORE = Extension("agreementscore")
+
+FEATURE_VECTOR = Extension("feature_vector")

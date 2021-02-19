@@ -46,18 +46,20 @@ class VocabularySize(Component):
         # masculin
         df_lemmatized_document_pp_m = df_lemmatized_document_pp.loc[
             df_lemmatized_document_pp['gender'] == 'M']
-        df_vocab_size_couple_m = self.get_unique_words(
+        df_vocab_size_m = self.get_unique_words(
             df_lemmatized_document_pp_m, queryable.nlp())
 
         # feminin person
         df_lemmatized_document_pp_f = df_lemmatized_document_pp.loc[
             df_lemmatized_document_pp['gender'] == 'W']
-        df_vocab_size_couple_f = self.get_unique_words(
+        df_vocab_size_f = self.get_unique_words(
             df_lemmatized_document_pp_f, queryable.nlp())
 
         # merge dataframes for couple, masculin and feminin person
-        df_vocab_size = reduce(lambda left, right: pd.merge(left, right, on='couple_id'), [
-            df_vocab_size_couple, df_lemmatized_document_pp_m, df_lemmatized_document_pp_f])
+        df_vocab_size = df_vocab_size_couple.merge(
+            df_vocab_size_m, on='couple_id').merge(
+            df_vocab_size_f, on='couple_id')
+        df_vocab_size.columns = ['couple_id', 'vocab_size_couple', 'vocab_size_m', 'vocab_size_f']
         print(df_vocab_size)
 
         return {VOCABULARY_SIZE_DOCUMENT: df_vocab_size}

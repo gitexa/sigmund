@@ -32,6 +32,20 @@ class Parser:
 
     SENTENCE = "text"
 
+    SCHEMA = {
+        DOCUMENT_ID: np.int64,
+        PARAGRAPH_ID: np.int64,
+        SENTENCE_ID: np.int64,
+        COUPLE_ID: np.int64,
+
+        SPEAKER: str,
+        GENDER: str,
+        IS_DEPRESSED_GROUP: np.bool_,
+        DEPRESSED_PERSON: str,
+
+        SENTENCE: str
+    }
+
     def __init__(self, nlp: Callable, metadata_path: str):
         self.nlp = nlp
         self.supp_exts = (".docx", ".csv")
@@ -39,22 +53,8 @@ class Parser:
         # Loads transcription metadata of institute
         self.metadata = pd.read_excel(metadata_path)
 
-        self.schema = {
-            Parser.DOCUMENT_ID: np.int64,
-            Parser.PARAGRAPH_ID: np.int64,
-            Parser.SENTENCE_ID: np.int64,
-            Parser.COUPLE_ID: np.int64,
-
-            Parser.SPEAKER: str,
-            Parser.GENDER: str,
-            Parser.IS_DEPRESSED_GROUP: np.bool_,
-            Parser.DEPRESSED_PERSON: str,
-
-            Parser.SENTENCE: str
-        }
-
-        self.frame = pd.DataFrame(columns=self.schema.keys()) \
-            .astype(dtype=self.schema)
+        self.frame = pd.DataFrame(columns=Parser.SCHEMA.keys()) \
+            .astype(dtype=Parser.SCHEMA)
 
     def read_from_files(self, paths: Iterable[str]):
         for path in paths:
@@ -135,7 +135,7 @@ class Parser:
 
         new_df = pd.DataFrame.from_dict(
             collected, orient="index").transpose().astype(
-            self.schema)
+            Parser.SCHEMA)
         self.frame = self.frame.append(new_df)
 
     def _read_csv_into_frame(self, path2file: str) -> None:

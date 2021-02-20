@@ -20,27 +20,37 @@ class FeatureMerger(Component):
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-        names = list(map(lambda e: e.name, self.candidates))
-        print(f"{FeatureMerger.__name__} with {names}")
+        # names = list(map(lambda e: e.name, self.candidates))
+        # print(f"{FeatureMerger.__name__} with {names}")
 
-        names = list(map(lambda e: e.name, storage.keys()))
-        print(f"in storage: {names}")
+        # names = list(map(lambda e: e.name, storage.keys()))
+        # print(f"in storage: {names}")
 
-        feature_dfs = list(map(
-            lambda e: e.load_from(storage=storage).add_prefix(f"_{e.name}"),
-            self.candidates
-        ))
-
-        if not feature_dfs:
+        # Preemptive exit
+        if not self.candidates:
             return dict()
 
-        if len(feature_dfs) == 1:
-            return {FEATURE_VECTOR: feature_dfs[0]}
+        # Load desired dfs from storage
+        feature_dfs = list(map(
+            lambda e: e.load_from(storage=storage), self.candidates
+        ))
 
+        # Rename columns introduced by each component by prepending the Extension name
+        # prevents joins from clashing columns
+        for extension, df in zip(self.candidates, feature_dfs):
+            to_rename = [column for column in df.columns if column not in Parser.SCHEMA]
+            renamed = [f"{extension.name}_{column}" for column in to_rename]
+            df.rename(columns=dict(zip(to_rename, renamed)), inplace=True)
+
+        # Assert join will work
         for extension, feature_df in zip(self.candidates, feature_dfs):
             if Parser.COUPLE_ID not in feature_df.columns:
                 raise AssertionError(
-                    f"Missing {Parser.COUPLE_ID} from DataFrame; key = {extension.name}")
+                    f"Missing {Parser.COUPLE_ID} from DataFrame: {extension.name} @ {feature_df.columns}")
+
+        # Cannot perform reduce on less than 2 DFs
+        if len(feature_dfs) == 1:
+            return {FEATURE_VECTOR: feature_dfs[0]}
 
         joined = reduce(lambda left, right: pd.merge(
             left, right, on=Parser.COUPLE_ID, how="inner"), feature_dfs)

@@ -54,7 +54,7 @@ class FeatureTFIDF(Component):
             index=count_vectorizer.get_feature_names()).T
 
         # construct results with couple_id
-        df_tfidf = df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
+        df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
 
         # select only columns which differ between depressed and non-depressed couples
         # TODO if desired

@@ -25,7 +25,8 @@ class Extension:
     def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
         lookup = storage.get(self, None)
         if lookup is None:
-            print(f"Warning: {Extension.load_from.__name__} is returned None")
+            print(
+                f"Warning: {Extension.load_from.__name__} returned None for {self.name}")
             return None
 
         return storage[self].copy(deep=True)

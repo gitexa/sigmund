@@ -72,6 +72,13 @@ class Pipeline:
                 raise AssertionError(
                     f"{component.name} did not create required extension(s): {names}")
 
+            not_valid = [e for e in component.creates_extensions
+                         if result.get(e, None) is None]
+            if not_valid:
+                names = [e.name for e in not_valid]
+                raise AssertionError(
+                    f"{component.name} created {names}, but set None as their value!")
+
             if result and visualise:
                 component.visualise(result)
 

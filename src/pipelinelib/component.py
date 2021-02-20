@@ -31,7 +31,7 @@ class Component(metaclass=abc.ABCMeta):
         self.required_extensions = required_extensions
         self.creates_extensions = creates_extensions
 
-    def _internal_apply(self, storage: Dict[str, pd.DataFrame],
+    def _internal_apply(self, storage: Dict[Extension, pd.DataFrame],
                         queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
         Wrapper around the abstract apply method with output

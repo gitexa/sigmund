@@ -76,7 +76,7 @@ class Pipeline:
     # def execute_on(self, text: str) -> dict:
     #    pass
 
-    def _is_compatible(self, component: Component) -> bool:
+    def _is_compatible(self, component: Component):
         """
         Check that the component will not overwrite a preregistered extension,
         or if it depends on an extension that has not been declared yet
@@ -86,9 +86,10 @@ class Pipeline:
         missing_extensions = list(filterfalse(
             self._extensions.__contains__, component.required_extensions))
         if missing_extensions:
+            extension_names = map(lambda e: e.name, missing_extensions)
             raise Exception(
                 f"Unable to apply {component.name} to pipeline - missing extensions: " +
-                f"{', '.join(missing_extensions)}")
+                f"{', '.join(extension_names)}")
 
         # Exception case for adapter: should be allowed to overwrite fields
         if not isinstance(component, Adapter):
@@ -96,9 +97,10 @@ class Pipeline:
             overwritten_extensions = list(filter(
                 self._extensions.__contains__, component.creates_extensions))
             if overwritten_extensions:
+                extension_names = map(lambda e: e.name, overwritten_extensions)
                 raise Exception(
                     f"Unable to apply {component.name} to pipeline: - would overwrite extensions: "
-                    + f"{', '.join(overwritten_extensions)}")
+                    + f"{', '.join(extension_names)}")
 
     def _register_extensions(self, component: Component):
         """

@@ -21,7 +21,6 @@ class TalkTurnExtractor(Component):
     """
     Extracts Talk turn from text and stores these under TALKTURN 
     """
-    #talkturn = Extension(name="talkturn")
 
     def __init__(self):
         super().__init__(name=TalkTurnExtractor.__name__,
@@ -29,7 +28,6 @@ class TalkTurnExtractor(Component):
                          creates_extensions=[TALKTURN])
         self.dic = pyphen.Pyphen(lang='de')
 
-    # def apply(self, doc: Doc) -> Doc:
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
@@ -37,11 +35,13 @@ class TalkTurnExtractor(Component):
         doc_count = tokens_par['document_id'].max()
         couple_ids = tokens_par['couple_id'].unique()
 
+        # If a paragraph has more then 5 tokens it is count as a talking turn 
         tokens_par['tokens_paragraph'] = tokens_par['tokens_paragraph'].apply(len)
         tokens_par['tokens_paragraph'] = tokens_par['tokens_paragraph'].apply(lambda x: 1 if x > 5 else 0)
         tokens_par = tokens_par.groupby(['document_id', 'speaker'])['tokens_paragraph'].sum()
         tokens_par = tokens_par.to_dict()
 
+        #Calculate Talkturn ratio (with respect to the value for man) for all the documents (Man/ (Man+Woman))
         talkturns = []
         for x in range(doc_count+1):
             talkturns.append(
@@ -54,6 +54,7 @@ class TalkTurnExtractor(Component):
         document = queryable.execute(level=TextBody.DOCUMENT)
         is_depressed_group = document['is_depressed_group'].to_numpy()
 
+        #Build Dataframe with columns: document_id, couple_id, is_depressed_group, TalkTurn
         values = np.concatenate(
             (np.arange(0, doc_count + 1, dtype=np.int64),
             couple_ids,

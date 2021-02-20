@@ -37,6 +37,7 @@ class FleschExtractor(Component):
 
         is_depressed_group = fre_document['is_depressed_group'].to_numpy()
         
+        #Filter columns
         fre_sentence = fre_sentence[['document_id', 'couple_id', 'paragraph_id', 'sentence_id', 'gender', 'is_depressed_group', 'text']]
         fre_paragraph = fre_paragraph[['document_id', 'couple_id', 'paragraph_id', 'gender', 'is_depressed_group', 'text']]
         fre_document = fre_paragraph[['document_id', 'couple_id', 'paragraph_id', 'gender', 'is_depressed_group','text']]
@@ -44,18 +45,17 @@ class FleschExtractor(Component):
         doc_count = fre_document['document_id'].max()
         couple_ids = fre_document['couple_id'].unique()
         
-
+        #Calculate the Flesch-Reading-Ease
         fre_sentence['text'] = fre_sentence['text'].apply(reading_ease_german)
         fre_paragraph['text'] = fre_paragraph['text'].apply(reading_ease_german)
 
-        fre_document_M_F = fre_document.groupby(['document_id', 'gender'])[
-            'text'].apply(process_fre)
-        fre_document_MF = fre_document.groupby(
-            ['document_id'])['text'].apply(process_fre)
+        fre_document_M_F = fre_document.groupby(['document_id', 'gender'])['text'].apply(process_fre)
+        fre_document_MF = fre_document.groupby(['document_id'])['text'].apply(process_fre)
 
         fre_document_M_F = fre_document_M_F.to_numpy()
         fre_document_MF = fre_document_MF.to_numpy()
 
+        #Build Dataframe with columns: document_id, couple_id, is_depressed_group, fre_female, fre_male, fre_both
         values = np.concatenate(
             (np.arange(0, doc_count + 1, dtype=int),
              np.array(couple_ids),
@@ -71,7 +71,8 @@ class FleschExtractor(Component):
         fre_document['couple_id'] = fre_document['couple_id'].astype(np.int64)
         fre_document['is_depressed_group'] = fre_document['is_depressed_group'].astype(bool)
 
-        # Split Dataframe by gender
+        # Split Dataframe by gender#
+        # Rename colums with respect to gender
         fre_sentence_m = fre_sentence[fre_sentence['gender'] == 'M']
         fre_sentence_f = fre_sentence[fre_sentence['gender'] == 'W']
 

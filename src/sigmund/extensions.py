@@ -34,4 +34,9 @@ VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
 TALKTURN = Extension("talkturn")
 AGREEMENTSCORE = Extension("agreementscore")
 
+
+# Aggregated features
 FEATURE_VECTOR = Extension("feature_vector")
+
+# Classification results
+CLASSIFICATION_NAIVE_BAYES = Extension("classification_naive_bayes")

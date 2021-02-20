@@ -49,7 +49,7 @@ class AgreementScoreExtractor(Component):
         paragraph_count_per_doc = tokens_par.groupby(
             ['document_id'])['paragraph_id'].max()
 
-        tokens_par = tokens_par.groupby(['document_id'])['text'].apply(list).to_dict()
+        tokens_par = tokens_par.groupby(['document_id'])['tokens_paragraph'].apply(list).to_dict()
 
         agr_score = [0, 0]
         agr_score[0] = np.zeros(doc_count + 1)
@@ -75,13 +75,20 @@ class AgreementScoreExtractor(Component):
 
         agr_score = 1 - np.around(agr_score[0] / agr_score[1], decimals=2)
 
+        # Add is_depressed_group label
+        document = queryable.execute(level=TextBody.DOCUMENT)
+        is_depressed_group = document['is_depressed_group'].to_numpy()
+
         # Prepare data for Dataframe
         values = np.concatenate(
-            (np.arange(0, doc_count + 1, dtype=np.int64), couple_ids,
-             agr_score),
-            axis=0).reshape((3, 10)).transpose()
+            (np.arange(0, doc_count + 1, dtype=np.int64),
+            couple_ids,
+            is_depressed_group,
+            agr_score),
+            axis=0).reshape((4, 10)).transpose()
 
         agr_score = pd.DataFrame(values,
-                                 columns=['document_id', 'couple_id', 'AgreementScore'])
+                                 columns=['document_id', 'couple_id', 'is_depressed_group', 'AgreementScore'])
+        agr_score['is_depressed_group'] = agr_score['is_depressed_group'].astype(bool)
 
         return {AGREEMENTSCORE: agr_score}

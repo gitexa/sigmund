@@ -18,13 +18,22 @@ LEMMATIZED_SENTENCE = Extension("lemmatized_sentence")
 LEMMATIZED_PARAGRAPH = Extension("lemmatized_paragraph")
 LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
 
-FRE_SENTENCE = Extension("fre_sentence")
-FRE_PARAGRAPH = Extension("fre_paragraph")
-FRE_DOCUMENT = Extension("fre_document")
+FRE_SENTENCE_M = Extension("fre_sentence_m")
+FRE_SENTENCE_F = Extension("fre_sentence_f")
+FRE_PARAGRAPH_M = Extension("fre_paragraph_m")
+FRE_PARAGRAPH_F = Extension("fre_paragraph_f")
+FRE_DOCUMENT_M = Extension("fre_document_m")
+FRE_DOCUMENT_F = Extension("fre_document_f")
+FRE_DOCUMENT_MF = Extension("fre_document_mf")
 
-LOH_SENTENCE = Extension("LOH_sentence")
-LOH_PARAGRAPH = Extension("LOH_paragraph")
-LOH_DOCUMENT = Extension("LOH_document")
+
+LIWC_SENTENCE_M = Extension("liwc_sentence_m")
+LIWC_SENTENCE_F = Extension("liwc_sentence_f")
+LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m")
+LIWC_PARAGRAPH_F = Extension("liwc_paragraph_f")
+LIWC_DOCUMENT_M = Extension("liwc_document_m")
+LIWC_DOCUMENT_F = Extension("liwc_document_f")
+LIWC_DOCUMENT_MF = Extension("liwc_document_mf")
 
 SYLLABLES = Extension("syllabels")
 

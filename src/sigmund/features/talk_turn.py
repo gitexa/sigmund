@@ -37,11 +37,9 @@ class TalkTurnExtractor(Component):
         doc_count = tokens_par['document_id'].max()
         couple_ids = tokens_par['couple_id'].unique()
 
-        #paragraph_count_per_doc = tokens.groupby(['document_id'])['paragraph_id'].max()
-
-        tokens_par['text'] = tokens_par['text'].apply(len)
-        tokens_par['text'] = tokens_par['text'].apply(lambda x: 1 if x > 5 else 0)
-        tokens_par = tokens_par.groupby(['document_id', 'speaker'])['text'].sum()
+        tokens_par['tokens_paragraph'] = tokens_par['tokens_paragraph'].apply(len)
+        tokens_par['tokens_paragraph'] = tokens_par['tokens_paragraph'].apply(lambda x: 1 if x > 5 else 0)
+        tokens_par = tokens_par.groupby(['document_id', 'speaker'])['tokens_paragraph'].sum()
         tokens_par = tokens_par.to_dict()
 
         talkturns = []
@@ -52,12 +50,21 @@ class TalkTurnExtractor(Component):
                     (tokens_par[(x, 'A')] + tokens_par[(x, 'B')]),
                     2))
 
+        # Add is_depressed_group label
+        document = queryable.execute(level=TextBody.DOCUMENT)
+        is_depressed_group = document['is_depressed_group'].to_numpy()
+
         values = np.concatenate(
-            (np.arange(0, doc_count + 1, dtype=np.int64), couple_ids,
-             np.asarray(talkturns)),
-            axis=0).reshape((3, 10)).transpose()
+            (np.arange(0, doc_count + 1, dtype=np.int64),
+            couple_ids,
+            is_depressed_group,
+            np.asarray(talkturns)),
+            axis=0).reshape((4, 10)).transpose()
+
 
         talkturns = pd.DataFrame(values,
-                                 columns=['document_id', 'couple_id', 'TalkTurn'])
+                                 columns=['document_id', 'couple_id', 'is_depressed_group', 'TalkTurn'])
+
+        talkturns['is_depressed_group'] = talkturns['is_depressed_group'].astype(bool)
 
         return {TALKTURN: talkturns}

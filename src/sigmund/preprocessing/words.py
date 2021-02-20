@@ -50,6 +50,10 @@ class Tokenizer(Component):
         tokens_sent['text'] = tokens_sent['text'].apply(
             self.tokenize_df, nlp=queryable.nlp())
 
+        tokens_sent = tokens_sent.rename(columns={'text': 'tokens_sentence'})
+        tokens_para = tokens_para.rename(columns={'text': 'tokens_paragraph'})
+        tokens_doc = tokens_doc.rename(columns={'text': 'tokens_document'})
+
         return {TOKENS_SENTENCE: tokens_sent, TOKENS_PARAGRAPH: tokens_para, TOKENS_DOCUMENT: tokens_doc}
 
     def tokenize_df(self, text: str, nlp) -> List[str]:

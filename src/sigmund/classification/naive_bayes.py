@@ -29,9 +29,10 @@ class NaiveBayes(Component):
         # get features
         df_feature_vector = FEATURE_VECTOR.load_from(storage=storage)
 
-        couple_id = df_feature_vector.iloc[:, 0]
-        labels = df_feature_vector.iloc[:, 1].astype(int)
-        features = df_feature_vector.iloc[:, 2:]
+        couple_id = df_feature_vector["couple_id"]
+        labels = df_feature_vector["is_depressed"].astype(int)
+        features = df_feature_vector[df_feature_vector.columns.difference(
+            ["couple_id", "is_depressed"], sort=False)]
 
         features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
             features, labels, features.index.values, test_size=0.20, random_state=42)
@@ -46,7 +47,7 @@ class NaiveBayes(Component):
         display(predicted)
 
         # evaluate classifier
-        accuracy = ((predicted == label_test).sum())/len(label_test)
+        accuracy = ((predicted == label_test).sum()) / len(label_test)
         display(accuracy)
 
         return {CLASSIFICATION_NAIVE_BAYES: predicted}

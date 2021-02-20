@@ -3,9 +3,8 @@ from typing import Dict, List, Set
 
 import pandas as pd
 
-from src.pipelinelib.querying import Queryable
 from src.pipelinelib.adapter import Adapter
-
+from src.pipelinelib.querying import Queryable
 from .component import Component
 from .extension import Extension
 
@@ -54,7 +53,7 @@ class Pipeline:
 
         return self
 
-    def execute(self) -> Dict[Extension, pd.DataFrame]:
+    def execute(self, visualise: bool = False) -> Dict[Extension, pd.DataFrame]:
         """
         Execute the pipeline with the registered components
         """
@@ -65,6 +64,10 @@ class Pipeline:
         for component in self._components:
             result = component._internal_apply(
                 storage=curr, queryable=self._queryable)
+
+            if result and visualise:
+                component.visualise(result)
+
             if result:
                 for extension, df in result.items():
                     extension.store_to(curr, df)

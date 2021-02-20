@@ -59,3 +59,7 @@ class Component(metaclass=abc.ABCMeta):
         a step in the analytics pipeline
         """
         pass
+
+    @abc.abstractmethod
+    def visualise(self, created: Dict[Extension, pd.DataFrame]):
+        return None

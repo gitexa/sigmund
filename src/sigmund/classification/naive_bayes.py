@@ -1,16 +1,16 @@
 import operator
+from typing import Dict
 
 import pandas as pd
-from src.pipelinelib.querying import Queryable
-from typing import Dict
-from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
-
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.pipelinelib.querying import Queryable
+from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
+
 
 class NaiveBayes(Component):
     """

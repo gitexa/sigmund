@@ -26,17 +26,17 @@ class NaiveBayes(Component):
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
-        # get features 
+        # get features
         df_feature_vector = FEATURE_VECTOR.load_from(storage=storage)
-.
+
         couple_id = df_feature_vector.iloc[:, 0]
         labels = df_feature_vector.iloc[:, 1].astype(int)
         features = df_feature_vector.iloc[:, 2:]
 
         features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
             features, labels, features.index.values, test_size=0.20, random_state=42)
-        
-        # fit classifier 
+
+        # fit classifier
         classifier = MultinomialNB()
         classifier.fit(features_train, label_train)
 
@@ -50,6 +50,7 @@ class NaiveBayes(Component):
         display(accuracy)
 
         return {CLASSIFICATION_NAIVE_BAYES: predicted}
+
 
 '''
 class NaiveBayesOnTfIdf(Component):

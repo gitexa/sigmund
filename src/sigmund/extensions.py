@@ -29,7 +29,7 @@ LOH_DOCUMENT = Extension("LOH_document")
 SYLLABLES = Extension("syllabels")
 
 # Features
-TFIDF_DOCUMENT = Extension("tfidf")
+TFIDF_DOCUMENT = Extension("tfidf_document")
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
 TALKTURN = Extension("talkturn")
 AGREEMENTSCORE = Extension("agreementscore")

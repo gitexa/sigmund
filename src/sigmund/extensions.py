@@ -44,6 +44,14 @@ VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size", is_feature=True)
 TALKTURN = Extension("talkturn", is_feature=True)
 AGREEMENTSCORE = Extension("agreementscore", is_feature=True)
 
+POS_SENTENCE_M = Extension('pos_sentence_m')
+POS_SENTENCE_F = Extension('pos_sentence_f')
+POS_PARAGRAPH_M = Extension('pos_paragraph_m')
+POS_PARAGRAPH_F = Extension('pos_paragraph_f')
+POS_DOCUMENT_M = Extension('pos_document_m')
+POS_DOCUMENT_F = Extension('pos_document_f')
+POS_DOCUMENT_MF = Extension('pos_document_mf')
+
 
 # Aggregated features
 FEATURE_VECTOR = Extension("feature_vector")

@@ -18,30 +18,31 @@ LEMMATIZED_SENTENCE = Extension("lemmatized_sentence")
 LEMMATIZED_PARAGRAPH = Extension("lemmatized_paragraph")
 LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
 
-FRE_SENTENCE_M = Extension("fre_sentence_m")
-FRE_SENTENCE_F = Extension("fre_sentence_f")
-FRE_PARAGRAPH_M = Extension("fre_paragraph_m")
-FRE_PARAGRAPH_F = Extension("fre_paragraph_f")
-FRE_DOCUMENT_M = Extension("fre_document_m")
-FRE_DOCUMENT_F = Extension("fre_document_f")
-FRE_DOCUMENT_MF = Extension("fre_document_mf")
+SYLLABLES = Extension("syllables")
 
-
-LIWC_SENTENCE_M = Extension("liwc_sentence_m")
-LIWC_SENTENCE_F = Extension("liwc_sentence_f")
-LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m")
-LIWC_PARAGRAPH_F = Extension("liwc_paragraph_f")
-LIWC_DOCUMENT_M = Extension("liwc_document_m", is_feature=True)
-LIWC_DOCUMENT_F = Extension("liwc_document_f")
-LIWC_DOCUMENT_MF = Extension("liwc_document_mf")
-
-SYLLABLES = Extension("syllabels")
 
 # Features
+FRE_SENTENCE_M = Extension("fre_sentence_m", is_feature=True)
+FRE_SENTENCE_F = Extension("fre_sentence_f", is_feature=True)
+FRE_PARAGRAPH_M = Extension("fre_paragraph_m", is_feature=True)
+FRE_PARAGRAPH_F = Extension("fre_paragraph_f", is_feature=True)
+FRE_DOCUMENT_M = Extension("fre_document_m", is_feature=True)
+FRE_DOCUMENT_F = Extension("fre_document_f", is_feature=True)
+FRE_DOCUMENT_MF = Extension("fre_document_mf", is_feature=True)
+
+
+LIWC_SENTENCE_M = Extension("liwc_sentence_m", is_feature=True)
+LIWC_SENTENCE_F = Extension("liwc_sentence_f", is_feature=True)
+LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m", is_feature=True)
+LIWC_PARAGRAPH_F = Extension("liwc_paragraph_f", is_feature=True)
+LIWC_DOCUMENT_M = Extension("liwc_document_m", is_feature=True)
+LIWC_DOCUMENT_F = Extension("liwc_document_f", is_feature=True)
+LIWC_DOCUMENT_MF = Extension("liwc_document_mf", is_feature=True)
+
 TFIDF_DOCUMENT = Extension("tfidf_document", is_feature=True)
-VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
-TALKTURN = Extension("talkturn")
-AGREEMENTSCORE = Extension("agreementscore")
+VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size", is_feature=True)
+TALKTURN = Extension("talkturn", is_feature=True)
+AGREEMENTSCORE = Extension("agreementscore", is_feature=True)
 
 
 # Aggregated features

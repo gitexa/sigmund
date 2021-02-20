@@ -30,6 +30,7 @@ class LiwcOneHot(Component):
         # self.parse, self.category_names = liwc.load_token_parser(token_parser_path)#Liwc(token_parser_path)
         self.white_list = white_list
         self.black_list = black_list
+        self.token_parser_path = token_parser_path
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
@@ -46,8 +47,7 @@ class LiwcOneHot(Component):
         liwc_document = tokens_doc
 
         # Get the liwc parser/categories
-        parse, category_names = liwc.load_token_parser(
-            "./data/German_LIWC2001_Dictionary.dic")
+        parse, category_names = liwc.load_token_parser(self.token_parser_path)
 
         # Get LIWC for sentence, paragraph
         liwc_sentence['tokens_sentence'] = liwc_sentence['tokens_sentence'].apply(

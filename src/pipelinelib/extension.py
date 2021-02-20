@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Dict, Union
 
 import pandas as pd
@@ -21,7 +22,7 @@ class Extension:
         self.name = name
 
     def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
-        return storage.get(self, None).copy(deep=True)
+        return storage[self].copy(deep=True) if self in storage else None
 
     def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
         storage[self] = df

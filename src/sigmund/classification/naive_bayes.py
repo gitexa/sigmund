@@ -1,4 +1,5 @@
 import operator
+from src.pipelinelib.text_body import TextBody
 from typing import Dict
 
 import pandas as pd
@@ -29,10 +30,17 @@ class NaiveBayes(Component):
         # get features
         df_feature_vector = FEATURE_VECTOR.load_from(storage=storage)
 
+        metadata = queryable.execute(level=TextBody.DOCUMENT)
+        df_feature_vector = pd.merge(
+            metadata[['couple_id', 'is_depressed_group']],
+            df_feature_vector, on='couple_id', how='inner')
+
+        display(df_feature_vector)
+
         couple_id = df_feature_vector["couple_id"]
-        labels = df_feature_vector["is_depressed"].astype(int)
+        labels = df_feature_vector["is_depressed_group"].astype(int)
         features = df_feature_vector[df_feature_vector.columns.difference(
-            ["couple_id", "is_depressed"], sort=False)]
+            ["couple_id", "is_depressed_group"], sort=False)]
 
         features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
             features, labels, features.index.values, test_size=0.20, random_state=42)

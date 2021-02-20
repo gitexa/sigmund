@@ -13,6 +13,7 @@ from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import *
 
+
 class FeatureTFIDF(Component):
     """
     This component provides features for classification by using sklearn tfidf
@@ -36,12 +37,12 @@ class FeatureTFIDF(Component):
     def get_tfidf(self, lines):
 
         # join text to string and retokenize with min_frequency
-        lines['text'] = lines['text'].apply(
+        lines['tokens_document'] = lines['tokens_document'].apply(
             lambda row: ' '.join(token for token in row))
 
         # get vectors with frequencies for the words in the lines; each line is considered a document; remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
         count_vectorizer = CountVectorizer(min_df=5)
-        count_vectorized = count_vectorizer.fit_transform(lines['text'])
+        count_vectorized = count_vectorizer.fit_transform(lines['tokens_document'])
 
         # transform the vector-frequency matrix in tfidf
         tfidf_transformer = TfidfTransformer(use_idf=True)
@@ -53,7 +54,7 @@ class FeatureTFIDF(Component):
             index=count_vectorizer.get_feature_names()).T
 
         # construct results with couple_id
-        df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
+        df_tfidf = df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
 
         # select only columns which differ between depressed and non-depressed couples
         # TODO if desired

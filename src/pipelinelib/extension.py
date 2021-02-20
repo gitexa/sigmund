@@ -18,20 +18,29 @@ class Extension:
         identifier of the extension
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, is_feature: bool = False):
         self.name = name
+        self.is_feature = is_feature
 
     def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
-        return storage[self].copy(deep=True) if self in storage else None
+        lookup = storage.get(self, None)
+        if lookup is None:
+            print(f"Warning: {Extension.load_from.__name__} is returned None")
+            return None
+
+        return storage[self].copy(deep=True)
+
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, Extension):
+            return False
+
+        return self.name == o.name and self.is_feature == o.is_feature
+
+    def __hash__(self) -> int:
+        return (hash(self.name) << 1) ^ hash(self.is_feature)
 
     def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
         storage[self] = df
 
     def __str__(self):
         return self.name
-
-    def __eq__(self, o: object) -> bool:
-        return isinstance(o, Extension) and self.name == o.name
-
-    def __hash__(self) -> int:
-        return hash(self.name)

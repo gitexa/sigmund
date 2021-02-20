@@ -84,17 +84,17 @@ class Stemmer(Component):
 
         # Document
         df_stemmed_document = TOKENS_DOCUMENT.load_from(storage=storage)
-        df_stemmed_document["text"] = df_stemmed_document["text"].apply(
+        df_stemmed_document["tokens_document"] = df_stemmed_document["tokens_document"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
         # Paragraph
         df_stemmed_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
-        df_stemmed_paragraph["text"] = df_stemmed_paragraph["text"].apply(
+        df_stemmed_paragraph["tokens_paragraph"] = df_stemmed_paragraph["tokens_paragraph"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
         # Sentence
         df_stemmed_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-        df_stemmed_sentence["text"] = df_stemmed_sentence["text"].apply(
+        df_stemmed_sentence["tokens_sentence"] = df_stemmed_sentence["tokens_sentence"].apply(
             self.stemm_df, stemmer=self._stemmer)
 
         return {STEMMED_SENTENCE: df_stemmed_sentence, STEMMED_PARAGRAPH: df_stemmed_paragraph, STEMMED_DOCUMENT: df_stemmed_document}
@@ -123,17 +123,17 @@ class Lemmatizer(Component):
 
         # Document
         df_lemmatized_document = TOKENS_DOCUMENT.load_from(storage=storage)
-        df_lemmatized_document["text"] = df_lemmatized_document["text"].apply(
+        df_lemmatized_document["tokens_document"] = df_lemmatized_document["tokens_document"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 
         # Paragraph
         df_lemmatized_paragraph = TOKENS_PARAGRAPH.load_from(storage=storage)
-        df_lemmatized_paragraph["text"] = df_lemmatized_paragraph["text"].apply(
+        df_lemmatized_paragraph["tokens_paragraph"] = df_lemmatized_paragraph["tokens_paragraph"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 
         # Sentence
         df_lemmatized_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-        df_lemmatized_sentence["text"] = df_lemmatized_sentence["text"].apply(
+        df_lemmatized_sentence["tokens_sentence"] = df_lemmatized_sentence["tokens_sentence"].apply(
             self.lemmatize_df, nlp=queryable.nlp())
 
         return {LEMMATIZED_SENTENCE: df_lemmatized_sentence, LEMMATIZED_PARAGRAPH: df_lemmatized_paragraph, LEMMATIZED_DOCUMENT: df_lemmatized_document}

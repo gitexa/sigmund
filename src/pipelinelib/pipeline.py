@@ -5,6 +5,7 @@ import pandas as pd
 
 from src.pipelinelib.adapter import Adapter
 from src.pipelinelib.querying import Queryable
+
 from .component import Component
 from .extension import Extension
 
@@ -64,6 +65,12 @@ class Pipeline:
         for component in self._components:
             result = component._internal_apply(
                 storage=curr, queryable=self._queryable)
+
+            missing_exts = [e for e in component.creates_extensions if e not in result]
+            if missing_exts:
+                names = [e.name for e in missing_exts]
+                raise AssertionError(
+                    f"{component.name} did not create required extension(s): {names}")
 
             if result and visualise:
                 component.visualise(result)

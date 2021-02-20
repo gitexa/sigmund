@@ -31,14 +31,14 @@ LIWC_SENTENCE_M = Extension("liwc_sentence_m")
 LIWC_SENTENCE_F = Extension("liwc_sentence_f")
 LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m")
 LIWC_PARAGRAPH_F = Extension("liwc_paragraph_f")
-LIWC_DOCUMENT_M = Extension("liwc_document_m")
+LIWC_DOCUMENT_M = Extension("liwc_document_m", is_feature=True)
 LIWC_DOCUMENT_F = Extension("liwc_document_f")
 LIWC_DOCUMENT_MF = Extension("liwc_document_mf")
 
 SYLLABLES = Extension("syllabels")
 
 # Features
-TFIDF_DOCUMENT = Extension("tfidf_document")
+TFIDF_DOCUMENT = Extension("tfidf_document", is_feature=True)
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size")
 TALKTURN = Extension("talkturn")
 AGREEMENTSCORE = Extension("agreementscore")

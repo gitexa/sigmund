@@ -22,7 +22,10 @@ from src.utils.liwc import Liwc
 
 class LiwcOneHot(Component):
 
-    def __init__(self, white_list = [], black_list = [], token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
+    def __init__(
+            self, white_list=[],
+            black_list=[],
+            token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
         super(LiwcOneHot, self).__init__(
             LiwcOneHot.__name__,
             required_extensions=[TOKENS_PARAGRAPH, TOKENS_SENTENCE],
@@ -33,10 +36,10 @@ class LiwcOneHot(Component):
         # self.parse, self.category_names = liwc.load_token_parser(token_parser_path)#Liwc(token_parser_path)
         self.white_list = white_list
         self.black_list = black_list
-        
+
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
-              
+
         tokens_sent = TOKENS_SENTENCE.load_from(storage=storage)
         tokens_par = TOKENS_PARAGRAPH.load_from(storage=storage)
         tokens_doc = TOKENS_PARAGRAPH.load_from(storage=storage)
@@ -62,15 +65,15 @@ class LiwcOneHot(Component):
 
         liwc_document_A_B = cat_per_tokens_doc.groupby(['document_id', 'gender'])[
             'tokens_paragraph'].apply(list).apply(liwc_parser_doc, parse=parse,
-                                      category=category_names)
+                                                  category=category_names)
 
         liwc_document_AB = cat_per_tokens_doc.groupby(['document_id'])[
             'tokens_paragraph'].apply(list).apply(liwc_parser_doc, parse=parse,
-                                      category=category_names)
+                                                  category=category_names)
 
         liwc_document_A_B = liwc_document_A_B.to_numpy()
         liwc_document_AB = liwc_document_AB.to_numpy()
-        #print(liwc_document_A_B)
+        # print(liwc_document_A_B)
 
         # Add is_depressed_group label
         document = queryable.execute(level=TextBody.DOCUMENT)
@@ -87,7 +90,9 @@ class LiwcOneHot(Component):
             (6, 10)).transpose()
 
         liwc_document = pd.DataFrame(
-            values, columns=['document_id', 'couple_id', 'is_depressed_group', 'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
+            values,
+            columns=['document_id', 'couple_id', 'is_depressed_group',
+                     'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
         liwc_document['document_id'] = liwc_document['document_id'].astype(np.int64)
         liwc_document['couple_id'] = liwc_document['couple_id'].astype(np.int64)
 
@@ -95,73 +100,120 @@ class LiwcOneHot(Component):
         liwc_sentence_m = cat_per_tokens_sent[cat_per_tokens_sent['gender'] == 'M']
         liwc_sentence_f = cat_per_tokens_sent[cat_per_tokens_sent['gender'] == 'W']
 
-        liwc_sentence_m = liwc_sentence_m.rename(columns={'liwc_sentences': 'liwc_sentence_m'})
-        liwc_sentence_f = liwc_sentence_f.rename(columns={'liwc_sentences': 'liwc_sentence_f'})
+        liwc_sentence_m = liwc_sentence_m.rename(
+            columns={'liwc_sentences': 'liwc_sentence_m'})
+        liwc_sentence_f = liwc_sentence_f.rename(
+            columns={'liwc_sentences': 'liwc_sentence_f'})
 
         liwc_paragraph_m = cat_per_tokens_par[cat_per_tokens_par['gender'] == 'M']
         liwc_paragraph_f = cat_per_tokens_par[cat_per_tokens_par['gender'] == 'W']
 
-        liwc_paragraph_m = liwc_paragraph_m.rename(columns={'liwc_paragraph': 'liwc_paragraph_m'})
-        liwc_paragraph_f = liwc_paragraph_f.rename(columns={'liwc_paragraph': 'liwc_paragraph_f'})
+        liwc_paragraph_m = liwc_paragraph_m.rename(
+            columns={'liwc_paragraph': 'liwc_paragraph_m'})
+        liwc_paragraph_f = liwc_paragraph_f.rename(
+            columns={'liwc_paragraph': 'liwc_paragraph_f'})
 
-        liwc_document_m = liwc_document.drop(columns= ['liwc_document_f', 'liwc_document_mf'])
-        liwc_document_f = liwc_document.drop(columns= ['liwc_document_m', 'liwc_document_mf'])
-        liwc_document_mf = liwc_document.drop(columns=['liwc_document_m', 'liwc_document_f'])
+        liwc_document_m = liwc_document.drop(
+            columns=['liwc_document_f', 'liwc_document_mf'])
+        liwc_document_f = liwc_document.drop(
+            columns=['liwc_document_m', 'liwc_document_mf'])
+        liwc_document_mf = liwc_document.drop(
+            columns=['liwc_document_m', 'liwc_document_f'])
 
         # Convert dict in dataframe to separate columns in dataframe
-        liwc_sentence_m = pd.concat([liwc_sentence_m.drop(['liwc_sentence_m'], axis=1),
-                                     liwc_sentence_m['liwc_sentence_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        liwc_sentence_m = pd.concat(
+            [liwc_sentence_m.drop(['liwc_sentence_m'],
+                                  axis=1),
+             liwc_sentence_m['liwc_sentence_m'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        liwc_sentence_f = pd.concat([liwc_sentence_f.drop(['liwc_sentence_f'], axis=1),
-                                     liwc_sentence_f['liwc_sentence_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
-        
-        liwc_paragraph_m = pd.concat([liwc_paragraph_m.drop(['liwc_paragraph_m'], axis=1),
-                                      liwc_paragraph_m['liwc_paragraph_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        liwc_sentence_f = pd.concat(
+            [liwc_sentence_f.drop(['liwc_sentence_f'],
+                                  axis=1),
+             liwc_sentence_f['liwc_sentence_f'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        liwc_paragraph_f = pd.concat([liwc_paragraph_f.drop(['liwc_paragraph_f'], axis=1),
-                                      liwc_paragraph_f['liwc_paragraph_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        liwc_paragraph_m = pd.concat([liwc_paragraph_m.drop(
+            ['liwc_paragraph_m'],
+            axis=1),
+            liwc_paragraph_m['liwc_paragraph_m'].
+            apply(pd.Series).fillna(0).sort_index(
+            axis=1)],
+            axis=1)
 
-        liwc_document_m = pd.concat([liwc_document_m.drop(['liwc_document_m'], axis=1),
-                                     liwc_document_m['liwc_document_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        liwc_paragraph_f = pd.concat([liwc_paragraph_f.drop(
+            ['liwc_paragraph_f'],
+            axis=1),
+            liwc_paragraph_f['liwc_paragraph_f'].
+            apply(pd.Series).fillna(0).sort_index(
+            axis=1)],
+            axis=1)
 
-        liwc_document_f = pd.concat([liwc_document_f.drop(['liwc_document_f'], axis=1),
-                                     liwc_document_f['liwc_document_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
-                                     
-        liwc_document_mf = pd.concat([liwc_document_mf.drop(['liwc_document_mf'], axis=1),
-                                      liwc_document_mf['liwc_document_mf'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
-        
+        liwc_document_m = pd.concat(
+            [liwc_document_m.drop(['liwc_document_m'],
+                                  axis=1),
+             liwc_document_m['liwc_document_m'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
+
+        liwc_document_f = pd.concat(
+            [liwc_document_f.drop(['liwc_document_f'],
+                                  axis=1),
+             liwc_document_f['liwc_document_f'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
+
+        liwc_document_mf = pd.concat([liwc_document_mf.drop(
+            ['liwc_document_mf'],
+            axis=1),
+            liwc_document_mf['liwc_document_mf'].
+            apply(pd.Series).fillna(0).sort_index(
+            axis=1)],
+            axis=1)
+
         # Keep only elements in the white list or remove elements in the black list
 
         if self.white_list != [] and self.black_list != []:
-            raise Exception('Both: black and white list where given. Please just enter one.')
+            raise Exception(
+                'Both: black and white list where given. Please just enter one.')
 
         elif self.black_list != [] and self.white_list == []:
-            
-            liwc_sentence_m = liwc_sentence_m.drop(columns= self.black_list)
-            liwc_sentence_f = liwc_sentence_f.drop(columns=self.black_list)
-            
-            liwc_paragraph_m = liwc_paragraph_m.drop(columns= self.black_list)
-            liwc_paragraph_f = liwc_paragraph_f.drop(columns= self.black_list)
 
-            liwc_document_m = liwc_document_m.drop(columns= self.black_list)
-            liwc_document_f = liwc_document_f.drop(columns= self.black_list)
-            liwc_document_mf = liwc_document_mf.drop(columns= self.black_list)
+            liwc_sentence_m = liwc_sentence_m.drop(columns=self.black_list)
+            liwc_sentence_f = liwc_sentence_f.drop(columns=self.black_list)
+
+            liwc_paragraph_m = liwc_paragraph_m.drop(columns=self.black_list)
+            liwc_paragraph_f = liwc_paragraph_f.drop(columns=self.black_list)
+
+            liwc_document_m = liwc_document_m.drop(columns=self.black_list)
+            liwc_document_f = liwc_document_f.drop(columns=self.black_list)
+            liwc_document_mf = liwc_document_mf.drop(columns=self.black_list)
 
         elif self.white_list != [] and self.black_list == []:
 
-            liwc_sentence_m = liwc_sentence_m[['couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id' ] + self.white_list]
-            liwc_sentence_f = liwc_sentence_f[['couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id' ] + self.white_list]
-            
-            liwc_paragraph_m = liwc_paragraph_m[['couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id' ] + self.white_list]
-            liwc_paragraph_f = liwc_paragraph_f[['couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id' ] + self.white_list]
+            liwc_sentence_m = liwc_sentence_m[[
+                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
+            liwc_sentence_f = liwc_sentence_f[[
+                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
 
-            liwc_document_m = liwc_document_m[['document_id', 'couple_id', 'is_depressed_group' ] + self.white_list]
-            liwc_document_f = liwc_document_f[['document_id', 'couple_id', 'is_depressed_group' ] + self.white_list]
-            liwc_document_mf = liwc_document_mf[['document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+            liwc_paragraph_m = liwc_paragraph_m[[
+                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id'] + self.white_list]
+            liwc_paragraph_f = liwc_paragraph_f[[
+                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id'] + self.white_list]
+
+            liwc_document_m = liwc_document_m[[
+                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+            liwc_document_f = liwc_document_f[[
+                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+            liwc_document_mf = liwc_document_mf[[
+                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
 
         return {LIWC_DOCUMENT_M: liwc_document_m, LIWC_DOCUMENT_F: liwc_document_f, LIWC_DOCUMENT_MF: liwc_document_mf,
                 LIWC_PARAGRAPH_M: liwc_paragraph_m, LIWC_PARAGRAPH_F: liwc_paragraph_f,
                 LIWC_SENTENCE_M: liwc_sentence_m, LIWC_SENTENCE_F: liwc_sentence_f}
+
 
 def liwc_parser(tokens, parse, category):
 
@@ -169,6 +221,7 @@ def liwc_parser(tokens, parse, category):
     liwc_cats = dict(liwc_cats)
     liwc_cats = collections.OrderedDict(sorted(liwc_cats.items()))
     return liwc_cats
+
 
 def liwc_parser_doc(tokens, parse, category):
 

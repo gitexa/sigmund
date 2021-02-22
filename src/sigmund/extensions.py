@@ -29,7 +29,6 @@ FRE_DOCUMENT_M = Extension("fre_document_m", is_feature=True)
 FRE_DOCUMENT_F = Extension("fre_document_f", is_feature=True)
 FRE_DOCUMENT_MF = Extension("fre_document_mf", is_feature=True)
 
-
 LIWC_SENTENCE_M = Extension("liwc_sentence_m", is_feature=True)
 LIWC_SENTENCE_F = Extension("liwc_sentence_f", is_feature=True)
 LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m", is_feature=True)
@@ -42,7 +41,9 @@ TFIDF_DOCUMENT_F = Extension("tfidf_document_f", is_feature=True)
 TFIDF_DOCUMENT_M = Extension("tfidf_document_m", is_feature=True)
 TFIDF_DOCUMENT_MF = Extension("tfidf_document_mf", is_feature=True)
 
-VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size", is_feature=True)
+VOCABULARY_SIZE_DOCUMENT_MF = Extension("vocabulary_size_mf", is_feature=True)
+VOCABULARY_SIZE_DOCUMENT_F = Extension("vocabulary_size_f", is_feature=True)
+VOCABULARY_SIZE_DOCUMENT_M = Extension("vocabulary_size_m", is_feature=True)
 
 TALKTURN = Extension("talkturn", is_feature=True)
 

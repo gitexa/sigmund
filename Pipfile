@@ -126,6 +126,7 @@ MarkupSafe = "==1.1.1"
 Pillow = "==8.0.1"
 Pygments = "==2.7.3"
 Send2Trash = "==1.5.0"
+pylint = "*"
 
 [scripts]
 test = "coverage run -m unittest discover -s ./tests -p *_test.py"

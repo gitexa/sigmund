@@ -7,6 +7,7 @@ verify_ssl = true
 flake8 = "*"
 autopep8 = "*"
 coverage = "*"
+pylint = "*"
 
 [packages]
 pre-commit = "*"
@@ -84,7 +85,6 @@ pycodestyle = "==2.6.0"
 pycparser = "==2.20"
 pydeck = "==0.5.0"
 pyflakes = "==2.2.0"
-pylint-venv = "==2.1.1"
 pyparsing = "==2.4.7"
 pyrsistent = "==0.17.3"
 python-dateutil = "==2.8.1"
@@ -126,7 +126,6 @@ MarkupSafe = "==1.1.1"
 Pillow = "==8.0.1"
 Pygments = "==2.7.3"
 Send2Trash = "==1.5.0"
-pylint = "*"
 
 [scripts]
 test = "coverage run -m unittest discover -s ./tests -p *_test.py"

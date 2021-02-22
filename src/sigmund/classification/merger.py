@@ -4,24 +4,28 @@ from typing import Dict, List
 import pandas as pd
 
 from src.pipelinelib.component import Component
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 from src.pipelinelib.querying import Parser, Queryable
 from src.sigmund.extensions import FEATURE_VECTOR
 
 
 class FeatureMerger(Component):
-    def __init__(self, feature_exts: List[Extension] = None):
+    def __init__(self, feature_exts: List[Extension] = None,
+                 output: Extension = FEATURE_VECTOR):
         self.candidates = feature_exts or []
-        assert not feature_exts or all(e.is_feature for e in feature_exts)
+        self.output = output
+        assert not feature_exts or all(
+            e.kind == ExtensionKind.FEATURE for e in feature_exts)
 
         super().__init__(FeatureMerger.__name__,
                          required_extensions=self.candidates,
-                         creates_extensions=[FEATURE_VECTOR])
+                         creates_extensions=[self.output])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         # Select provided candidates or all feature vector extensions
-        candidates = self.candidates or list(filter(lambda e: e.is_feature, storage))
+        candidates = self.candidates or list(
+            filter(lambda e: e.kind == ExtensionKind.FEATURE, storage))
 
         # Preemptive exit
         if not candidates:
@@ -47,8 +51,8 @@ class FeatureMerger(Component):
 
         # Cannot perform reduce on less than 2 DFs
         if len(feature_dfs) == 1:
-            return {FEATURE_VECTOR: feature_dfs[0]}
+            return {self.output: feature_dfs[0]}
 
         joined = reduce(lambda left, right: pd.merge(
             left, right, on=Parser.COUPLE_ID, how="inner"), feature_dfs)
-        return {FEATURE_VECTOR: joined}
+        return {self.output: joined}

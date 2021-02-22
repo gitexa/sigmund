@@ -1,68 +1,78 @@
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 
 # Raw text representations
-RAW_TEXT = Extension("raw_text")
-RAW_TEXT_WO_ANNOTATIONS = Extension("raw_text_wo_annotations")
-RAW_TEXT_WO_STOPWORDS = Extension("raw_text_wo_stopwords")
+RAW_TEXT = Extension(name="raw_text", kind=ExtensionKind.PREPROCESSING)
+RAW_TEXT_WO_ANNOTATIONS = Extension(
+    name="raw_text_wo_annotations", kind=ExtensionKind.PREPROCESSING)
+RAW_TEXT_WO_STOPWORDS = Extension(
+    name="raw_text_wo_stopwords", kind=ExtensionKind.PREPROCESSING)
 
 # Preprocessing Levels
-TOKENS_SENTENCE = Extension("tokens_sentence")
-TOKENS_PARAGRAPH = Extension("tokens_paragraphs")
-TOKENS_DOCUMENT = Extension("tokens_document")
+TOKENS_SENTENCE = Extension(name="tokens_sentence", kind=ExtensionKind.PREPROCESSING)
+TOKENS_PARAGRAPH = Extension(name="tokens_paragraphs", kind=ExtensionKind.PREPROCESSING)
+TOKENS_DOCUMENT = Extension(name="tokens_document", kind=ExtensionKind.PREPROCESSING)
 
-STEMMED_SENTENCE = Extension("stemmed_sentence")
-STEMMED_PARAGRAPH = Extension("stemmed_paragraph")
-STEMMED_DOCUMENT = Extension("stemmed_document")
+STEMMED_SENTENCE = Extension(name="stemmed_sentence", kind=ExtensionKind.PREPROCESSING)
+STEMMED_PARAGRAPH = Extension(name="stemmed_paragraph",
+                              kind=ExtensionKind.PREPROCESSING)
+STEMMED_DOCUMENT = Extension(name="stemmed_document", kind=ExtensionKind.PREPROCESSING)
 
-LEMMATIZED_SENTENCE = Extension("lemmatized_sentence")
-LEMMATIZED_PARAGRAPH = Extension("lemmatized_paragraph")
-LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
+LEMMATIZED_SENTENCE = Extension(
+    name="lemmatized_sentence", kind=ExtensionKind.PREPROCESSING)
+LEMMATIZED_PARAGRAPH = Extension(
+    name="lemmatized_paragraph", kind=ExtensionKind.PREPROCESSING)
+LEMMATIZED_DOCUMENT = Extension(
+    name="lemmatized_document", kind=ExtensionKind.PREPROCESSING)
 
-SYLLABLES = Extension("syllables")
+SYLLABLES = Extension(name="syllables", kind=ExtensionKind.PREPROCESSING)
 
 # Features
-FRE_SENTENCE_M = Extension("fre_sentence_m", is_feature=True)
-FRE_SENTENCE_F = Extension("fre_sentence_f", is_feature=True)
-FRE_PARAGRAPH_M = Extension("fre_paragraph_m", is_feature=True)
-FRE_PARAGRAPH_F = Extension("fre_paragraph_f", is_feature=True)
-FRE_DOCUMENT_M = Extension("fre_document_m", is_feature=True)
-FRE_DOCUMENT_F = Extension("fre_document_f", is_feature=True)
-FRE_DOCUMENT_MF = Extension("fre_document_mf", is_feature=True)
+FRE_SENTENCE_M = Extension(name="fre_sentence_m", kind=ExtensionKind.FEATURE)
+FRE_SENTENCE_F = Extension(name="fre_sentence_f", kind=ExtensionKind.FEATURE)
+FRE_PARAGRAPH_M = Extension("name=fre_paragraph_m", kind=ExtensionKind.FEATURE)
+FRE_PARAGRAPH_F = Extension(name="fre_paragraph_f", kind=ExtensionKind.FEATURE)
+FRE_DOCUMENT_M = Extension(name="fre_document_m", kind=ExtensionKind.FEATURE)
+FRE_DOCUMENT_F = Extension(name="fre_document_f", kind=ExtensionKind.FEATURE)
+FRE_DOCUMENT_MF = Extension(name="fre_document_mf", kind=ExtensionKind.FEATURE)
 
-LIWC_SENTENCE_M = Extension("liwc_sentence_m", is_feature=True)
-LIWC_SENTENCE_F = Extension("liwc_sentence_f", is_feature=True)
-LIWC_PARAGRAPH_M = Extension("liwc_paragraph_m", is_feature=True)
-LIWC_PARAGRAPH_F = Extension("liwc_paragraph_f", is_feature=True)
-LIWC_DOCUMENT_M = Extension("liwc_document_m", is_feature=True)
-LIWC_DOCUMENT_F = Extension("liwc_document_f", is_feature=True)
-LIWC_DOCUMENT_MF = Extension("liwc_document_mf", is_feature=True)
+LIWC_SENTENCE_M = Extension(name="liwc_sentence_m", kind=ExtensionKind.FEATURE)
+LIWC_SENTENCE_F = Extension(name="liwc_sentence_f", kind=ExtensionKind.FEATURE)
+LIWC_PARAGRAPH_M = Extension(name="liwc_paragraph_m", kind=ExtensionKind.FEATURE)
+LIWC_PARAGRAPH_F = Extension(name="liwc_paragraph_f", kind=ExtensionKind.FEATURE)
+LIWC_DOCUMENT_M = Extension(name="liwc_document_m", kind=ExtensionKind.FEATURE)
+LIWC_DOCUMENT_F = Extension(name="liwc_document_f", kind=ExtensionKind.FEATURE)
+LIWC_DOCUMENT_MF = Extension(name="liwc_document_mf", kind=ExtensionKind.FEATURE)
 
-TFIDF_DOCUMENT_F = Extension("tfidf_document_f", is_feature=True)
-TFIDF_DOCUMENT_M = Extension("tfidf_document_m", is_feature=True)
-TFIDF_DOCUMENT_MF = Extension("tfidf_document_mf", is_feature=True)
+TFIDF_DOCUMENT_F = Extension(name="tfidf_document_f", kind=ExtensionKind.FEATURE)
+TFIDF_DOCUMENT_M = Extension(name="tfidf_document_m", kind=ExtensionKind.FEATURE)
+TFIDF_DOCUMENT_MF = Extension(name="tfidf_document_mf", kind=ExtensionKind.FEATURE)
 
-VOCABULARY_SIZE_DOCUMENT_MF = Extension("vocabulary_size_mf", is_feature=True)
-VOCABULARY_SIZE_DOCUMENT_F = Extension("vocabulary_size_f", is_feature=True)
-VOCABULARY_SIZE_DOCUMENT_M = Extension("vocabulary_size_m", is_feature=True)
+VOCABULARY_SIZE_DOCUMENT_MF = Extension(
+    name="vocabulary_size_mf", kind=ExtensionKind.FEATURE)
+VOCABULARY_SIZE_DOCUMENT_F = Extension(
+    name="vocabulary_size_f", kind=ExtensionKind.FEATURE)
+VOCABULARY_SIZE_DOCUMENT_M = Extension(
+    name="vocabulary_size_m", kind=ExtensionKind.FEATURE)
 
-TALKTURN = Extension("talkturn", is_feature=True)
+TALKTURN = Extension(name="talkturn", kind=ExtensionKind.FEATURE)
 
-AGREEMENTSCORE = Extension("agreementscore", is_feature=True)
+AGREEMENTSCORE = Extension(name="agreementscore", kind=ExtensionKind.FEATURE)
 
-POS_SENTENCE_M = Extension('pos_sentence_m', is_feature=True)
-POS_SENTENCE_F = Extension('pos_sentence_f', is_feature=True)
-POS_PARAGRAPH_M = Extension('pos_paragraph_m', is_feature=True)
-POS_PARAGRAPH_F = Extension('pos_paragraph_f', is_feature=True)
-POS_DOCUMENT_M = Extension('pos_document_m', is_feature=True)
-POS_DOCUMENT_F = Extension('pos_document_f', is_feature=True)
-POS_DOCUMENT_MF = Extension('pos_document_mf', is_feature=True)
+POS_SENTENCE_M = Extension(name='pos_sentence_m', kind=ExtensionKind.FEATURE)
+POS_SENTENCE_F = Extension(name='pos_sentence_f', kind=ExtensionKind.FEATURE)
+POS_PARAGRAPH_M = Extension(name='pos_paragraph_m', kind=ExtensionKind.FEATURE)
+POS_PARAGRAPH_F = Extension(name='pos_paragraph_f', kind=ExtensionKind.FEATURE)
+POS_DOCUMENT_M = Extension(name='pos_document_m', kind=ExtensionKind.FEATURE)
+POS_DOCUMENT_F = Extension(name='pos_document_f', kind=ExtensionKind.FEATURE)
+POS_DOCUMENT_MF = Extension(name='pos_document_mf', kind=ExtensionKind.FEATURE)
 
 
 # Aggregated features
-FEATURE_VECTOR = Extension("feature_vector")
+FEATURE_VECTOR = Extension(name="feature_vector", kind=ExtensionKind.FEATURE)
 
 # Classification results
-CLASSIFICATION_NAIVE_BAYES = Extension("classification_naive_bayes")
+CLASSIFICATION_NAIVE_BAYES = Extension(
+    name="classification_naive_bayes", kind=ExtensionKind.CLASSIFIER)
 CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS = Extension(
-    "classification_linear_discriminant_analysis")
-PCA_REDUCTION = Extension("pca_reduction")
+    name="classification_linear_discriminant_analysis", kind=ExtensionKind.CLASSIFIER)
+PCA_REDUCTION = Extension(name="pca_reduction", kind=ExtensionKind.CLASSIFIER)

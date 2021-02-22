@@ -85,9 +85,10 @@ class Liwc(Component):
             axis=0).reshape(
             (5, 10)).transpose()
 
-        liwc_document = pd.DataFrame(
-            values,
-            columns=['document_id', 'couple_id', 'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
+        liwc_document = pd.DataFrame(values,
+                                     columns=['document_id', 'couple_id',
+                                              'liwc_document_m', 'liwc_document_f',
+                                              'liwc_document_mf'])
         liwc_document['document_id'] = liwc_document['document_id'].astype(np.int64)
         liwc_document['couple_id'] = liwc_document['couple_id'].astype(np.int64)
 
@@ -209,17 +210,25 @@ class Liwc(Component):
             liwc_document_mf = liwc_document_mf[[
                 'document_id', 'couple_id', ] + self.white_list]
 
-        #Aggregate over sentences and paragraphs to get document features and drop gender/speaker
+        # Aggregate over sentences and paragraphs to get document features and drop gender/speaker
 
-        liwc_sentence_m = liwc_sentence_m.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
-        liwc_sentence_f = liwc_sentence_f.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
-        liwc_paragraph_m = liwc_paragraph_m.drop(columns=['gender', 'speaker', 'paragraph_id'])
-        liwc_paragraph_f = liwc_paragraph_f.drop(columns=['gender', 'speaker', 'paragraph_id'])
+        liwc_sentence_m = liwc_sentence_m.drop(
+            columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        liwc_sentence_f = liwc_sentence_f.drop(
+            columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        liwc_paragraph_m = liwc_paragraph_m.drop(
+            columns=['gender', 'speaker', 'paragraph_id'])
+        liwc_paragraph_f = liwc_paragraph_f.drop(
+            columns=['gender', 'speaker', 'paragraph_id'])
 
-        liwc_sentence_m = liwc_sentence_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        liwc_sentence_f = liwc_sentence_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        liwc_paragraph_m = liwc_paragraph_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        liwc_paragraph_f = liwc_paragraph_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
+        liwc_sentence_m = liwc_sentence_m.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        liwc_sentence_f = liwc_sentence_f.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        liwc_paragraph_m = liwc_paragraph_m.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        liwc_paragraph_f = liwc_paragraph_f.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
 
         return {LIWC_DOCUMENT_M: liwc_document_m, LIWC_DOCUMENT_F: liwc_document_f, LIWC_DOCUMENT_MF: liwc_document_mf,
                 LIWC_PARAGRAPH_M: liwc_paragraph_m, LIWC_PARAGRAPH_F: liwc_paragraph_f,

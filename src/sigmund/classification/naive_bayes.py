@@ -1,24 +1,24 @@
 import operator
-from src.pipelinelib.text_body import TextBody
 from typing import Dict
 
+import numpy as np
 import pandas as pd
-import numpy as np 
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
+from IPython.core.display import display
 from sklearn import metrics
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
+from sklearn.naive_bayes import MultinomialNB
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
+from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
 
 
 class NaiveBayes(Component):
     """
-    Performs naive bayes on a feature dataframe 
+    Performs naive bayes on a feature vector and prints results
     """
 
     def __init__(self):
@@ -45,48 +45,37 @@ class NaiveBayes(Component):
         features = df_feature_vector[df_feature_vector.columns.difference(
             ["couple_id", "is_depressed_group"], sort=False)]
 
-        
         # Using "normal" validation
         features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-            features, labels, features.index.values, test_size=0.20, random_state=42)
-        
+            features, labels, features.index.values, test_size=0.50, random_state=42)
+
         # fit classifier
         classifier = MultinomialNB()
         classifier.fit(features_train, label_train)
 
         # predict
-        predicted = classifier.predict(features_test)
-        display(label_test)
-        display(predicted)
+        predicted_test = classifier.predict(features_test)
+        df_predicted_test = pd.DataFrame(
+            data=predicted_test, columns=['predicted'],
+            index=label_test.index.copy())
 
         # evaluate classifier
-        accuracy = ((predicted == label_test).sum()) / len(label_test)
-        display(accuracy)
+        accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+
+        # aggregate results and build dataframe
+        couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+        gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
+        df_prediction_summary = pd.concat(
+            [couple_id_test, gt_test, label_test, df_predicted_test], axis=1)
 
         # Using cross validation
-        classifier = MultinomialNB()    
+        classifier = MultinomialNB()
         cv = StratifiedKFold(n_splits=5, random_state=42)
         scores = cross_val_score(classifier, features, labels, cv=cv)
-        display(np.mean(scores))
 
+        # Print results
+        display(df_prediction_summary)
+        display(f'Accuracy on test set: {accuracy}')
+        display(f'Accuracy with cross-valiation: {scores} | mean = {np.mean(scores)}')
 
-        return {CLASSIFICATION_NAIVE_BAYES: predicted}
-
-
-'''
-class NaiveBayesOnTfIdf(Component):
-    BAYES = Extension("tfidf_gaussian_nb", int)
-
-    def __init__(self, x_train, y_train):
-        super().__init__(name=NaiveBayesOnTfIdf.__name__, required_extensions=[
-            TfIdf.TFIDF], creates_extensions=[NaiveBayesOnTfIdf.BAYES])
-        self.naive_bayes = MultinomialNB()
-        self.naive_bayes.fit(x_train, y_train)
-
-    def apply(self, doc: Doc) -> Doc:
-        feature_vector = operator.attrgetter(TfIdf.TFIDF.name)(doc._)
-        prediction = self.naive_bayes.predict(feature_vector)
-
-        doc._.tfidf_gaussian_nb = prediction[0]
-        return doc
-'''
+        return {CLASSIFICATION_NAIVE_BAYES: df_prediction_summary}

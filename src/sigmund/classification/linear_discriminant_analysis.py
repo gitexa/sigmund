@@ -58,4 +58,9 @@ class LinearDiscriminantAnalysis(Component):
         accuracy = ((predicted == label_test).sum()) / len(label_test)
         display(accuracy)
 
+        # Using cross validation
+        cv = StratifiedKFold(n_splits=5, random_state=42)
+        scores = cross_val_score(classifier, features, labels, cv=cv)
+        display(np.mean(scores))
+
         return {CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS: predicted}

@@ -10,8 +10,8 @@ from src.sigmund.extensions import FEATURE_VECTOR
 
 
 class FeatureMerger(Component):
-    def __init__(self, feature_exts: List[Extension] = []):
-        self.candidates = feature_exts
+    def __init__(self, feature_exts: List[Extension] = None):
+        self.candidates = feature_exts or []
         assert not feature_exts or all(e.is_feature for e in feature_exts)
 
         super().__init__(FeatureMerger.__name__,

@@ -80,7 +80,7 @@ class Pipeline:
                     f"{component.name} created {names}, but set None as their value!")
 
             if result and visualise:
-                component.visualise(result)
+                component.visualise(result, self._queryable)
 
             if result:
                 for extension, df in result.items():

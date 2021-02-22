@@ -1,7 +1,7 @@
 import functools
 import re
 from itertools import filterfalse
-from typing import Callable, Dict, Iterable, Text, Tuple
+from typing import Callable, Iterable, Tuple
 
 import docx
 import numpy as np
@@ -79,7 +79,7 @@ class Parser:
             self.nlp.remove_pipe("sentencizer")
 
     def _read_docx_into_frame(self, path2file: str, couple_id_pat: str = re.compile(
-            r"Paar (\d+)")) -> None:
+        r"Paar (\d+)")) -> None:
         # Read document
         document = docx.Document(path2file)
         couple_id = next(re.finditer(couple_id_pat, path2file)).group(1)
@@ -141,7 +141,7 @@ class Parser:
     def _read_csv_into_frame(self, path2file: str) -> None:
         # Treat these all as new documents, which means offsetting by the amount of assigned document ids
         csv_df = pd.read_csv(path2file, index_col=0)[
-            Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
+                     Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
         self.frame = pd.concat(self.frame, csv_df)
 
 
@@ -219,8 +219,7 @@ class Queryable:
         preced = map(lambda q: f"({q})", self.query)
         joined = " and ".join(preced)
 
-        print(
-            f"=== {Queryable.__name__} is executing on {level} level, query = '{joined}' ===")
+        # print(f"=== {Queryable.__name__} is executing on {level} level, query = '{joined}' ===")
 
         # Copy, feel free to modify as you like
         df = self._get_agged_frame(level=level).copy()
@@ -240,7 +239,7 @@ class Queryable:
         if level == TextBody.DOCUMENT:
             return self.df.groupby([Parser.DOCUMENT_ID], as_index=False).agg(
                 {Parser.COUPLE_ID: "first", Parser.IS_DEPRESSED_GROUP: "first", Parser.
-                 DEPRESSED_PERSON: "first", Parser.SENTENCE: ". ".join}
+                    DEPRESSED_PERSON: "first", Parser.SENTENCE: ". ".join}
             )
         elif level == TextBody.PARAGRAPH:
             return self.df.groupby([Parser.DOCUMENT_ID, Parser.PARAGRAPH_ID], as_index=False).agg({

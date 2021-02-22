@@ -31,6 +31,9 @@ class Extension:
 
         return storage[self].copy(deep=True)
 
+    def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
+        storage[self] = df
+
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Extension):
             return False
@@ -40,8 +43,8 @@ class Extension:
     def __hash__(self) -> int:
         return (hash(self.name) << 1) ^ hash(self.is_feature)
 
-    def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
-        storage[self] = df
-
     def __str__(self):
         return self.name
+
+    def __repr__(self) -> str:
+        return f"{self.name}({self.is_feature})"

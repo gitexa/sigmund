@@ -1,6 +1,6 @@
 import operator
 from collections import Counter, OrderedDict
-from typing import Dict, List
+from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -8,7 +8,7 @@ from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
-from src.pipelinelib.querying import Queryable
+from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (POS_DOCUMENT_F, POS_DOCUMENT_M, POS_DOCUMENT_MF,
                                     POS_PARAGRAPH_F, POS_PARAGRAPH_M, POS_SENTENCE_F,
@@ -48,15 +48,22 @@ class PartOfSpeech(Component):
         pos_document = tokens_doc
 
         # Get POS for sentence, paragraph
-        pos_sentence['tokens_sentence'] = pos_sentence['tokens_sentence'].apply(self._get_pos, nlp=queryable.nlp())
+        pos_sentence['tokens_sentence'] = pos_sentence['tokens_sentence'].apply(
+            self._get_pos, nlp=queryable.nlp())
         pos_sentence = pos_sentence.rename(columns={'tokens_sentence': 'pos_sentence'})
 
-        pos_paragraph['tokens_paragraph'] = pos_paragraph['tokens_paragraph'].apply(self._get_pos, nlp=queryable.nlp())
-        pos_paragraph = pos_paragraph.rename(columns={'tokens_paragraph': 'pos_paragraph'})
+        pos_paragraph['tokens_paragraph'] = pos_paragraph['tokens_paragraph'].apply(
+            self._get_pos, nlp=queryable.nlp())
+        pos_paragraph = pos_paragraph.rename(
+            columns={'tokens_paragraph': 'pos_paragraph'})
 
         # Get POS for document with gender split and joined
-        pos_document_A_B = pos_document.groupby(['document_id', 'gender'])['tokens_paragraph'].apply(list).apply(self._get_pos_doc, nlp=queryable.nlp())
-        pos_document_AB = pos_document.groupby(['document_id'])['tokens_paragraph'].apply(list).apply(self._get_pos_doc, nlp=queryable.nlp())
+        pos_document_A_B = pos_document.groupby(
+            ['document_id', 'gender'])['tokens_paragraph'].apply(list).apply(
+            self._get_pos_doc, nlp=queryable.nlp())
+        pos_document_AB = pos_document.groupby(
+            ['document_id'])['tokens_paragraph'].apply(list).apply(
+            self._get_pos_doc, nlp=queryable.nlp())
 
         pos_document_A_B = pos_document_A_B.to_numpy()
         pos_document_AB = pos_document_AB.to_numpy()
@@ -75,7 +82,10 @@ class PartOfSpeech(Component):
             axis=0).reshape(
             (5, 10)).transpose()
 
-        pos_document = pd.DataFrame(values, columns=['document_id', 'couple_id', 'pos_document_m', 'pos_document_f', 'pos_document_mf'])
+        pos_document = pd.DataFrame(values,
+                                    columns=['document_id', 'couple_id',
+                                             'pos_document_m', 'pos_document_f',
+                                             'pos_document_mf'])
         # Convert type to int
         pos_document['document_id'] = pos_document['document_id'].astype(np.int64)
         pos_document['couple_id'] = pos_document['couple_id'].astype(np.int64)
@@ -94,38 +104,73 @@ class PartOfSpeech(Component):
         pos_paragraph_m = pos_paragraph_m.drop(columns=['is_depressed_group'])
         pos_paragraph_f = pos_paragraph_f.drop(columns=['is_depressed_group'])
 
-        pos_document_m = pos_document.drop(columns=['pos_document_f', 'pos_document_mf'])
-        pos_document_f = pos_document.drop(columns=['pos_document_m', 'pos_document_mf'])
-        pos_document_mf = pos_document.drop(columns=['pos_document_m', 'pos_document_f'])
+        pos_document_m = pos_document.drop(
+            columns=['pos_document_f', 'pos_document_mf'])
+        pos_document_f = pos_document.drop(
+            columns=['pos_document_m', 'pos_document_mf'])
+        pos_document_mf = pos_document.drop(
+            columns=['pos_document_m', 'pos_document_f'])
 
         # Rename colums with respect to gender
-        pos_sentence_m = pos_sentence_m.rename(columns={'pos_sentence': 'pos_sentence_m'})
-        pos_sentence_f = pos_sentence_f.rename(columns={'pos_sentence': 'pos_sentence_f'})
+        pos_sentence_m = pos_sentence_m.rename(
+            columns={'pos_sentence': 'pos_sentence_m'})
+        pos_sentence_f = pos_sentence_f.rename(
+            columns={'pos_sentence': 'pos_sentence_f'})
 
-        pos_paragraph_m = pos_paragraph_m.rename(columns={'pos_paragraph': 'pos_paragraph_m'})
-        pos_paragraph_f = pos_paragraph_f.rename(columns={'pos_paragraph': 'pos_paragraph_f'})
+        pos_paragraph_m = pos_paragraph_m.rename(
+            columns={'pos_paragraph': 'pos_paragraph_m'})
+        pos_paragraph_f = pos_paragraph_f.rename(
+            columns={'pos_paragraph': 'pos_paragraph_f'})
 
         # Convert dictionary of POS (with counts) in a dataframe to separate columns and concatenate with the labels + NaN -> 0
-        pos_sentence_m = pd.concat([pos_sentence_m.drop(['pos_sentence_m'], axis=1),
-                                    pos_sentence_m['pos_sentence_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_sentence_m = pd.concat(
+            [pos_sentence_m.drop(['pos_sentence_m'],
+                                 axis=1),
+             pos_sentence_m['pos_sentence_m'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_sentence_f = pd.concat([pos_sentence_f.drop(['pos_sentence_f'], axis=1),
-                                    pos_sentence_f['pos_sentence_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_sentence_f = pd.concat(
+            [pos_sentence_f.drop(['pos_sentence_f'],
+                                 axis=1),
+             pos_sentence_f['pos_sentence_f'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_paragraph_m = pd.concat([pos_paragraph_m.drop(['pos_paragraph_m'], axis=1),
-                                    pos_paragraph_m['pos_paragraph_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_paragraph_m = pd.concat(
+            [pos_paragraph_m.drop(['pos_paragraph_m'],
+                                  axis=1),
+             pos_paragraph_m['pos_paragraph_m'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_paragraph_f = pd.concat([pos_paragraph_f.drop(['pos_paragraph_f'], axis=1),
-                                    pos_paragraph_f['pos_paragraph_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_paragraph_f = pd.concat(
+            [pos_paragraph_f.drop(['pos_paragraph_f'],
+                                  axis=1),
+             pos_paragraph_f['pos_paragraph_f'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_document_m = pd.concat([pos_document_m.drop(['pos_document_m'], axis=1),
-                                    pos_document_m['pos_document_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_document_m = pd.concat(
+            [pos_document_m.drop(['pos_document_m'],
+                                 axis=1),
+             pos_document_m['pos_document_m'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_document_f = pd.concat([pos_document_f.drop(['pos_document_f'], axis=1),
-                                    pos_document_f['pos_document_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_document_f = pd.concat(
+            [pos_document_f.drop(['pos_document_f'],
+                                 axis=1),
+             pos_document_f['pos_document_f'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
-        pos_document_mf = pd.concat([pos_document_mf.drop(['pos_document_mf'], axis=1),
-                                    pos_document_mf['pos_document_mf'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
+        pos_document_mf = pd.concat(
+            [pos_document_mf.drop(['pos_document_mf'],
+                                  axis=1),
+             pos_document_mf['pos_document_mf'].apply(pd.Series).fillna(0).sort_index(
+                 axis=1)],
+            axis=1)
 
         # Keep only elements in the white list or remove elements in the black list
         if self.white_list != [] and self.black_list != []:
@@ -146,39 +191,78 @@ class PartOfSpeech(Component):
 
         elif self.white_list != [] and self.black_list == []:
 
-            pos_sentence_m = pos_sentence_m[['couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
-            pos_sentence_f = pos_sentence_f[['couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
+            pos_sentence_m = pos_sentence_m[[
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id',
+                'sentence_id'] + self.white_list]
+            pos_sentence_f = pos_sentence_f[[
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id',
+                'sentence_id'] + self.white_list]
 
-            pos_paragraph_m = pos_paragraph_m[['couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id'] + self.white_list]
-            pos_paragraph_f = pos_paragraph_f[['couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id'] + self.white_list]
+            pos_paragraph_m = pos_paragraph_m[[
+                'couple_id', 'speaker', 'gender', 'document_id',
+                                                  'paragraph_id'] + self.white_list]
+            pos_paragraph_f = pos_paragraph_f[[
+                'couple_id', 'speaker', 'gender', 'document_id',
+                                                  'paragraph_id'] + self.white_list]
 
-            pos_document_m = pos_document_m[['document_id', 'couple_id', ] + self.white_list]
-            pos_document_f = pos_document_f[['document_id', 'couple_id', ] + self.white_list]
-            pos_document_mf = pos_document_mf[['document_id', 'couple_id', ] + self.white_list]
+            pos_document_m = pos_document_m[[
+                'document_id', 'couple_id', ] + self.white_list]
+            pos_document_f = pos_document_f[[
+                'document_id', 'couple_id', ] + self.white_list]
+            pos_document_mf = pos_document_mf[[
+                'document_id', 'couple_id', ] + self.white_list]
 
-        #Aggregate over sentences and paragraphs to get document features and drop gender/speaker
+        # Aggregate over sentences and paragraphs to get document features and drop gender/speaker
 
-        pos_sentence_m = pos_sentence_m.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
-        pos_sentence_f = pos_sentence_f.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
-        pos_paragraph_m = pos_paragraph_m.drop(columns=['gender', 'speaker', 'paragraph_id'])
-        pos_paragraph_f = pos_paragraph_f.drop(columns=['gender', 'speaker', 'paragraph_id'])
+        pos_sentence_m = pos_sentence_m.drop(
+            columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        pos_sentence_f = pos_sentence_f.drop(
+            columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        pos_paragraph_m = pos_paragraph_m.drop(
+            columns=['gender', 'speaker', 'paragraph_id'])
+        pos_paragraph_f = pos_paragraph_f.drop(
+            columns=['gender', 'speaker', 'paragraph_id'])
 
-        pos_sentence_m = pos_sentence_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        pos_sentence_f = pos_sentence_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        pos_paragraph_m = pos_paragraph_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
-        pos_paragraph_f = pos_paragraph_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
+        pos_sentence_m = pos_sentence_m.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        pos_sentence_f = pos_sentence_f.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        pos_paragraph_m = pos_paragraph_m.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
+        pos_paragraph_f = pos_paragraph_f.groupby(
+            ['document_id', 'couple_id']).agg('mean').reset_index()
 
         return {POS_DOCUMENT_F: pos_document_f, POS_DOCUMENT_M: pos_document_m, POS_DOCUMENT_MF: pos_document_mf,
                 POS_PARAGRAPH_F: pos_paragraph_f, POS_PARAGRAPH_M: pos_paragraph_m,
                 POS_SENTENCE_F: pos_sentence_f, POS_SENTENCE_M: pos_sentence_m}
+
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+        df = POS_DOCUMENT_MF.load_from(storage=created)
+        metadata_doc = queryable.execute(level=TextBody.DOCUMENT)
+
+        wmtd = pd.merge(
+            metadata_doc[["couple_id", "is_depressed_group"]],
+            df, on=Parser.COUPLE_ID, how="inner")
+
+        depressed = wmtd.loc[wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
+        non_depressed = wmtd.loc[~wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
+
+        subbed = depressed.subtract(non_depressed).sort_values()
+        # display(depressed)
+        # display(non_depressed)
+
+        subbed.plot.bar(
+            subplots=True, figsize=(20, 10),
+            title="Subtracted means of LIWC values for all corpi")
 
     def _get_pos(self, word_list, nlp):
 
         # Create Spacy doc from tokens and get a ordered dictionary of the tags with the counts
         df_as_string = ' '.join(word_list)
         doc = nlp(df_as_string)
-        pos_list = []
-        [pos_list.append(word.tag_) for word in doc]
+        pos_list = [word.tag_ for word in doc]
 
         pos_list = dict(Counter(pos_list))
         pos_list = OrderedDict(sorted(pos_list.items()))
@@ -187,16 +271,12 @@ class PartOfSpeech(Component):
     def _get_pos_doc(self, word_list, nlp):
 
         # Join the lists into one list
-        res = []
-        for str_list in word_list:
-            res += str_list
+        res = [s for str_list in word_list for s in str_list]
 
         # Create Spacy doc from tokens and get a ordered dictionary of the tags with the counts
         df_as_string = ' '.join(res)
         doc = nlp(df_as_string)
-        pos_list = []
-        [pos_list.append(word.tag_) for word in doc]
-
+        pos_list = [word.tag_ for word in doc]
         pos_list = dict(Counter(pos_list))
         pos_list = OrderedDict(sorted(pos_list.items()))
         return pos_list

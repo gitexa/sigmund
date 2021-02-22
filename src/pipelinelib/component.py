@@ -51,5 +51,5 @@ class Component(metaclass=abc.ABCMeta):
         pass
 
     # @abc.abstractmethod
-    def visualise(self, created: Dict[Extension, pd.DataFrame]):
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
         pass

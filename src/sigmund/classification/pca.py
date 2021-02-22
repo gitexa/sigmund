@@ -1,9 +1,10 @@
 import operator
+from src.pipelinelib.text_body import TextBody
 
 import pandas as pd
 from src.pipelinelib.querying import Queryable
 from typing import Dict
-from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
+from src.sigmund.extensions import *
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -23,7 +24,7 @@ class PCAReduction(Component):
         super().__init__(
             PCAReduction.__name__,
             required_extensions=[FEATURE_VECTOR],
-            creates_extensions=[PCA])
+            creates_extensions=[PCA_REDUCTION])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
@@ -51,6 +52,4 @@ class PCAReduction(Component):
         # plot 
         plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=30, cmap='Set1')
 
-
-
-        return {PCA: predicted}
+        return {PCA_REDUCTION: embedded}

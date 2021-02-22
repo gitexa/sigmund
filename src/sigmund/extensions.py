@@ -63,4 +63,6 @@ FEATURE_VECTOR = Extension("feature_vector")
 
 # Classification results
 CLASSIFICATION_NAIVE_BAYES = Extension("classification_naive_bayes")
-CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS = Extension("classification_linear_discriminant_analysis")
+CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS = Extension(
+    "classification_linear_discriminant_analysis")
+PCA_REDUCTION = Extension("pca_reduction")

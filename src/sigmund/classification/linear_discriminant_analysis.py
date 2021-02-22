@@ -1,6 +1,7 @@
 import operator
 from typing import Dict
 
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import train_test_split
@@ -15,7 +16,7 @@ from src.sigmund.extensions import *
 
 class LinearDiscriminantAnalysis(Component):
     """
-    Performs linear discriminant analysis on a feature dataframe 
+    Performs linear discriminant analysis on a feature vector 
     """
 
     def __init__(self):
@@ -46,7 +47,7 @@ class LinearDiscriminantAnalysis(Component):
             features, labels, features.index.values, test_size=0.20, random_state=42)
 
         # fit classifier
-        classifier = LinearDiscriminantAnalysis()
+        classifier = LinearDiscriminantAnalysis(n_components=2)
         classifier.fit(features_train, label_train)
 
         # predict
@@ -63,4 +64,18 @@ class LinearDiscriminantAnalysis(Component):
         scores = cross_val_score(classifier, features, labels, cv=cv)
         display(np.mean(scores))
 
+        # visualize with reduced dimensionality
+        self.visualize(plt, classifier, features, labels)
+
         return {CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS: predicted}
+
+    def visualize(self, plt, classifier, all_features, labels):
+
+        # dimensionality reduction
+        embedded_features = classifier.transform(all_features)
+
+        # plot the projected points
+        plt.scatter(
+            embedded_features[:, 0],
+            embedded_features[:, 1],
+            c=labels, s=30, cmap='Set1')

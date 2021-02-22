@@ -1,18 +1,18 @@
 import operator
-from src.pipelinelib.text_body import TextBody
-
-import pandas as pd
-from src.pipelinelib.querying import Queryable
 from typing import Dict
-from src.sigmund.extensions import *
+
 import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.decomposition import PCA
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
+from src.pipelinelib.querying import Queryable
+from src.pipelinelib.text_body import TextBody
+from src.sigmund.extensions import *
 
 
 class PCAReduction(Component):
@@ -46,10 +46,23 @@ class PCAReduction(Component):
         pca = PCA(n_components=2, svd_solver='full')
         embedded = pca.fit_transform(features)
 
+        # construct pandas df with labels 
+        df_embedded = pd.DataFrame(embedded, columns=['dim1', 'dim2'])
+        df_embedded = pd.concat([df_embedded, labels], axis=1)
+        display(df_embedded)
+
         # explained variance 
         explained_variance = pca.explained_variance_ratio_
+        display(explained_variance)
 
-        # plot 
-        plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=30, cmap='Set1')
+        return {PCA_REDUCTION: df_embedded}
+    
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+        
+        df_embedded = PCA_REDUCTION.load_from(storage=created)
 
-        return {PCA_REDUCTION: embedded}
+        plt.scatter(
+            df_embedded['dim1'],
+            df_embedded['dim2'],
+            c=df_embedded['is_depressed_group'],
+            s=30, cmap='Set1')

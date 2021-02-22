@@ -15,13 +15,13 @@ from src.sigmund.extensions import (LIWC_DOCUMENT_F, LIWC_DOCUMENT_M, LIWC_DOCUM
                                     LIWC_SENTENCE_M, TOKENS_PARAGRAPH, TOKENS_SENTENCE)
 
 
-class LiwcOneHot(Component):
+class Liwc(Component):
     def __init__(
             self, white_list=[],
             black_list=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
-        super(LiwcOneHot, self).__init__(
-            LiwcOneHot.__name__,
+        super(Liwc, self).__init__(
+            Liwc.__name__,
             required_extensions=[TOKENS_PARAGRAPH, TOKENS_SENTENCE],
             creates_extensions=[LIWC_DOCUMENT_F, LIWC_DOCUMENT_M, LIWC_DOCUMENT_MF,
                                 LIWC_PARAGRAPH_F, LIWC_PARAGRAPH_M,
@@ -72,24 +72,22 @@ class LiwcOneHot(Component):
         liwc_document_AB = liwc_document_AB.to_numpy()
 
         # Add is_depressed_group label
-        document = queryable.execute(level=TextBody.DOCUMENT)
-        is_depressed_group = document['is_depressed_group'].to_numpy()
+        # document = queryable.execute(level=TextBody.DOCUMENT)
+        # is_depressed_group = document['is_depressed_group'].to_numpy()
 
-        # Build Dataframe with columns: document_id, couple_id, is_depressed_group, liwc_female, liwc_male, liwc_both
+        # Build Dataframe with columns: document_id, couple_id, liwc_female, liwc_male, liwc_both
         values = np.concatenate(
             (np.arange(0, doc_count + 1, dtype=int),
              np.array(couple_ids),
-             is_depressed_group,
              liwc_document_A_B[0:: 2],
              liwc_document_A_B[1:: 2],
              liwc_document_AB),
             axis=0).reshape(
-            (6, 10)).transpose()
+            (5, 10)).transpose()
 
         liwc_document = pd.DataFrame(
             values,
-            columns=['document_id', 'couple_id', 'is_depressed_group',
-                     'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
+            columns=['document_id', 'couple_id', 'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
         liwc_document['document_id'] = liwc_document['document_id'].astype(np.int64)
         liwc_document['couple_id'] = liwc_document['couple_id'].astype(np.int64)
 
@@ -108,6 +106,12 @@ class LiwcOneHot(Component):
             columns={'liwc_paragraph': 'liwc_paragraph_m'})
         liwc_paragraph_f = liwc_paragraph_f.rename(
             columns={'liwc_paragraph': 'liwc_paragraph_f'})
+
+        # Drop redundant columns
+        liwc_sentence_m = liwc_sentence_m.drop(columns=['is_depressed_group'])
+        liwc_sentence_f = liwc_sentence_f.drop(columns=['is_depressed_group'])
+        liwc_paragraph_m = liwc_paragraph_m.drop(columns=['is_depressed_group'])
+        liwc_paragraph_f = liwc_paragraph_f.drop(columns=['is_depressed_group'])
 
         liwc_document_m = liwc_document.drop(
             columns=['liwc_document_f', 'liwc_document_mf'])
@@ -189,21 +193,33 @@ class LiwcOneHot(Component):
         elif self.white_list != [] and self.black_list == []:
 
             liwc_sentence_m = liwc_sentence_m[[
-                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
             liwc_sentence_f = liwc_sentence_f[[
-                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id', 'sentence_id'] + self.white_list]
 
             liwc_paragraph_m = liwc_paragraph_m[[
-                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id'] + self.white_list]
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id'] + self.white_list]
             liwc_paragraph_f = liwc_paragraph_f[[
-                'couple_id', 'speaker', 'gender', 'is_depressed_group', 'document_id', 'paragraph_id'] + self.white_list]
+                'couple_id', 'speaker', 'gender', 'document_id', 'paragraph_id'] + self.white_list]
 
             liwc_document_m = liwc_document_m[[
-                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+                'document_id', 'couple_id', ] + self.white_list]
             liwc_document_f = liwc_document_f[[
-                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+                'document_id', 'couple_id', ] + self.white_list]
             liwc_document_mf = liwc_document_mf[[
-                'document_id', 'couple_id', 'is_depressed_group'] + self.white_list]
+                'document_id', 'couple_id', ] + self.white_list]
+
+        #Aggregate over sentences and paragraphs to get document features and drop gender/speaker
+
+        liwc_sentence_m = liwc_sentence_m.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        liwc_sentence_f = liwc_sentence_f.drop(columns=['gender', 'speaker', 'paragraph_id', 'sentence_id'])
+        liwc_paragraph_m = liwc_paragraph_m.drop(columns=['gender', 'speaker', 'paragraph_id'])
+        liwc_paragraph_f = liwc_paragraph_f.drop(columns=['gender', 'speaker', 'paragraph_id'])
+
+        liwc_sentence_m = liwc_sentence_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
+        liwc_sentence_f = liwc_sentence_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
+        liwc_paragraph_m = liwc_paragraph_m.groupby(['document_id', 'couple_id']).agg('max').reset_index()
+        liwc_paragraph_f = liwc_paragraph_f.groupby(['document_id', 'couple_id']).agg('max').reset_index()
 
         return {LIWC_DOCUMENT_M: liwc_document_m, LIWC_DOCUMENT_F: liwc_document_f, LIWC_DOCUMENT_MF: liwc_document_mf,
                 LIWC_PARAGRAPH_M: liwc_paragraph_m, LIWC_PARAGRAPH_F: liwc_paragraph_f,

@@ -49,13 +49,13 @@ TALKTURN = Extension("talkturn", is_feature=True)
 
 AGREEMENTSCORE = Extension("agreementscore", is_feature=True)
 
-POS_SENTENCE_M = Extension('pos_sentence_m')
-POS_SENTENCE_F = Extension('pos_sentence_f')
-POS_PARAGRAPH_M = Extension('pos_paragraph_m')
-POS_PARAGRAPH_F = Extension('pos_paragraph_f')
-POS_DOCUMENT_M = Extension('pos_document_m')
-POS_DOCUMENT_F = Extension('pos_document_f')
-POS_DOCUMENT_MF = Extension('pos_document_mf')
+POS_SENTENCE_M = Extension('pos_sentence_m', is_feature=True)
+POS_SENTENCE_F = Extension('pos_sentence_f', is_feature=True)
+POS_PARAGRAPH_M = Extension('pos_paragraph_m', is_feature=True)
+POS_PARAGRAPH_F = Extension('pos_paragraph_f', is_feature=True)
+POS_DOCUMENT_M = Extension('pos_document_m', is_feature=True)
+POS_DOCUMENT_F = Extension('pos_document_f', is_feature=True)
+POS_DOCUMENT_MF = Extension('pos_document_mf', is_feature=True)
 
 
 # Aggregated features

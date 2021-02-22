@@ -1,3 +1,4 @@
+from itertools import chain
 import operator
 import re
 import string
@@ -23,16 +24,36 @@ class FeatureTFIDF(Component):
         super().__init__(
             FeatureTFIDF.__name__,
             required_extensions=[LEMMATIZED_DOCUMENT],
-            creates_extensions=[TFIDF_DOCUMENT])
+            creates_extensions=[TFIDF_DOCUMENT_MF, TFIDF_DOCUMENT_M, TFIDF_DOCUMENT_F])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
         # Get transcipts on document level stemmed
         df_lemmatized_document = LEMMATIZED_DOCUMENT.load_from(storage)
+
+        # couple
         df_tfidf_document = self.get_tfidf(df_lemmatized_document)
 
-        return {TFIDF_DOCUMENT: df_tfidf_document}
+        # per person
+        df_lemmatized_paragraph = LEMMATIZED_PARAGRAPH.load_from(storage)
+        df_lemmatized_document_pp = df_lemmatized_paragraph.groupby(
+            ['couple_id', 'gender'])['tokens_paragraph'].apply(
+            lambda x: list(chain.from_iterable(x))).reset_index()
+        df_lemmatized_document_pp = df_lemmatized_document_pp.rename(columns={'tokens_paragraph': 'tokens_document'})
+
+        # masculin
+        df_lemmatized_document_pp_m = df_lemmatized_document_pp.loc[
+            df_lemmatized_document_pp['gender'] == 'M']
+        df_tfidf_document_m = self.get_tfidf(df_lemmatized_document_pp_m)
+
+        # feminin person
+        df_lemmatized_document_pp_f = df_lemmatized_document_pp.loc[
+            df_lemmatized_document_pp['gender'] == 'W']
+        df_tfidf_document_f = self.get_tfidf(
+            df_lemmatized_document_pp_f)
+
+        return {TFIDF_DOCUMENT_MF: df_tfidf_document, TFIDF_DOCUMENT_M: df_tfidf_document_m, TFIDF_DOCUMENT_F: df_tfidf_document_f}
 
     def get_tfidf(self, lines):
 

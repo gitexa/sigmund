@@ -20,7 +20,6 @@ LEMMATIZED_DOCUMENT = Extension("lemmatized_document")
 
 SYLLABLES = Extension("syllables")
 
-
 # Features
 FRE_SENTENCE_M = Extension("fre_sentence_m", is_feature=True)
 FRE_SENTENCE_F = Extension("fre_sentence_f", is_feature=True)
@@ -39,9 +38,14 @@ LIWC_DOCUMENT_M = Extension("liwc_document_m", is_feature=True)
 LIWC_DOCUMENT_F = Extension("liwc_document_f", is_feature=True)
 LIWC_DOCUMENT_MF = Extension("liwc_document_mf", is_feature=True)
 
-TFIDF_DOCUMENT = Extension("tfidf_document", is_feature=True)
+TFIDF_DOCUMENT_F = Extension("tfidf_document_f", is_feature=True)
+TFIDF_DOCUMENT_M = Extension("tfidf_document_m", is_feature=True)
+TFIDF_DOCUMENT_MF = Extension("tfidf_document_mf", is_feature=True)
+
 VOCABULARY_SIZE_DOCUMENT = Extension("vocabulary_size", is_feature=True)
+
 TALKTURN = Extension("talkturn", is_feature=True)
+
 AGREEMENTSCORE = Extension("agreementscore", is_feature=True)
 
 POS_SENTENCE_M = Extension('pos_sentence_m')

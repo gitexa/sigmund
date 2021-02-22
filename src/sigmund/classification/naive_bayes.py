@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from IPython.core.display import display
 from sklearn import metrics
-from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
+from sklearn.model_selection import StratifiedKFold, cross_val_score, cross_val_predict, train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from spacy.tokens import Doc
 
@@ -69,11 +69,23 @@ class NaiveBayes(Component):
             [couple_id_test, gt_test, label_test, df_predicted_test], axis=1)
 
         # Using cross validation
+        gt = df_feature_vector['is_depressed_group']
         cv = StratifiedKFold(n_splits=5, random_state=42)
+        
+        predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
+        df_predicted_test = pd.DataFrame(
+            data=predictions_test_cv, columns=['predicted'],
+            index=labels.index.copy())
+        
         scores = cross_val_score(classifier, features, labels, cv=cv)
+        df_prediction_summary_cv = pd.concat(
+            [couple_id, gt, labels, df_predicted_test], axis=1)
 
         # Print results
+        display('Predictions on the test set')
         display(df_prediction_summary)
+        display('Cross-valiation')
+        display(df_prediction_summary_cv)
         display(f'Accuracy on test set: {accuracy}')
         display(f'Accuracy with cross-valiation: {scores} | mean = {np.mean(scores)}')
 

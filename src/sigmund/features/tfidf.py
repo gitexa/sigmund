@@ -35,9 +35,11 @@ class FeatureTFIDF(Component):
 
         # Get transcipts on document level stemmed
         df_lemmatized_document = LEMMATIZED_DOCUMENT.load_from(storage)
+        display(df_lemmatized_document)
 
         # Calculate TFIDF per couple
         df_tfidf_document_mf = self.get_tfidf(df_lemmatized_document)
+        display(df_tfidf_document_mf)
 
         # Aggregate paragraph information to docment per person
         df_lemmatized_paragraph = LEMMATIZED_PARAGRAPH.load_from(storage)
@@ -48,14 +50,19 @@ class FeatureTFIDF(Component):
 
         # Calculate TFIDF for masculin person
         df_lemmatized_document_pp_m = df_lemmatized_document_pp.loc[
-            df_lemmatized_document_pp['gender'] == 'M']
+            df_lemmatized_document_pp['gender'] == 'M'].reset_index(drop=True)
         df_tfidf_document_m = self.get_tfidf(df_lemmatized_document_pp_m)
+        display(df_lemmatized_document_pp_m)
+        display(df_tfidf_document_m)
+
 
         # Calculate TFIDF for feminin person
         df_lemmatized_document_pp_f = df_lemmatized_document_pp.loc[
-            df_lemmatized_document_pp['gender'] == 'W']
+            df_lemmatized_document_pp['gender'] == 'W'].reset_index(drop=True)
         df_tfidf_document_f = self.get_tfidf(
             df_lemmatized_document_pp_f)
+        display(df_tfidf_document_f)
+
 
         # Check black and white list
         if self.white_list != [] and self.black_list != []:
@@ -77,6 +84,9 @@ class FeatureTFIDF(Component):
 
     def get_tfidf(self, lines):
 
+        display('TFIDF start')
+        display(lines)
+
         # join text to string and retokenize with min_frequency
         lines['tokens_document'] = lines['tokens_document'].apply(
             lambda row: ' '.join(token for token in row))
@@ -94,6 +104,7 @@ class FeatureTFIDF(Component):
             tfidf.T.todense(),
             index=count_vectorizer.get_feature_names()).T
 
+        display(df_tfidf)
         # construct results with couple_id
         df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
 

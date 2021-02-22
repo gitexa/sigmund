@@ -69,7 +69,6 @@ class NaiveBayes(Component):
             [couple_id_test, gt_test, label_test, df_predicted_test], axis=1)
 
         # Using cross validation
-        classifier = MultinomialNB()
         cv = StratifiedKFold(n_splits=5, random_state=42)
         scores = cross_val_score(classifier, features, labels, cv=cv)
 

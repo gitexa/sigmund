@@ -3,8 +3,9 @@ from typing import Dict
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
@@ -14,14 +15,14 @@ from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import *
 
 
-class LinearDiscriminantAnalysis(Component):
+class LinearDiscriminantAnalysisClassifier(Component):
     """
     Performs linear discriminant analysis on a feature vector 
     """
 
     def __init__(self):
         super().__init__(
-            LinearDiscriminantAnalysis.__name__,
+            LinearDiscriminantAnalysisClassifier.__name__,
             required_extensions=[FEATURE_VECTOR],
             creates_extensions=[CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS])
 
@@ -47,35 +48,51 @@ class LinearDiscriminantAnalysis(Component):
             features, labels, features.index.values, test_size=0.20, random_state=42)
 
         # fit classifier
-        classifier = LinearDiscriminantAnalysis(n_components=2)
+        classifier = LinearDiscriminantAnalysis()
         classifier.fit(features_train, label_train)
 
         # predict
-        predicted = classifier.predict(features_test)
-        display(label_test)
-        display(predicted)
+        predicted_test = classifier.predict(features_test)
+        df_predicted_test = pd.DataFrame(
+            data=predicted_test, columns=['predicted'],
+            index=label_test.index.copy())
+
 
         # evaluate classifier
-        accuracy = ((predicted == label_test).sum()) / len(label_test)
-        display(accuracy)
+        accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+
+        # aggregate results and build dataframe
+        couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+        gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
+        df_prediction_summary = pd.concat(
+            [couple_id_test, gt_test, label_test, df_predicted_test], axis=1)
 
         # Using cross validation
         cv = StratifiedKFold(n_splits=5, random_state=42)
         scores = cross_val_score(classifier, features, labels, cv=cv)
-        display(np.mean(scores))
+
+        # Print results
+        display(df_prediction_summary)
+        display(f'Accuracy on test set: {accuracy}')
+        display(f'Accuracy with cross-valiation: {scores} | mean = {np.mean(scores)}')
+
 
         # visualize with reduced dimensionality
-        self.visualize(plt, classifier, features, labels)
+        # self.visualize(plt, classifier, features, labels)
 
-        return {CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS: predicted}
+        return {CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS: df_prediction_summary}
 
     def visualize(self, plt, classifier, all_features, labels):
 
         # dimensionality reduction
         embedded_features = classifier.transform(all_features)
 
+        display(all_features)
+        display(labels)
+        display(embedded_features)
+
         # plot the projected points
-        plt.scatter(
+        plt.plot(
             embedded_features[:, 0],
             embedded_features[:, 1],
             c=labels, s=30, cmap='Set1')

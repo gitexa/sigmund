@@ -1,18 +1,15 @@
-import operator
-from typing import Dict
+from functools import reduce
+from typing import Dict, List
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
-from src.pipelinelib.querying import Queryable
+from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import *
+from src.sigmund.extensions import FEATURE_VECTOR, PCA_REDUCTION
 
 
 class PCAReduction(Component):
@@ -20,24 +17,37 @@ class PCAReduction(Component):
     Performs PCA on the feature dataframe 
     """
 
-    def __init__(self):
+    def __init__(self, inputs: List[Extension] = None,
+                 output: Extension = None):
+        self.inputs = inputs or [FEATURE_VECTOR]
+        self.output = output or PCA_REDUCTION
+
         super().__init__(
             PCAReduction.__name__,
-            required_extensions=[FEATURE_VECTOR],
-            creates_extensions=[PCA_REDUCTION])
+            required_extensions=inputs,
+            creates_extensions=[self.output])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
-        # get features
-        df_feature_vector = FEATURE_VECTOR.load_from(storage=storage)
-        metadata = queryable.execute(level=TextBody.DOCUMENT)
-        df_feature_vector = pd.merge(
-            metadata[['couple_id', 'is_depressed_group']],
-            df_feature_vector, on='couple_id', how='inner')
-        display(df_feature_vector)
+        if not len(self.inputs):
+            return dict()
 
-        couple_id = df_feature_vector["couple_id"]
+        # get features
+        elif len(self.inputs) == 1:
+            df_feature_vector = self.inputs[0].load_from(storage=storage)
+
+        else:
+            loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
+            df_feature_vector = reduce(lambda left, right: pd.merge(
+                left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
+
+        if "is_depressed_group" not in df_feature_vector.columns:
+            metadata = queryable.execute(level=TextBody.DOCUMENT)
+            df_feature_vector = pd.merge(
+                metadata[['couple_id', 'is_depressed_group']],
+                df_feature_vector, on='couple_id', how='inner')
+
         labels = df_feature_vector["is_depressed_group"].astype(int)
         features = df_feature_vector[df_feature_vector.columns.difference(
             ["couple_id", "is_depressed_group"], sort=False)]
@@ -46,20 +56,20 @@ class PCAReduction(Component):
         pca = PCA(n_components=2, svd_solver='full')
         embedded = pca.fit_transform(features)
 
-        # construct pandas df with labels 
+        # construct pandas df with labels
         df_embedded = pd.DataFrame(embedded, columns=['dim1', 'dim2'])
         df_embedded = pd.concat([df_embedded, labels], axis=1)
         display(df_embedded)
 
-        # explained variance 
+        # explained variance
         explained_variance = pca.explained_variance_ratio_
         display(explained_variance)
 
-        return {PCA_REDUCTION: df_embedded}
-    
+        return {self.output: df_embedded}
+
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
-        
-        df_embedded = PCA_REDUCTION.load_from(storage=created)
+
+        df_embedded = self.output.load_from(storage=created)
 
         plt.scatter(
             df_embedded['dim1'],

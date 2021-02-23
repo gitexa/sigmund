@@ -333,7 +333,6 @@ class Liwc_Inverse(Component):
         parse, category_names = liwc.load_token_parser(self.token_parser_path)
 
         liwc_inverse_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-
         for cat in self.category:
             # Get LIWC for sentence
             liwc_inverse_sentence[cat] = liwc_inverse_sentence['tokens_sentence'].apply(

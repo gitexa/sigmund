@@ -31,6 +31,7 @@ class Parser:
     SPEAKER = "speaker"
 
     SENTENCE = "text"
+    HAMILTON_SCORE = "hamilton"
 
     SCHEMA = {
         DOCUMENT_ID: np.int64,
@@ -43,7 +44,8 @@ class Parser:
         IS_DEPRESSED_GROUP: np.bool_,
         DEPRESSED_PERSON: str,
 
-        SENTENCE: str
+        SENTENCE: str,
+        HAMILTON_SCORE: np.int64
     }
 
     def __init__(self, nlp: Callable, metadata_path: str):
@@ -79,16 +81,17 @@ class Parser:
             self.nlp.remove_pipe("sentencizer")
 
     def _read_docx_into_frame(self, path2file: str, couple_id_pat: str = re.compile(
-        r"Paar (\d+)")) -> None:
+            r"Paar (\d+)")) -> None:
         # Read document
         document = docx.Document(path2file)
         couple_id = next(re.finditer(couple_id_pat, path2file)).group(1)
         new_document_id = len(self.frame[Parser.DOCUMENT_ID].unique())
 
         paragraph_w_speakers = [paragraph.text for paragraph in document.paragraphs]
-        genders_lookup = {
-            "A": _extract_gender(paragraph_w_speakers[1]),
-            "B": _extract_gender(paragraph_w_speakers[2])}
+
+        first_speaker = _extract_gender(paragraph_w_speakers[1])
+        second_speaker = _extract_gender(paragraph_w_speakers[2])
+        genders_lookup = {"A": first_speaker, "B": second_speaker}
 
         # Skip None, A, B with [3:]
         speaker_paragraphs = [_split_speaker_text(
@@ -118,6 +121,12 @@ class Parser:
         is_depressed_group = bool(group_id)
         depressed_person = None if not is_depressed_group else "W"
 
+        # Hamilton Score reading
+        male_hs, female_hs = couple_metadata["HDI.1"]
+        hamilton_scores = [male_hs
+                           if speaker == "M" else female_hs
+                           for speaker in sentence_genders]
+
         collected = {
             Parser.DOCUMENT_ID: [new_document_id] * sentence_count,
             Parser.PARAGRAPH_ID: paragraph_ids,
@@ -130,6 +139,8 @@ class Parser:
             Parser.IS_DEPRESSED_GROUP: [is_depressed_group] * sentence_count,
             Parser.DEPRESSED_PERSON: [depressed_person] * sentence_count,
 
+            Parser.HAMILTON_SCORE: hamilton_scores,
+
             Parser.SENTENCE: sentences
         }
 
@@ -141,7 +152,7 @@ class Parser:
     def _read_csv_into_frame(self, path2file: str) -> None:
         # Treat these all as new documents, which means offsetting by the amount of assigned document ids
         csv_df = pd.read_csv(path2file, index_col=0)[
-                     Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
+            Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
         self.frame = pd.concat(self.frame, csv_df)
 
 
@@ -198,6 +209,7 @@ class Queryable:
     def nlp(self):
         return self._nlp
 
+    @staticmethod
     def from_parser(parser: Parser) -> "Queryable":
         return Queryable(parser.frame, parser.nlp)
 
@@ -245,6 +257,7 @@ class Queryable:
             return self.df.groupby([Parser.DOCUMENT_ID, Parser.PARAGRAPH_ID], as_index=False).agg({
                 Parser.COUPLE_ID: "first", Parser.SPEAKER: "first", Parser.GENDER: "first",
                 Parser.IS_DEPRESSED_GROUP: "first", Parser.DEPRESSED_PERSON: "first",
+                Parser.HAMILTON_SCORE: "first",
                 Parser.SENTENCE: ". ".join,
             })
         else:  # level == TextBody.SENTENCE

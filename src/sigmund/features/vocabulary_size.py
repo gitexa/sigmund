@@ -8,8 +8,10 @@ from spacy.attrs import ORTH
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
-from src.sigmund.extensions import LEMMATIZED_DOCUMENT, VOCABULARY_SIZE_DOCUMENT_F, VOCABULARY_SIZE_DOCUMENT_M, \
-    VOCABULARY_SIZE_DOCUMENT_MF, LEMMATIZED_PARAGRAPH
+from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
+                                    VOCABULARY_SIZE_DOCUMENT_F,
+                                    VOCABULARY_SIZE_DOCUMENT_M,
+                                    VOCABULARY_SIZE_DOCUMENT_MF)
 
 
 class VocabularySize(Component):

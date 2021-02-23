@@ -1,15 +1,12 @@
-import operator
 from functools import reduce
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from IPython.core.display import display
-from sklearn import metrics
 from sklearn.model_selection import (StratifiedKFold, cross_val_predict,
                                      cross_val_score, train_test_split)
 from sklearn.naive_bayes import MultinomialNB
-from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
@@ -28,8 +25,8 @@ class NaiveBayes(Component):
                  output: Extension = None,
                  voting: bool = False):
 
-        self.inputs = inputs or [FEATURE_VECTOR]
-        self.output = output or CLASSIFICATION_NAIVE_BAYES
+        self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
+        self.output: Extension = output or CLASSIFICATION_NAIVE_BAYES
         self.voting = voting
 
         super().__init__(
@@ -47,12 +44,15 @@ class NaiveBayes(Component):
         if not self.voting:
             if not len(self.inputs):
                 return dict()
+
             elif len(self.inputs) == 1:
                 df_feature_vector = self.inputs[0].load_from(storage=storage)
+
             else:
                 loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
                 df_feature_vector = reduce(lambda left, right: pd.merge(
                     left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
+
             if "is_depressed_group" not in df_feature_vector.columns:
                 metadata = queryable.execute(level=TextBody.DOCUMENT)
                 df_feature_vector = pd.merge(
@@ -62,16 +62,23 @@ class NaiveBayes(Component):
             if not len(self.inputs):
                 raise Exception(
                     'When voting, keys for the classifier results must be used.')
+
             elif len(self.inputs) == 1:
                 df_feature_vector = self.inputs[0].load_from(storage=storage)
+
             else:
-                loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
-                df_feature_vector = reduce(
-                    lambda left, right: pd.merge(
-                        left[['couple_id', 'predicted']],
-                        right[['couple_id', 'predicted']],
-                        on=Parser.COUPLE_ID, how="inner"),
-                    loaded)
+                loaded = [e.load_from(storage=storage) for e in self.inputs]
+
+                # rename predicted columns, join on couple id
+                acc = loaded[0]
+                for extension, df in zip(self.inputs[1:], loaded[1:]):
+                    acc = self.__merge_frame(left=acc, right_ext=extension, right=df)
+
+                acc.rename(columns={
+                    "predicted": f"{self.inputs[0].name}_predicted"
+                }, inplace=True)
+                df_feature_vector = acc
+
                 metadata = queryable.execute(level=TextBody.DOCUMENT)
                 df_feature_vector = pd.merge(
                     metadata[['couple_id', 'is_depressed_group']],
@@ -129,3 +136,13 @@ class NaiveBayes(Component):
         display(f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
 
         return {self.output: df_prediction_summary_cv}
+
+    def __merge_frame(
+            self, left: pd.DataFrame, right_ext: Extension, right: pd.DataFrame):
+        left_predicted_cols = [col for col in left.columns if col.endswith("predicted")]
+        left = left[["couple_id"] + left_predicted_cols]
+
+        right = right[["couple_id", "predicted"]]
+        right.rename(columns={"predicted": f"{right_ext.name}_predicted"}, inplace=True)
+
+        return pd.merge(left, right, on=Parser.COUPLE_ID, how="inner")

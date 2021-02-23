@@ -78,25 +78,25 @@ FEATURE_VECTOR = Extension(name="feature_vector", kind=ExtensionKind.FEATURE)
 
 # Classification results
 CLASSIFICATION_NAIVE_BAYES = Extension(
-    name="classification_naive_bayes", kind=ExtensionKind.CLASSIFIER)
+    name="nb_class", kind=ExtensionKind.CLASSIFIER)
 CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS = Extension(
     name="classification_linear_discriminant_analysis", kind=ExtensionKind.CLASSIFIER)
 PCA_REDUCTION = Extension(name="pca_reduction", kind=ExtensionKind.CLASSIFIER)
 
 
 CLASSIFICATION_NAIVE_BAYES_TFIDF = Extension(
-    name="classification_naive_bayes_tfidf", kind=ExtensionKind.CLASSIFIER
+    name="nb_class_tfidf", kind=ExtensionKind.CLASSIFIER
 )
 
 CLASSIFICATION_NAIVE_BAYES_LIWC = Extension(
-    name="classification_naive_bayes_liwc", kind=ExtensionKind.CLASSIFIER
+    name="nb_class_liwc", kind=ExtensionKind.CLASSIFIER
 )
 
 
 CLASSIFICATION_NAIVE_BAYES_VOTING = Extension(
-    name="classification_naive_bayes_voting", kind=ExtensionKind.CLASSIFIER
+    name="nb_class_voting", kind=ExtensionKind.CLASSIFIER
 )
 
 CLASSIFICATION_NAIVE_BAYES_POS = Extension(
-    name="classification_naive_bayes_pos", kind=ExtensionKind.CLASSIFIER
+    name="nb_class_pos", kind=ExtensionKind.CLASSIFIER
 )

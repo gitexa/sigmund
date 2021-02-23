@@ -29,7 +29,7 @@ class LinearDiscriminantAnalysisClassifier(Component):
 
         super().__init__(
             LinearDiscriminantAnalysisClassifier.__name__,
-            required_extensions=inputs,
+            required_extensions=self.inputs,
             creates_extensions=[self.output])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],

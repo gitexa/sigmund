@@ -19,18 +19,18 @@ class PCAReduction(Component):
 
     def __init__(self, inputs: List[Extension] = None,
                  output: Extension = None):
-        self.inputs = inputs or FEATURE_VECTOR
+        self.inputs = inputs or [FEATURE_VECTOR]
         self.output = output or PCA_REDUCTION
 
         super().__init__(
             PCAReduction.__name__,
-            required_extensions=[self.inputs],
+            required_extensions=self.inputs,
             creates_extensions=[self.output])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
-        # load feature from storage 
+        # load feature from storage
         if not len(self.inputs):
             return dict()
         elif len(self.inputs) == 1:

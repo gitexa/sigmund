@@ -19,29 +19,26 @@ class PCAReduction(Component):
 
     def __init__(self, inputs: List[Extension] = None,
                  output: Extension = None):
-        self.inputs = inputs or [FEATURE_VECTOR]
+        self.inputs = inputs or FEATURE_VECTOR
         self.output = output or PCA_REDUCTION
 
         super().__init__(
             PCAReduction.__name__,
-            required_extensions=inputs,
+            required_extensions=[self.inputs],
             creates_extensions=[self.output])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
+        # load feature from storage 
         if not len(self.inputs):
             return dict()
-
-        # get features
         elif len(self.inputs) == 1:
             df_feature_vector = self.inputs[0].load_from(storage=storage)
-
         else:
             loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
             df_feature_vector = reduce(lambda left, right: pd.merge(
                 left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
-
         if "is_depressed_group" not in df_feature_vector.columns:
             metadata = queryable.execute(level=TextBody.DOCUMENT)
             df_feature_vector = pd.merge(

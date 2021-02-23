@@ -1,6 +1,7 @@
 from collections import Counter, OrderedDict
 from typing import Dict
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -233,6 +234,78 @@ class PartOfSpeech(Component):
                 POS_PARAGRAPH_F: pos_paragraph_f, POS_PARAGRAPH_M: pos_paragraph_m,
                 POS_SENTENCE_F: pos_sentence_f, POS_SENTENCE_M: pos_sentence_m}
 
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+
+        pos_document_mf = POS_DOCUMENT_MF.load_from(storage=created)
+        pos_document_f = POS_DOCUMENT_F.load_from(storage=created)
+        pos_document_m = POS_DOCUMENT_M.load_from(storage=created)
+
+        is_depressed_group_labels = queryable.execute(
+            level=TextBody.DOCUMENT).is_depressed_group
+
+        pos_document_mf['is_depressed_group'] = is_depressed_group_labels
+        pos_document_f['is_depressed_group'] = is_depressed_group_labels
+        pos_document_m['is_depressed_group'] = is_depressed_group_labels
+
+        for cat in pos_document_mf.drop(
+                columns=['couple_id', 'document_id', 'is_depressed_group']).columns.values:
+
+            cat_document_mf = pos_document_mf[['couple_id', 'is_depressed_group', cat]]
+            cat_document_f = pos_document_f[['couple_id', 'is_depressed_group', cat]]
+            cat_document_m = pos_document_m[['couple_id', 'is_depressed_group', cat]]
+            fig, ax = plt.subplots(2, 2, figsize=(30, 15))
+
+            # First barplot: depr/non_depr couples
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].mean(
+            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].mean()}, index=[cat])
+            df.plot.bar(rot=0, ax=ax[0, 0])
+            ax[0, 0].set_title('Part of Speech - ' + cat + ' - mean')
+
+            # Second barplot: Female/Male in depr/non_depr couples
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
+            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            df.boxplot(ax=ax[1, 0])
+            ax[1, 0].set_title('Part of Speech - ' + cat + ' - all')
+
+            # First boxplot: depr/non_depr couples
+            df = pd.DataFrame({'Female': [cat_document_f[cat_document_f['is_depressed_group'] == True][cat].mean(),
+                                          cat_document_f[cat_document_f['is_depressed_group'] == False][cat].mean()],
+                               'Male': [cat_document_m[cat_document_m['is_depressed_group'] == True][cat].mean(),
+                                        cat_document_m[cat_document_m['is_depressed_group'] == False][cat].mean()]},
+                              index=['depressed couple', 'non-depressed couple'])
+            df.plot.bar(rot=0, ax=ax[0, 1])
+            ax[0, 1].set_title('Part of Speech - ' + cat + ' - mean')
+
+            # Second boxplot: Female/Male in depr/non_depr couples
+            df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
+                               'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+                               'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+                               'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            df.boxplot(ax=ax[1, 1])
+            ax[1, 1].set_title('Part of Speech - ' + cat + ' - all')
+    '''     
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+        df = POS_DOCUMENT_MF.load_from(storage=created)
+        metadata_doc = queryable.execute(level=TextBody.DOCUMENT)
+
+        wmtd = pd.merge(
+            metadata_doc[["couple_id", "is_depressed_group"]],
+            df, on=Parser.COUPLE_ID, how="inner")
+
+        depressed = wmtd.loc[wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
+        non_depressed = wmtd.loc[~wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
+
+        subbed = depressed.subtract(non_depressed).sort_values()
+        # display(depressed)
+        # display(non_depressed)
+
+        subbed.plot.bar(
+            subplots=True, figsize=(20, 10),
+            title="Subtracted means of LIWC values for all corpi")
+    '''
+
     def _get_pos(self, word_list, nlp):
 
         # Create Spacy doc from tokens and get a ordered dictionary of the tags with the counts
@@ -256,26 +329,3 @@ class PartOfSpeech(Component):
         pos_list = dict(Counter(pos_list))
         pos_list = OrderedDict(sorted(pos_list.items()))
         return pos_list
-
-    def visualise(
-            self, created: Dict[Extension, pd.DataFrame],
-            queryable: Queryable):
-        df = POS_DOCUMENT_MF.load_from(storage=created)
-        metadata_doc = queryable.execute(level=TextBody.DOCUMENT)
-
-        wmtd = pd.merge(
-            metadata_doc[["couple_id", "is_depressed_group"]],
-            df, on=Parser.COUPLE_ID, how="inner")
-
-        depressed = wmtd.loc[wmtd["is_depressed_group"]][
-            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
-        non_depressed = wmtd.loc[~wmtd["is_depressed_group"]][
-            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
-
-        subbed = depressed.subtract(non_depressed).sort_values()
-        # display(depressed)
-        # display(non_depressed)
-
-        subbed.plot.bar(
-            subplots=True, figsize=(20, 10),
-            title="Subtracted means of LIWC values for all corpi")

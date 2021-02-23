@@ -66,7 +66,6 @@ class Tokenizer(Component):
                 res.append(token.lower())
         return res
 
-
 class Stemmer(Component):
     """
     Performs stemming on the tokens

@@ -85,7 +85,7 @@ class FleschExtractor(Component):
         fre_document_f = fre_document.drop(columns=['fre_document_m', 'fre_document_mf'])
         fre_document_mf = fre_document.drop(columns=['fre_document_m', 'fre_document_f'])
 
-        #Aggregate over sentences and paragraphs to get document features and drop gender
+        # Aggregate over sentences and paragraphs to get document features and drop gender
 
         fre_sentence_m = fre_sentence_m.drop(columns=['gender', 'paragraph_id', 'sentence_id'])
         fre_sentence_f = fre_sentence_f.drop(columns=['gender', 'paragraph_id', 'sentence_id'])

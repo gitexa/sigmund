@@ -1,6 +1,7 @@
 from itertools import chain
 from typing import Dict
 
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
@@ -16,9 +17,7 @@ class FeatureTFIDF(Component):
     This component provides features for classification by using sklearn tfidf
     """
 
-    def __init__(
-            self, white_list=[],
-            black_list=[], ):
+    def __init__(self, white_list=[], black_list=[]):
         super().__init__(
             FeatureTFIDF.__name__,
             required_extensions=[LEMMATIZED_DOCUMENT],
@@ -93,3 +92,52 @@ class FeatureTFIDF(Component):
         df_tfidf.insert(loc=0, column='couple_id', value=lines['couple_id'])
 
         return df_tfidf
+
+    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+
+        tfidf_document_mf = TFIDF_DOCUMENT_MF.load_from(storage=created)
+        tfidf_document_f = TFIDF_DOCUMENT_F.load_from(storage=created)
+        tfidf_document_m = TFIDF_DOCUMENT_M.load_from(storage=created)
+
+        is_depressed_group_labels = queryable.execute(level=TextBody.DOCUMENT).is_depressed_group
+
+        tfidf_document_mf['is_depressed_group'] = is_depressed_group_labels
+        tfidf_document_f['is_depressed_group'] = is_depressed_group_labels
+        tfidf_document_m['is_depressed_group'] = is_depressed_group_labels
+
+        for cat in tfidf_document_mf.drop(columns=['couple_id', 'is_depressed_group']).columns.values:
+
+            cat_document_mf = tfidf_document_mf[['couple_id', 'is_depressed_group', cat]]
+            cat_document_f = tfidf_document_f[['couple_id', 'is_depressed_group', cat]]
+            cat_document_m = tfidf_document_m[['couple_id', 'is_depressed_group', cat]]
+            fig, ax = plt.subplots(2, 2, figsize=(30, 15))
+
+            # First barplot: depr/non_depr couples
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].mean(),
+                            'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].mean()},
+                            index = [cat])
+            df.plot.bar(rot=0, ax=ax[0, 0])
+            ax[0, 0].set_title('TFIDF - ' + cat + ' - mean')
+
+            # Second barplot: Female/Male in depr/non_depr couples
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(),
+                            'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            df.boxplot(ax=ax[1, 0])
+            ax[1, 0].set_title('TFIDF - ' + cat + ' - all')
+
+            # First boxplot: depr/non_depr couples
+            df = pd.DataFrame({'Female': [cat_document_f[cat_document_f['is_depressed_group'] == True][cat].mean(),
+                                        cat_document_f[cat_document_f['is_depressed_group'] == False][cat].mean()],
+                            'Male': [cat_document_m[cat_document_m['is_depressed_group'] == True][cat].mean(),
+                                        cat_document_m[cat_document_m['is_depressed_group'] == False][cat].mean()]},
+                            index = ['depressed couple','non-depressed couple'])
+            df.plot.bar(rot=0, ax=ax[0, 1])
+            ax[0, 1].set_title('TFIDF - ' + cat + ' - mean')
+
+            # Second boxplot: Female/Male in depr/non_depr couples
+            df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
+                            'depressed couple - Male'  : cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+                            'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+                            'non-depressed couple - Male '  : cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            df.boxplot(ax=ax[1, 1])
+            ax[1, 1].set_title('TFIDF - ' + cat + ' - all')

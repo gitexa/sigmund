@@ -25,7 +25,7 @@ class Component(metaclass=abc.ABCMeta):
         extensions that this step will create, and shall not exist prior to this step's application
     """
 
-    def __init__(self, name: str, required_extensions: Iterable[Union[str, Extension]],
+    def __init__(self, name: str, required_extensions: Iterable[Extension],
                  creates_extensions: Iterable[Extension]):
         self.name = name
         self.required_extensions = required_extensions

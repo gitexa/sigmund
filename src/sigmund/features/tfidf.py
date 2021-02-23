@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
+from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import LEMMATIZED_DOCUMENT, TFIDF_DOCUMENT_MF, TFIDF_DOCUMENT_M, TFIDF_DOCUMENT_F, \
     LEMMATIZED_PARAGRAPH
 

@@ -23,11 +23,13 @@ class NaiveBayes(Component):
     def __init__(self,
                  inputs: List[Extension] = None,
                  output: Extension = None,
-                 voting: bool = False):
+                 voting: bool = False,
+                 hamilton: bool = False):
 
         self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
         self.output: Extension = output or CLASSIFICATION_NAIVE_BAYES
         self.voting = voting
+        self.hamilton = hamilton
 
         super().__init__(
             f"{NaiveBayes.__name__} for {self.inputs}",
@@ -41,6 +43,9 @@ class NaiveBayes(Component):
         # 1) from which features to construct feature vector
         # 2) key to store the results
         # if voting==True, feature vector consists of previous classifier outputs
+        # if hamilton==True, 4-class prediction on Hamilton depression scale is performed, otherwise binary classification (depressed vs non-depressed is performed)
+        
+        # Construct feature vector
         if not self.voting:
             if not len(self.inputs):
                 return dict()
@@ -53,6 +58,12 @@ class NaiveBayes(Component):
                 df_feature_vector = reduce(lambda left, right: pd.merge(
                     left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
 
+            if "is_depressed_group" not in df_feature_vector.columns:
+                metadata = queryable.execute(level=TextBody.DOCUMENT)
+                df_feature_vector = pd.merge(
+                    metadata[['couple_id', 'is_depressed_group']],
+                    df_feature_vector, on='couple_id', how='inner')
+            
             if "is_depressed_group" not in df_feature_vector.columns:
                 metadata = queryable.execute(level=TextBody.DOCUMENT)
                 df_feature_vector = pd.merge(
@@ -84,58 +95,74 @@ class NaiveBayes(Component):
                     metadata[['couple_id', 'is_depressed_group']],
                     df_feature_vector, on='couple_id', how='inner')
 
+        # Display feature vector
         display(df_feature_vector)
 
-        couple_id = df_feature_vector["couple_id"]
-        labels = df_feature_vector["is_depressed_group"].astype(int)
-        features = df_feature_vector[df_feature_vector.columns.difference(
-            ["couple_id", "is_depressed_group"], sort=False)]
+        # Binary classification
+        if not self.hamilton:
+            couple_id = df_feature_vector["couple_id"]
+            labels = df_feature_vector["is_depressed_group"].astype(int)
+            features = df_feature_vector[df_feature_vector.columns.difference(
+                ["couple_id", "is_depressed_group"], sort=False)]
 
-        # Using "normal" validation
-        features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-            features, labels, features.index.values, test_size=0.50, random_state=42)
+            # Using "normal" validation
+            features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
+                features, labels, features.index.values, test_size=0.50, random_state=42)
 
-        # fit classifier
-        classifier = MultinomialNB()
-        classifier.fit(features_train, label_train)
+            # fit classifier
+            classifier = MultinomialNB()
+            classifier.fit(features_train, label_train)
 
-        # predict
-        predicted_test = classifier.predict(features_test)
-        df_predicted_test = pd.DataFrame(
-            data=predicted_test, columns=['predicted'],
-            index=label_test.index.copy())
+            # predict
+            predicted_test = classifier.predict(features_test)
+            df_predicted_test = pd.DataFrame(
+                data=predicted_test, columns=['predicted'],
+                index=label_test.index.copy())
 
-        # evaluate classifier
-        accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+            # evaluate classifier
+            accuracy = ((predicted_test == label_test).sum()) / len(label_test)
 
-        # aggregate results and build dataframe
-        couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
-        gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
-        df_prediction_summary = pd.concat(
-            [couple_id_test, label_test, df_predicted_test], axis=1)
+            # aggregate results and build dataframe
+            couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+            gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
+            df_prediction_summary = pd.concat(
+                [couple_id_test, label_test, df_predicted_test], axis=1)
 
-        # Using cross validation
-        gt = df_feature_vector['is_depressed_group']
-        cv = StratifiedKFold(n_splits=5, random_state=42)
+            # Using cross validation
+            gt = df_feature_vector['is_depressed_group']
+            cv = StratifiedKFold(n_splits=5, random_state=42)
 
-        predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
-        df_predicted_test = pd.DataFrame(
-            data=predictions_test_cv, columns=['predicted'],
-            index=labels.index.copy())
+            predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
+            df_predicted_test = pd.DataFrame(
+                data=predictions_test_cv, columns=['predicted'],
+                index=labels.index.copy())
 
-        scores = cross_val_score(classifier, features, labels, cv=cv)
-        df_prediction_summary_cv = pd.concat(
-            [couple_id, gt, labels, df_predicted_test], axis=1)
+            scores = cross_val_score(classifier, features, labels, cv=cv)
+            df_prediction_summary_cv = pd.concat(
+                [couple_id, gt, labels, df_predicted_test], axis=1)
 
-        # Print results
-        display('Predictions on the test set')
-        display(df_prediction_summary)
-        display('Cross-Validation')
-        display(df_prediction_summary_cv)
-        display(f'Accuracy on test set: {accuracy}')
-        display(f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
+            # Print results
+            display('Predictions on the test set')
+            display(df_prediction_summary)
+            display('Cross-Validation')
+            display(df_prediction_summary_cv)
+            display(f'Accuracy on test set: {accuracy}')
+            display(f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
 
-        return {self.output: df_prediction_summary_cv}
+            return {self.output: df_prediction_summary_cv}
+        
+        # Hamilton Depression score classification 
+        else:
+            couple_id = df_feature_vector["couple_id"]
+            hdrs_labels = df_feature_vector["is_depressed_group"].astype(int)
+            features = df_feature_vector[df_feature_vector.columns.difference(
+                ["couple_id", "is_depressed_group"], sort=False)]
+            
+            df_prediction_summary_cv = 
+
+            return {self.output: df_prediction_summary_cv}
+
+
 
     def __merge_frame(
             self, left: pd.DataFrame, right_ext: Extension, right: pd.DataFrame):

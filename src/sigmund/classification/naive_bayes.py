@@ -23,10 +23,14 @@ class NaiveBayes(Component):
     Performs naive bayes on a feature vector and prints results
     """
 
-    def __init__(self, inputs: List[Extension] = None,
-                 output: Extension = None):
+    def __init__(self,
+                 inputs: List[Extension] = None,
+                 output: Extension = None,
+                 voting: bool = False):
+
         self.inputs = inputs or [FEATURE_VECTOR]
         self.output = output or CLASSIFICATION_NAIVE_BAYES
+        self.voting = voting
 
         super().__init__(
             NaiveBayes.__name__,
@@ -36,23 +40,42 @@ class NaiveBayes(Component):
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
 
-        if not len(self.inputs):
-            return dict()
-
-        # get features
-        elif len(self.inputs) == 1:
-            df_feature_vector = self.inputs[0].load_from(storage=storage)
-
+        # Read user input:
+        # 1) from which features to construct feature vector
+        # 2) key to store the results
+        # if voting==True, feature vector consists of previous classifier outputs
+        if not self.voting:
+            if not len(self.inputs):
+                return dict()
+            elif len(self.inputs) == 1:
+                df_feature_vector = self.inputs[0].load_from(storage=storage)
+            else:
+                loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
+                df_feature_vector = reduce(lambda left, right: pd.merge(
+                    left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
+            if "is_depressed_group" not in df_feature_vector.columns:
+                metadata = queryable.execute(level=TextBody.DOCUMENT)
+                df_feature_vector = pd.merge(
+                    metadata[['couple_id', 'is_depressed_group']],
+                    df_feature_vector, on='couple_id', how='inner')
         else:
-            loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
-            df_feature_vector = reduce(lambda left, right: pd.merge(
-                left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
-
-        if "is_depressed_group" not in df_feature_vector.columns:
-            metadata = queryable.execute(level=TextBody.DOCUMENT)
-            df_feature_vector = pd.merge(
-                metadata[['couple_id', 'is_depressed_group']],
-                df_feature_vector, on='couple_id', how='inner')
+            if not len(self.inputs):
+                raise Exception(
+                    'When voting, keys for the classifier results must be used.')
+            elif len(self.inputs) == 1:
+                df_feature_vector = self.inputs[0].load_from(storage=storage)
+            else:
+                loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
+                df_feature_vector = reduce(
+                    lambda left, right: pd.merge(
+                        left[['couple_id', 'predicted']],
+                        right[['couple_id', 'predicted']],
+                        on=Parser.COUPLE_ID, how="inner"),
+                    loaded)
+                metadata = queryable.execute(level=TextBody.DOCUMENT)
+                df_feature_vector = pd.merge(
+                    metadata[['couple_id', 'is_depressed_group']],
+                    df_feature_vector, on='couple_id', how='inner')
 
         display(df_feature_vector)
 
@@ -82,7 +105,7 @@ class NaiveBayes(Component):
         couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
         gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
         df_prediction_summary = pd.concat(
-            [couple_id_test, gt_test, label_test, df_predicted_test], axis=1)
+            [couple_id_test, label_test, df_predicted_test], axis=1)
 
         # Using cross validation
         gt = df_feature_vector['is_depressed_group']
@@ -105,4 +128,4 @@ class NaiveBayes(Component):
         display(f'Accuracy on test set: {accuracy}')
         display(f'Accuracy with cross-valiation: {scores} | mean = {np.mean(scores)}')
 
-        return {self.output: df_prediction_summary}
+        return {self.output: df_prediction_summary_cv}

@@ -49,7 +49,7 @@ class PartOfSpeech(Component):
 
         # Get POS for sentence, paragraph
         pos_sentence['tokens_sentence'] = pos_sentence['tokens_sentence'].apply(
-            self._get_pos, nlp=queryable.nlp())
+            self._get_pos, nlp=queryable.nlgitp())
         pos_sentence = pos_sentence.rename(columns={'tokens_sentence': 'pos_sentence'})
 
         pos_paragraph['tokens_paragraph'] = pos_paragraph['tokens_paragraph'].apply(
@@ -98,7 +98,6 @@ class PartOfSpeech(Component):
         pos_paragraph_f = pos_paragraph[pos_paragraph['gender'] == 'W']
 
         # Drop redundant columns
-
         pos_sentence_m = pos_sentence_m.drop(columns=['is_depressed_group'])
         pos_sentence_f = pos_sentence_f.drop(columns=['is_depressed_group'])
         pos_paragraph_m = pos_paragraph_m.drop(columns=['is_depressed_group'])

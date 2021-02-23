@@ -66,7 +66,6 @@ POS_DOCUMENT_M = Extension(name='pos_document_m', kind=ExtensionKind.FEATURE)
 POS_DOCUMENT_F = Extension(name='pos_document_f', kind=ExtensionKind.FEATURE)
 POS_DOCUMENT_MF = Extension(name='pos_document_mf', kind=ExtensionKind.FEATURE)
 
-
 # Aggregated features
 FEATURE_VECTOR = Extension(name="feature_vector", kind=ExtensionKind.FEATURE)
 
@@ -76,3 +75,17 @@ CLASSIFICATION_NAIVE_BAYES = Extension(
 CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS = Extension(
     name="classification_linear_discriminant_analysis", kind=ExtensionKind.CLASSIFIER)
 PCA_REDUCTION = Extension(name="pca_reduction", kind=ExtensionKind.CLASSIFIER)
+
+
+CLASSIFICATION_NAIVE_BAYES_TFIDF = Extension(
+    name="classification_naive_bayes_tfidf", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_NAIVE_BAYES_LIWC = Extension(
+    name="classification_naive_bayes_liwc", kind=ExtensionKind.CLASSIFIER
+)
+
+
+CLASSIFICATION_NAIVE_BAYES_VOTING = Extension(
+    name="classification_naive_bayes_voting", kind=ExtensionKind.CLASSIFIER
+)

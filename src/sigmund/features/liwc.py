@@ -242,13 +242,18 @@ class Liwc(Component):
         liwc_document_f = LIWC_DOCUMENT_F.load_from(storage=created)
         liwc_document_m = LIWC_DOCUMENT_M.load_from(storage=created)
 
-        is_depressed_group_labels = queryable.execute(level=TextBody.DOCUMENT).is_depressed_group
+        is_depressed_group_labels = queryable.execute(
+            level=TextBody.DOCUMENT).is_depressed_group
 
         liwc_document_mf['is_depressed_group'] = is_depressed_group_labels
         liwc_document_f['is_depressed_group'] = is_depressed_group_labels
         liwc_document_m['is_depressed_group'] = is_depressed_group_labels
 
-        for cat in liwc_document_mf.drop(columns=['couple_id', 'document_id','is_depressed_group']).columns.values:
+        for cat in liwc_document_mf.drop(
+                columns=['couple_id', 'document_id', 'is_depressed_group']).columns.values:
+
+            if (cat not in liwc_document_f.columns or cat not in liwc_document_m.columns):
+                continue
 
             cat_document_mf = liwc_document_mf[['couple_id', 'is_depressed_group', cat]]
             cat_document_f = liwc_document_f[['couple_id', 'is_depressed_group', cat]]
@@ -256,34 +261,34 @@ class Liwc(Component):
             fig, ax = plt.subplots(2, 2, figsize=(30, 15))
 
             # First barplot: depr/non_depr couples
-            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].mean(),
-                            'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].mean()},
-                            index = [cat])
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].mean(
+            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].mean()}, index=[cat])
             df.plot.bar(rot=0, ax=ax[0, 0])
             ax[0, 0].set_title('LIWC - ' + cat + ' - mean')
 
             # Second barplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(),
-                            'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
+            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
             df.boxplot(ax=ax[1, 0])
             ax[1, 0].set_title('LIWC - ' + cat + ' - all')
 
             # First boxplot: depr/non_depr couples
             df = pd.DataFrame({'Female': [cat_document_f[cat_document_f['is_depressed_group'] == True][cat].mean(),
-                                        cat_document_f[cat_document_f['is_depressed_group'] == False][cat].mean()],
-                            'Male': [cat_document_m[cat_document_m['is_depressed_group'] == True][cat].mean(),
+                                          cat_document_f[cat_document_f['is_depressed_group'] == False][cat].mean()],
+                               'Male': [cat_document_m[cat_document_m['is_depressed_group'] == True][cat].mean(),
                                         cat_document_m[cat_document_m['is_depressed_group'] == False][cat].mean()]},
-                            index = ['depressed couple','non-depressed couple'])
+                              index=['depressed couple', 'non-depressed couple'])
             df.plot.bar(rot=0, ax=ax[0, 1])
             ax[0, 1].set_title('LIWC - ' + cat + ' - mean')
 
             # Second boxplot: Female/Male in depr/non_depr couples
             df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
-                            'depressed couple - Male'  : cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
-                            'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
-                            'non-depressed couple - Male '  : cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+                               'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+                               'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+                               'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('LIWC - ' + cat + ' - all')
+
 
 def liwc_parser(tokens, parse, category):
 
@@ -307,9 +312,10 @@ def liwc_parser_doc(tokens, parse, category):
     liwc_cats = collections.OrderedDict(sorted(liwc_cats.items()))
     return liwc_cats
 
+
 class Liwc_Inverse(Component):
     def __init__(
-            self, category = [],
+            self, category=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
         super(Liwc_Inverse, self).__init__(
             Liwc_Inverse.__name__,
@@ -327,32 +333,37 @@ class Liwc_Inverse(Component):
         parse, category_names = liwc.load_token_parser(self.token_parser_path)
 
         liwc_inverse_sentence = TOKENS_SENTENCE.load_from(storage=storage)
-        
+
         for cat in self.category:
             # Get LIWC for sentence
             liwc_inverse_sentence[cat] = liwc_inverse_sentence['tokens_sentence'].apply(
                 liwc_inverse_parser, parse=parse, category=category_names, search=cat)
 
             # Convert 0 to NaN in LIWC categories
-            liwc_inverse_sentence[cat].replace(0, np.nan , inplace=True)
-        
+            liwc_inverse_sentence[cat].replace(0, np.nan, inplace=True)
+
         liwc_inverse_sentence = liwc_inverse_sentence.drop(columns=['speaker'])
 
         # Replaye tokens with whole sentence
-        liwc_inverse_sentence['tokens_sentence'] = queryable.execute(level=TextBody.SENTENCE)['text']
-        liwc_inverse_sentence = liwc_inverse_sentence.rename(columns={'tokens_sentence': 'sentence'})
+        liwc_inverse_sentence['tokens_sentence'] = queryable.execute(level=TextBody.SENTENCE)[
+            'text']
+        liwc_inverse_sentence = liwc_inverse_sentence.rename(
+            columns={'tokens_sentence': 'sentence'})
 
-        # Drop rows not including the liwc category 
-        liwc_inverse_sentence = liwc_inverse_sentence.dropna(subset=self.category, thresh=1)
-        
+        # Drop rows not including the liwc category
+        liwc_inverse_sentence = liwc_inverse_sentence.dropna(
+            subset=self.category, thresh=1)
+
         # Convert NaN to empty list in LIWC categories
-        liwc_inverse_sentence[self.category] = liwc_inverse_sentence[self.category].apply(lambda s: s.fillna({i: [] for i in liwc_inverse_sentence[self.category].index}))
-        #display(liwc_inverse_sentence.reset_index(drop=True))
+        liwc_inverse_sentence[self.category] = liwc_inverse_sentence[self.category].apply(
+            lambda s: s.fillna({i: [] for i in liwc_inverse_sentence[self.category].index}))
+        # display(liwc_inverse_sentence.reset_index(drop=True))
 
         return {LIWC_INVERSE: liwc_inverse_sentence.reset_index(drop=True)}
 
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
         pass
+
 
 def liwc_inverse_parser(tokens, parse, category, search):
 
@@ -362,4 +373,4 @@ def liwc_inverse_parser(tokens, parse, category, search):
         if search in list(parse(token)):
             cat_token.append(token)
 
-    return cat_token if len(cat_token) != 0  else 0
+    return cat_token if len(cat_token) != 0 else 0

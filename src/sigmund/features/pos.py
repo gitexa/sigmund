@@ -250,6 +250,9 @@ class PartOfSpeech(Component):
         for cat in pos_document_mf.drop(
                 columns=['couple_id', 'document_id', 'is_depressed_group']).columns.values:
 
+            if (cat not in pos_document_f.columns or cat not in pos_document_m.columns):
+                continue
+            
             cat_document_mf = pos_document_mf[['couple_id', 'is_depressed_group', cat]]
             cat_document_f = pos_document_f[['couple_id', 'is_depressed_group', cat]]
             cat_document_m = pos_document_m[['couple_id', 'is_depressed_group', cat]]

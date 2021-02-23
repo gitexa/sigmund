@@ -1,18 +1,14 @@
 from itertools import chain
-import operator
-import re
-import string
 from typing import Dict
 
 import pandas as pd
-from IPython.core.display import display
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
-from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import *
+from src.sigmund.extensions import LEMMATIZED_DOCUMENT, TFIDF_DOCUMENT_MF, TFIDF_DOCUMENT_M, TFIDF_DOCUMENT_F, \
+    LEMMATIZED_PARAGRAPH
 
 
 class FeatureTFIDF(Component):
@@ -21,8 +17,8 @@ class FeatureTFIDF(Component):
     """
 
     def __init__(
-        self, white_list=[],
-        black_list=[],):
+            self, white_list=[],
+            black_list=[], ):
         super().__init__(
             FeatureTFIDF.__name__,
             required_extensions=[LEMMATIZED_DOCUMENT],
@@ -66,14 +62,12 @@ class FeatureTFIDF(Component):
             df_tfidf_document_m = df_tfidf_document_m.drop(columns=self.black_list)
             df_tfidf_document_f = df_tfidf_document_f.drop(columns=self.black_list)
         elif self.white_list != [] and self.black_list == []:
-            df_tfidf_document_mf = df_tfidf_document_mf[[
-                'couple_id'] + self.white_list]
-            df_tfidf_document_m = df_tfidf_document_m[[
-                'couple_id'] + self.white_list]
-            df_tfidf_document_f = df_tfidf_document_f[[
-                'couple_id'] + self.white_list]
+            df_tfidf_document_mf = df_tfidf_document_mf[['couple_id'] + self.white_list]
+            df_tfidf_document_m = df_tfidf_document_m[['couple_id'] + self.white_list]
+            df_tfidf_document_f = df_tfidf_document_f[['couple_id'] + self.white_list]
 
-        return {TFIDF_DOCUMENT_MF: df_tfidf_document_mf, TFIDF_DOCUMENT_M: df_tfidf_document_m, TFIDF_DOCUMENT_F: df_tfidf_document_f}
+        return {TFIDF_DOCUMENT_MF: df_tfidf_document_mf, TFIDF_DOCUMENT_M: df_tfidf_document_m,
+                TFIDF_DOCUMENT_F: df_tfidf_document_f}
 
     def get_tfidf(self, lines):
 
@@ -81,7 +75,8 @@ class FeatureTFIDF(Component):
         lines['tokens_document'] = lines['tokens_document'].apply(
             lambda row: ' '.join(token for token in row))
 
-        # get vectors with frequencies for the words in the lines; each line is considered a document; remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
+        # get vectors with frequencies for the words in the lines; each line is considered a document;
+        # remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
         count_vectorizer = CountVectorizer(min_df=5)
         count_vectorized = count_vectorizer.fit_transform(lines['tokens_document'])
 

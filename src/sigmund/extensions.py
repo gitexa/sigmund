@@ -27,9 +27,12 @@ LEMMATIZED_DOCUMENT = Extension(
 SYLLABLES = Extension(name="syllables", kind=ExtensionKind.PREPROCESSING)
 
 # Features
-BASIC_STATISTICS_DOCUMENT_MF = Extension(name="basic_statistics_document_mf", kind=ExtensionKind.FEATURE)
-BASIC_STATISTICS_DOCUMENT_M = Extension(name="basic_statistics_document_m", kind=ExtensionKind.FEATURE)
-BASIC_STATISTICS_DOCUMENT_F = Extension(name="basic_statistics_document_f", kind=ExtensionKind.FEATURE)
+BASIC_STATISTICS_DOCUMENT_MF = Extension(
+    name="basic_statistics_document_mf", kind=ExtensionKind.FEATURE)
+BASIC_STATISTICS_DOCUMENT_M = Extension(
+    name="basic_statistics_document_m", kind=ExtensionKind.FEATURE)
+BASIC_STATISTICS_DOCUMENT_F = Extension(
+    name="basic_statistics_document_f", kind=ExtensionKind.FEATURE)
 
 FRE_SENTENCE_M = Extension(name="fre_sentence_m", kind=ExtensionKind.FEATURE)
 FRE_SENTENCE_F = Extension(name="fre_sentence_f", kind=ExtensionKind.FEATURE)
@@ -92,4 +95,8 @@ CLASSIFICATION_NAIVE_BAYES_LIWC = Extension(
 
 CLASSIFICATION_NAIVE_BAYES_VOTING = Extension(
     name="classification_naive_bayes_voting", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_NAIVE_BAYES_POS = Extension(
+    name="classification_naive_bayes_pos", kind=ExtensionKind.CLASSIFIER
 )

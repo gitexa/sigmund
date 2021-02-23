@@ -33,7 +33,7 @@ class NaiveBayes(Component):
         self.voting = voting
 
         super().__init__(
-            NaiveBayes.__name__,
+            f"{NaiveBayes.__name__} for {self.inputs}",
             required_extensions=self.inputs,
             creates_extensions=[self.output])
 
@@ -123,9 +123,9 @@ class NaiveBayes(Component):
         # Print results
         display('Predictions on the test set')
         display(df_prediction_summary)
-        display('Cross-valiation')
+        display('Cross-Validation')
         display(df_prediction_summary_cv)
         display(f'Accuracy on test set: {accuracy}')
-        display(f'Accuracy with cross-valiation: {scores} | mean = {np.mean(scores)}')
+        display(f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
 
         return {self.output: df_prediction_summary_cv}

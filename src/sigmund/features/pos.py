@@ -1,10 +1,8 @@
-import operator
 from collections import Counter, OrderedDict
 from typing import Dict
 
 import numpy as np
 import pandas as pd
-from spacy.tokens import Doc
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
@@ -13,7 +11,6 @@ from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (POS_DOCUMENT_F, POS_DOCUMENT_M, POS_DOCUMENT_MF,
                                     POS_PARAGRAPH_F, POS_PARAGRAPH_M, POS_SENTENCE_F,
                                     POS_SENTENCE_M, TOKENS_PARAGRAPH, TOKENS_SENTENCE)
-from src.sigmund.preprocessing.pos import PartOfSpeechTags
 
 
 class PartOfSpeech(Component):
@@ -21,16 +18,17 @@ class PartOfSpeech(Component):
     This component calculates part of speech features by using Spacy's POS component to calc the counts per word-category
     """
 
-    def __init__(self, white_list=[], black_list=[]):
+    def __init__(self, white_list=None, black_list=None):
         super(PartOfSpeech, self).__init__(
             PartOfSpeech.__name__,
             required_extensions=[TOKENS_PARAGRAPH, TOKENS_SENTENCE],
             creates_extensions=[POS_DOCUMENT_F, POS_DOCUMENT_M, POS_DOCUMENT_MF,
                                 POS_PARAGRAPH_F, POS_PARAGRAPH_M,
-                                POS_SENTENCE_F, POS_SENTENCE_M, ]
+                                POS_SENTENCE_F, POS_SENTENCE_M]
         )
-        self.white_list = white_list
-        self.black_list = black_list
+
+        self.white_list = white_list or []
+        self.black_list = black_list or []
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
@@ -49,7 +47,7 @@ class PartOfSpeech(Component):
 
         # Get POS for sentence, paragraph
         pos_sentence['tokens_sentence'] = pos_sentence['tokens_sentence'].apply(
-            self._get_pos, nlp=queryable.nlgitp())
+            self._get_pos, nlp=queryable.nlp())
         pos_sentence = pos_sentence.rename(columns={'tokens_sentence': 'pos_sentence'})
 
         pos_paragraph['tokens_paragraph'] = pos_paragraph['tokens_paragraph'].apply(
@@ -235,27 +233,6 @@ class PartOfSpeech(Component):
                 POS_PARAGRAPH_F: pos_paragraph_f, POS_PARAGRAPH_M: pos_paragraph_m,
                 POS_SENTENCE_F: pos_sentence_f, POS_SENTENCE_M: pos_sentence_m}
 
-    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
-        df = POS_DOCUMENT_MF.load_from(storage=created)
-        metadata_doc = queryable.execute(level=TextBody.DOCUMENT)
-
-        wmtd = pd.merge(
-            metadata_doc[["couple_id", "is_depressed_group"]],
-            df, on=Parser.COUPLE_ID, how="inner")
-
-        depressed = wmtd.loc[wmtd["is_depressed_group"]][
-            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
-        non_depressed = wmtd.loc[~wmtd["is_depressed_group"]][
-            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
-
-        subbed = depressed.subtract(non_depressed).sort_values()
-        # display(depressed)
-        # display(non_depressed)
-
-        subbed.plot.bar(
-            subplots=True, figsize=(20, 10),
-            title="Subtracted means of LIWC values for all corpi")
-
     def _get_pos(self, word_list, nlp):
 
         # Create Spacy doc from tokens and get a ordered dictionary of the tags with the counts
@@ -280,40 +257,25 @@ class PartOfSpeech(Component):
         pos_list = OrderedDict(sorted(pos_list.items()))
         return pos_list
 
+    def visualise(
+            self, created: Dict[Extension, pd.DataFrame],
+            queryable: Queryable):
+        df = POS_DOCUMENT_MF.load_from(storage=created)
+        metadata_doc = queryable.execute(level=TextBody.DOCUMENT)
 
-class ReadinessToAction(Component):
-    R2D = Extension("r2d", float)
+        wmtd = pd.merge(
+            metadata_doc[["couple_id", "is_depressed_group"]],
+            df, on=Parser.COUPLE_ID, how="inner")
 
-    def __init__(self):
-        super(ReadinessToAction, self).__init__(
-            ReadinessToAction.__name__,
-            required_extensions=[PartOfSpeechTags.VERB_COUNT, PartOfSpeechTags.NOUN_COUNT],
-            creates_extensions=[ReadinessToAction.R2D]
-        )
+        depressed = wmtd.loc[wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
+        non_depressed = wmtd.loc[~wmtd["is_depressed_group"]][
+            wmtd.columns.difference(["document_id", "is_depressed_group"])].mean()
 
-    def apply(self, doc: Doc) -> Doc:
-        verb_count = operator.attrgetter(PartOfSpeechTags.VERB_COUNT.name)(doc._)
-        noun_count = operator.attrgetter(PartOfSpeechTags.NOUN_COUNT.name)(doc._)
+        subbed = depressed.subtract(non_depressed).sort_values()
+        # display(depressed)
+        # display(non_depressed)
 
-        doc._.r2d = verb_count / noun_count
-        return doc
-
-
-class PronominalisationIndex(Component):
-    PRON_INDEX = Extension("pron_index", float)
-
-    def __init__(self):
-        super(PronominalisationIndex, self).__init__(
-            PronominalisationIndex.__name__,
-            required_extensions=[PartOfSpeechTags.PRON_COUNT, PartOfSpeechTags.NOUN_COUNT,
-                                 PartOfSpeechTags.PROPN_COUNT],
-            creates_extensions=[PronominalisationIndex.PRON_INDEX]
-        )
-
-    def apply(self, doc: Doc) -> Doc:
-        pron_count = operator.attrgetter(PartOfSpeechTags.PRON_COUNT.name)(doc._)
-        noun_count = operator.attrgetter(PartOfSpeechTags.NOUN_COUNT.name)(doc._)
-        propn_count = operator.attrgetter(PartOfSpeechTags.PROPN_COUNT.name)(doc._)
-
-        doc._.pron_index = pron_count / (pron_count + noun_count + propn_count)
-        return doc
+        subbed.plot.bar(
+            subplots=True, figsize=(20, 10),
+            title="Subtracted means of LIWC values for all corpi")

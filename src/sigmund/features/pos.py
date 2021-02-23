@@ -252,7 +252,7 @@ class PartOfSpeech(Component):
 
             if (cat not in pos_document_f.columns or cat not in pos_document_m.columns):
                 continue
-            
+
             cat_document_mf = pos_document_mf[['couple_id', 'is_depressed_group', cat]]
             cat_document_f = pos_document_f[['couple_id', 'is_depressed_group', cat]]
             cat_document_m = pos_document_m[['couple_id', 'is_depressed_group', cat]]

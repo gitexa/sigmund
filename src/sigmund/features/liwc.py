@@ -361,7 +361,7 @@ class Liwc_Inverse(Component):
         return {LIWC_INVERSE: liwc_inverse_sentence.reset_index(drop=True)}
 
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
-        pass
+        display(LIWC_INVERSE.load_from(storage=created))
 
 
 def liwc_inverse_parser(tokens, parse, category, search):

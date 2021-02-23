@@ -44,62 +44,59 @@ class NaiveBayes(Component):
         # 2) key to store the results
         # if voting==True, feature vector consists of previous classifier outputs
         # if hamilton==True, 4-class prediction on Hamilton depression scale is performed, otherwise binary classification (depressed vs non-depressed is performed)
-        
-        # Construct feature vector
-        if not self.voting:
-            if not len(self.inputs):
-                return dict()
-
-            elif len(self.inputs) == 1:
-                df_feature_vector = self.inputs[0].load_from(storage=storage)
-
-            else:
-                loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
-                df_feature_vector = reduce(lambda left, right: pd.merge(
-                    left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
-
-            if "is_depressed_group" not in df_feature_vector.columns:
-                metadata = queryable.execute(level=TextBody.DOCUMENT)
-                df_feature_vector = pd.merge(
-                    metadata[['couple_id', 'is_depressed_group']],
-                    df_feature_vector, on='couple_id', how='inner')
-            
-            if "is_depressed_group" not in df_feature_vector.columns:
-                metadata = queryable.execute(level=TextBody.DOCUMENT)
-                df_feature_vector = pd.merge(
-                    metadata[['couple_id', 'is_depressed_group']],
-                    df_feature_vector, on='couple_id', how='inner')
-        else:
-            if not len(self.inputs):
-                raise Exception(
-                    'When voting, keys for the classifier results must be used.')
-
-            elif len(self.inputs) == 1:
-                df_feature_vector = self.inputs[0].load_from(storage=storage)
-
-            else:
-                loaded = [e.load_from(storage=storage) for e in self.inputs]
-
-                # rename predicted columns, join on couple id
-                acc = loaded[0]
-                for extension, df in zip(self.inputs[1:], loaded[1:]):
-                    acc = self.__merge_frame(left=acc, right_ext=extension, right=df)
-
-                acc.rename(columns={
-                    "predicted": f"{self.inputs[0].name}_predicted"
-                }, inplace=True)
-                df_feature_vector = acc
-
-                metadata = queryable.execute(level=TextBody.DOCUMENT)
-                df_feature_vector = pd.merge(
-                    metadata[['couple_id', 'is_depressed_group']],
-                    df_feature_vector, on='couple_id', how='inner')
-
-        # Display feature vector
-        display(df_feature_vector)
 
         # Binary classification
         if not self.hamilton:
+            # Construct feature vector for non-voting-classifier
+            if not self.voting:
+                if not len(self.inputs):
+                    return dict()
+
+                elif len(self.inputs) == 1:
+                    df_feature_vector = self.inputs[0].load_from(storage=storage)
+
+                else:
+                    loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
+                    df_feature_vector = reduce(lambda left, right: pd.merge(
+                        left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
+
+                if "is_depressed_group" not in df_feature_vector.columns:
+                    metadata = queryable.execute(level=TextBody.DOCUMENT)
+                    df_feature_vector = pd.merge(
+                        metadata[['couple_id', 'is_depressed_group']],
+                        df_feature_vector, on='couple_id', how='inner')
+
+            # Construct feature vector for voting-classifier
+            else:
+                if not len(self.inputs):
+                    raise Exception(
+                        'When voting, keys for the classifier results must be used.')
+
+                elif len(self.inputs) == 1:
+                    df_feature_vector = self.inputs[0].load_from(storage=storage)
+
+                else:
+                    loaded = [e.load_from(storage=storage) for e in self.inputs]
+
+                    # rename predicted columns, join on couple id
+                    acc = loaded[0]
+                    for extension, df in zip(self.inputs[1:], loaded[1:]):
+                        acc = self.__merge_frame(
+                            left=acc, right_ext=extension, right=df)
+
+                    acc.rename(columns={
+                        "predicted": f"{self.inputs[0].name}_predicted"
+                    }, inplace=True)
+                    df_feature_vector = acc
+
+                    metadata = queryable.execute(level=TextBody.DOCUMENT)
+                    df_feature_vector = pd.merge(
+                        metadata[['couple_id', 'is_depressed_group']],
+                        df_feature_vector, on='couple_id', how='inner')
+
+            # Display feature vector
+            display(df_feature_vector)
+
             couple_id = df_feature_vector["couple_id"]
             labels = df_feature_vector["is_depressed_group"].astype(int)
             features = df_feature_vector[df_feature_vector.columns.difference(
@@ -147,22 +144,123 @@ class NaiveBayes(Component):
             display('Cross-Validation')
             display(df_prediction_summary_cv)
             display(f'Accuracy on test set: {accuracy}')
-            display(f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
+            display(
+                f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
 
             return {self.output: df_prediction_summary_cv}
-        
-        # Hamilton Depression score classification 
+
+        # Hamilton Depression score classification
         else:
+            # Construct feature vector for non-voting-classifier
+            if not self.voting:
+                if not len(self.inputs):
+                    return dict()
+
+                elif len(self.inputs) == 1:
+                    df_feature_vector = self.inputs[0].load_from(storage=storage)
+
+                else:
+                    loaded = map(lambda e: e.load_from(storage=storage), self.inputs)
+                    df_feature_vector = reduce(lambda left, right: pd.merge(
+                        left, right, on=Parser.COUPLE_ID, how="inner"), loaded)
+
+                if "hamilton" not in df_feature_vector.columns:
+                    metadata_hrs = queryable.execute(level=TextBody.PARAGRAPH)
+                    metadata_hrs = metadata_hrs.loc[metadata_hrs['gender'] == 'W'][[
+                        'couple_id', 'hamilton']].groupby('couple_id').first().reset_index()
+                    metadata_hrs['hamilton_score'] = metadata_hrs['hamilton'].apply(
+                        lambda row: self.get_hamilton_class(row))
+                    df_feature_vector = pd.merge(
+                        metadata_hrs[['couple_id', 'hamilton_score']],
+                        df_feature_vector, on='couple_id', how='inner')
+
+            # Construct feature vector for voting-classifier
+            else:
+                if not len(self.inputs):
+                    raise Exception(
+                        'When voting, keys for the classifier results must be used.')
+
+                elif len(self.inputs) == 1:
+                    df_feature_vector = self.inputs[0].load_from(storage=storage)
+
+                else:
+                    loaded = [e.load_from(storage=storage) for e in self.inputs]
+
+                    # rename predicted columns, join on couple id
+                    acc = loaded[0]
+                    for extension, df in zip(self.inputs[1:], loaded[1:]):
+                        acc = self.__merge_frame(
+                            left=acc, right_ext=extension, right=df)
+
+                    acc.rename(columns={
+                        "predicted": f"{self.inputs[0].name}_predicted"
+                    }, inplace=True)
+                    df_feature_vector = acc
+
+                    if "hamilton" not in df_feature_vector.columns:
+                        metadata_hrs = queryable.execute(level=TextBody.PARAGRAPH)
+                        metadata_hrs = metadata_hrs.loc[metadata_hrs['gender'] == 'W'][[
+                            'couple_id', 'hamilton']].groupby('couple_id').first().reset_index()
+                        metadata_hrs['hamilton_score'] = metadata_hrs['hamilton'].apply(
+                            lambda row: self.get_hamilton_class(row))
+                        df_feature_vector = pd.merge(
+                            metadata_hrs[['couple_id', 'hamilton_score']],
+                            df_feature_vector, on='couple_id', how='inner')
+
+            # Display feature vector
+            display(df_feature_vector)
+
             couple_id = df_feature_vector["couple_id"]
-            hdrs_labels = df_feature_vector["is_depressed_group"].astype(int)
+            labels = df_feature_vector["hamilton_score"].astype(int)
             features = df_feature_vector[df_feature_vector.columns.difference(
-                ["couple_id", "is_depressed_group"], sort=False)]
-            
-            df_prediction_summary_cv = 
+                ["couple_id", "hamilton_score"], sort=False)]
+
+            # Using "normal" validation
+            features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
+                features, labels, features.index.values, test_size=0.50, random_state=42)
+
+            # fit classifier
+            classifier = MultinomialNB()
+            classifier.fit(features_train, label_train)
+
+            # predict
+            predicted_test = classifier.predict(features_test)
+            df_predicted_test = pd.DataFrame(
+                data=predicted_test, columns=['predicted'],
+                index=label_test.index.copy())
+
+            # evaluate classifier
+            accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+
+            # aggregate results and build dataframe
+            couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+            gt_test = df_feature_vector.iloc[indices_test, :]['hamilton_score']
+            df_prediction_summary = pd.concat(
+                [couple_id_test, label_test, df_predicted_test], axis=1)
+
+            # Using cross validation
+            gt = df_feature_vector['hamilton_score']
+            cv = StratifiedKFold(n_splits=5, random_state=42)
+
+            predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
+            df_predicted_test = pd.DataFrame(
+                data=predictions_test_cv, columns=['predicted'],
+                index=labels.index.copy())
+
+            scores = cross_val_score(classifier, features, labels, cv=cv)
+            df_prediction_summary_cv = pd.concat(
+                [couple_id, gt, labels, df_predicted_test], axis=1)
+
+            # Print results
+            display('Predictions on the test set')
+            display(df_prediction_summary)
+            display('Cross-Validation')
+            display(df_prediction_summary_cv)
+            display(f'Accuracy on test set: {accuracy}')
+            display(
+                f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
 
             return {self.output: df_prediction_summary_cv}
-
-
 
     def __merge_frame(
             self, left: pd.DataFrame, right_ext: Extension, right: pd.DataFrame):
@@ -173,3 +271,16 @@ class NaiveBayes(Component):
         right.rename(columns={"predicted": f"{right_ext.name}_predicted"}, inplace=True)
 
         return pd.merge(left, right, on=Parser.COUPLE_ID, how="inner")
+
+    def get_hamilton_class(self, value):
+
+        if value >= 0 and value <= 9:
+            depression_class = 1
+        if value >= 10 and value <= 20:
+            depression_class = 2
+        if value >= 21 and value <= 30:
+            depression_class = 3
+        if value > 30:
+            depression_class = 4
+
+        return depression_class

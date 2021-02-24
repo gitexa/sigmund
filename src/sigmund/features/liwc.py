@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from src.pipelinelib.component import Component
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (LIWC_DOCUMENT_F, LIWC_DOCUMENT_M, LIWC_DOCUMENT_MF,

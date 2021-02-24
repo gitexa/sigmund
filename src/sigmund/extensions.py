@@ -131,3 +131,9 @@ LIWC_PLOT = Extension(name="LIWC plot", kind=ExtensionKind.FEATURE)
 POS_PLOT = Extension(name="POS plot", kind=ExtensionKind.FEATURE)
 TFIDF_PLOT = Extension(name="TFIDF plot", kind=ExtensionKind.FEATURE)
 LIWC_INVERSE_PLOT = Extension("LIWC Inverse plot", kind=ExtensionKind.FEATURE)
+
+BASIC_STATISTICS_COUPLE_PLOT = Extension(
+    name="Basic Statistics Couple Plot", kind=ExtensionKind.FEATURE)
+
+BASIC_STATISTICS_PERSON_PLOT = Extension(
+    name="Basic Statistics Person per Couple Plot", kind=ExtensionKind.FEATURE)

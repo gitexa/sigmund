@@ -7,9 +7,11 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import (BASIC_STATISTICS_DOCUMENT_F,
+from src.sigmund.extensions import (BASIC_STATISTICS_COUPLE_PLOT,
+                                    BASIC_STATISTICS_DOCUMENT_F,
                                     BASIC_STATISTICS_DOCUMENT_M,
-                                    BASIC_STATISTICS_DOCUMENT_MF, LEMMATIZED_PARAGRAPH)
+                                    BASIC_STATISTICS_DOCUMENT_MF,
+                                    BASIC_STATISTICS_PERSON_PLOT, LEMMATIZED_PARAGRAPH)
 
 
 class BasicStatistics(Component):
@@ -23,7 +25,8 @@ class BasicStatistics(Component):
         super().__init__(BasicStatistics.__name__,
                          required_extensions=[LEMMATIZED_PARAGRAPH],
                          creates_extensions=[BASIC_STATISTICS_DOCUMENT_MF,
-                                             BASIC_STATISTICS_DOCUMENT_M, BASIC_STATISTICS_DOCUMENT_F])
+                                             BASIC_STATISTICS_DOCUMENT_M,
+                                             BASIC_STATISTICS_DOCUMENT_F])
 
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
@@ -74,85 +77,133 @@ class BasicStatistics(Component):
         bs_document_f = BASIC_STATISTICS_DOCUMENT_F.load_from(storage=created)
         bs_document_m = BASIC_STATISTICS_DOCUMENT_M.load_from(storage=created)
 
-        is_depressed_group_labels = queryable.execute(level=TextBody.DOCUMENT).is_depressed_group
+        is_depressed_group_labels = queryable.execute(
+            level=TextBody.DOCUMENT).is_depressed_group
 
         bs_document_mf['is_depressed_group'] = is_depressed_group_labels
         bs_document_f['is_depressed_group'] = is_depressed_group_labels
         bs_document_m['is_depressed_group'] = is_depressed_group_labels
 
-        ###################### FOR COUPLE
+        categories = [BASIC_STATISTICS_COUPLE_PLOT, BASIC_STATISTICS_PERSON_PLOT]
+        figs = []
+
+        # FOR COUPLE
         fig, ax = plt.subplots(2, 3, figsize=(30, 15))
 
         # First barplot: depr/non_depr couples - Number of paragraphs - mean
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['paragraph_count'].mean(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['paragraph_count'].mean()}, index=['paragraph_count'])
+        df = pd.DataFrame({
+            'Depressed couple':
+            bs_document_mf
+            [bs_document_mf['is_depressed_group'] == True]
+            ['paragraph_count'].mean(),
+            'Non-depressed couple':
+            bs_document_mf
+            [bs_document_mf['is_depressed_group'] == False]
+            ['paragraph_count'].mean()},
+            index=['paragraph_count'])
         df.T.plot.bar(rot=0, ax=ax[0, 0], legend=False)
         ax[0, 0].set_title('Number of paragraphs - mean')
 
         # First boxplot: depr/non_depr couples - Number of paragraphs
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['paragraph_count'].to_numpy(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['paragraph_count'].to_numpy()})
+        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['paragraph_count'].to_numpy(
+        ), 'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['paragraph_count'].to_numpy()})
         df.boxplot(rot=0, ax=ax[1, 0])
         ax[1, 0].set_title('Number of paragraphs')
 
         # Second barplot: depr/non_depr couples - Number of words - mean
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['word_count'].mean(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['word_count'].mean()}, index=['word_count'])
+        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['word_count'].mean(
+        ), 'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['word_count'].mean()}, index=['word_count'])
         df.T.plot.bar(rot=0, ax=ax[0, 1], legend=False)
         ax[0, 1].set_title('Number of words - mean')
 
         # Second boxplot: depr/non_depr couples - Number of words
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['word_count'].to_numpy(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['word_count'].to_numpy()})
+        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['word_count'].to_numpy(
+        ), 'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['word_count'].to_numpy()})
         df.boxplot(rot=0, ax=ax[1, 1])
         ax[1, 1].set_title('Number of words')
 
         # Third barplot: depr/non_depr couples - Number of words per paragraph- mean
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['words_per_paragraph'].mean(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['words_per_paragraph'].mean()}, index=['words_per_paragraph'])
+        df = pd.DataFrame({
+            'Depressed couple':
+            bs_document_mf
+            [bs_document_mf['is_depressed_group'] == True]
+            ['words_per_paragraph'].mean(),
+            'Non-depressed couple':
+            bs_document_mf
+            [bs_document_mf['is_depressed_group'] == False]
+            ['words_per_paragraph'].mean()},
+            index=['words_per_paragraph'])
         df.T.plot.bar(rot=0, ax=ax[0, 2], legend=False)
         ax[0, 2].set_title('Words per paragraph - mean')
 
         # Thrid boxplot: depr/non_depr couples - Number of words per paragraph
-        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['words_per_paragraph'].to_numpy(),
-                           'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['words_per_paragraph'].to_numpy()})
+        df = pd.DataFrame({'Depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == True]['words_per_paragraph'].to_numpy(
+        ), 'Non-depressed couple': bs_document_mf[bs_document_mf['is_depressed_group'] == False]['words_per_paragraph'].to_numpy()})
         df.boxplot(rot=0, ax=ax[1, 2])
         ax[1, 2].set_title('Words per paragraph')
 
-###################### FOR PERSON PER COUPLE
+        figs.append(fig)
+
+# FOR PERSON PER COUPLE
         fig, ax = plt.subplots(2, 3, figsize=(30, 15))
         # First barplot: depr/non_depr per person - Number of paragraphs - mean
         df = pd.DataFrame({'Female': [bs_document_f[bs_document_f['is_depressed_group'] == True]['paragraph_count'].mean(),
                                       bs_document_f[bs_document_f['is_depressed_group'] == False]['paragraph_count'].mean()],
-                            'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['paragraph_count'].mean(),
+                           'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['paragraph_count'].mean(),
                                     bs_document_m[bs_document_m['is_depressed_group'] == False]['paragraph_count'].mean()]},
-                            index=['Depressed couple', 'Non-depressed couple'])
+                          index=['Depressed couple', 'Non-depressed couple'])
         df.plot.bar(rot=0, ax=ax[0, 0])
         ax[0, 0].set_title('Number of paragraphs per person - mean')
 
         # First boxplot: depr/non_depr per person - Number of paragraphs
-        df = pd.DataFrame({'depr. couple - Female': bs_document_f[bs_document_f['is_depressed_group'] == True]['paragraph_count'].to_numpy(),
-                            'depr. couple - Male': bs_document_m[bs_document_m['is_depressed_group'] == True]['paragraph_count'].to_numpy(),
-                            'non-depr. couple - Female ': bs_document_f[bs_document_f['is_depressed_group'] == False]['paragraph_count'].to_numpy(),
-                            'non-depr. couple - Male ': bs_document_m[bs_document_m['is_depressed_group'] == False]['paragraph_count'].to_numpy()})
+        df = pd.DataFrame({
+            'depr. couple - Female':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == True]
+            ['paragraph_count'].to_numpy(),
+            'depr. couple - Male':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == True]
+            ['paragraph_count'].to_numpy(),
+            'non-depr. couple - Female ':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == False]
+            ['paragraph_count'].to_numpy(),
+            'non-depr. couple - Male ':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == False]
+            ['paragraph_count'].to_numpy()})
         df.boxplot(ax=ax[1, 0])
         ax[1, 0].set_title('Number of paragraphs per person')
         ax[1, 0].tick_params(labelrotation=45)
-        
+
         # Second barplot: depr/non_depr per person - Number of words - mean
         df = pd.DataFrame({'Female': [bs_document_f[bs_document_f['is_depressed_group'] == True]['word_count'].mean(),
                                       bs_document_f[bs_document_f['is_depressed_group'] == False]['word_count'].mean()],
-                            'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['word_count'].mean(),
+                           'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['word_count'].mean(),
                                     bs_document_m[bs_document_m['is_depressed_group'] == False]['word_count'].mean()]},
-                            index=['Depressed couple', 'Non-depressed couple'])
+                          index=['Depressed couple', 'Non-depressed couple'])
         df.plot.bar(rot=0, ax=ax[0, 1])
         ax[0, 1].set_title('Number of words - mean')
 
         # Second boxplot: depr/non_depr per person - Number of words
-        df = pd.DataFrame({'depr. couple - Female': bs_document_f[bs_document_f['is_depressed_group'] == True]['word_count'].to_numpy(),
-                            'depr. couple - Male': bs_document_m[bs_document_m['is_depressed_group'] == True]['word_count'].to_numpy(),
-                            'non-depr. couple - Female ': bs_document_f[bs_document_f['is_depressed_group'] == False]['word_count'].to_numpy(),
-                            'non-depr. couple - Male ': bs_document_m[bs_document_m['is_depressed_group'] == False]['word_count'].to_numpy()})
+        df = pd.DataFrame({
+            'depr. couple - Female':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == True]
+            ['word_count'].to_numpy(),
+            'depr. couple - Male':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == True]
+            ['word_count'].to_numpy(),
+            'non-depr. couple - Female ':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == False]
+            ['word_count'].to_numpy(),
+            'non-depr. couple - Male ':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == False]
+            ['word_count'].to_numpy()})
         df.boxplot(ax=ax[1, 1])
         ax[1, 1].set_title('Number of words')
         ax[1, 1].tick_params(labelrotation=45)
@@ -160,17 +211,34 @@ class BasicStatistics(Component):
         # Third barplot: depr/non_depr per person - Number of words per paragraph- mean
         df = pd.DataFrame({'Female': [bs_document_f[bs_document_f['is_depressed_group'] == True]['words_per_paragraph'].mean(),
                                       bs_document_f[bs_document_f['is_depressed_group'] == False]['words_per_paragraph'].mean()],
-                            'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['words_per_paragraph'].mean(),
+                           'Male': [bs_document_m[bs_document_m['is_depressed_group'] == True]['words_per_paragraph'].mean(),
                                     bs_document_m[bs_document_m['is_depressed_group'] == False]['words_per_paragraph'].mean()]},
-                            index=['Depressed couple', 'Non-depressed couple'])
+                          index=['Depressed couple', 'Non-depressed couple'])
         df.plot.bar(rot=0, ax=ax[0, 2])
         ax[0, 2].set_title('Words per paragraph - mean')
 
         # Thrid boxplot: depr/non_depr per person - Number of words per paragraph
-        df = pd.DataFrame({'depr. couple - Female': bs_document_f[bs_document_f['is_depressed_group'] == True]['words_per_paragraph'].to_numpy(),
-                            'depr. couple - Male': bs_document_m[bs_document_m['is_depressed_group'] == True]['words_per_paragraph'].to_numpy(),
-                            'non-depr. couple - Female ': bs_document_f[bs_document_f['is_depressed_group'] == False]['words_per_paragraph'].to_numpy(),
-                            'non-depr. couple - Male ': bs_document_m[bs_document_m['is_depressed_group'] == False]['words_per_paragraph'].to_numpy()})
+        df = pd.DataFrame({
+            'depr. couple - Female':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == True]
+            ['words_per_paragraph'].to_numpy(),
+            'depr. couple - Male':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == True]
+            ['words_per_paragraph'].to_numpy(),
+            'non-depr. couple - Female ':
+            bs_document_f
+            [bs_document_f['is_depressed_group'] == False]
+            ['words_per_paragraph'].to_numpy(),
+            'non-depr. couple - Male ':
+            bs_document_m
+            [bs_document_m['is_depressed_group'] == False]
+            ['words_per_paragraph'].to_numpy()})
         df.boxplot(ax=ax[1, 2])
         ax[1, 2].set_title('Words per paragraph')
         ax[1, 2].tick_params(labelrotation=45)
+
+        figs.append(fig)
+
+        return dict(zip(categories, figs))

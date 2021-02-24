@@ -1,7 +1,9 @@
+import os
 from itertools import filterfalse
 from typing import Dict, List, Set
 
 import pandas as pd
+from matplotlib.figure import Figure
 
 from src.pipelinelib.adapter import Adapter
 from src.pipelinelib.querying import Queryable
@@ -33,6 +35,8 @@ class Pipeline:
         self._extensions: Set[Extension] = set()
         self._components: List[Component] = list()
 
+        self._plot_output = "./images"
+
         if empty_pipeline:
             self._remove_all_pipes()
 
@@ -63,6 +67,8 @@ class Pipeline:
         print(f"=== Starting pipeline with {pipe_names} ===")
 
         curr: Dict[Extension, pd.DataFrame] = dict()
+        ext_plot_map = dict()
+
         for component in self._components:
             result = component._internal_apply(
                 storage=curr, queryable=self._queryable)
@@ -81,14 +87,18 @@ class Pipeline:
                     f"{component.name} created {names}, but set None as their value!")
 
             if result and visualise:
-                component.visualise(result, self._queryable)
+                plots = component.visualise(result, self._queryable)
+                self._store_plots(component, plots)
+                ext_plot_map.update(plots)
+
+                # ext_plot_map.update(plots)
 
             if result:
                 for extension, df in result.items():
                     extension.store_to(curr, df)
 
         print("=== Finished pipeline execution ===")
-        return curr
+        return (curr, ext_plot_map) if visualise else curr
 
 
     def _is_compatible(self, component: Component):
@@ -145,3 +155,14 @@ class Pipeline:
 
     def _remove_all_pipes(self):
         self._components.clear()
+
+    def _store_plots(self, component: Component, plots: Dict[Extension, Figure]):
+        if not os.path.exists(self._plot_output):
+            os.mkdir(self._plot_output)
+
+        for ext in plots:
+            path = os.path.join(self._plot_output, ext.filename())
+            plots[ext].savefig(path)
+
+    def __repr__(self) -> str:
+        return f"{Pipeline.__name__}: {self._components}"

@@ -1,4 +1,5 @@
 import os
+import re
 
 import matplotlib.pyplot as plt
 import spacy
@@ -83,25 +84,48 @@ storage, plots = pipeline.execute(visualise=True)
 
 features = [(ext, plot) for ext, plot in plots.items()
             if ext.kind == ExtensionKind.FEATURE]
+
 classifications = [(ext, plot) for ext, plot in plots.items()
                    if ext.kind == ExtensionKind.CLASSIFIER]
 
 st.write("Found", len(features), "features")
 st.write("Found", len(classifications), "classifications")
 
-# images = [
-#     Image.open(os.path.join(pipeline._plot_output, ext.filename() + ".png"))
-#     for ext, _ in features
-# ]
-# captions = [ext.name for ext in plots]
+st.markdown("## Features")
 
-# st.image(images, caption=captions, width=None, clear_figure=False)
+feature_paths = [
+    # TFIDF
+    "feature-TFIDF - wenn.png",
+    "feature-TFIDF - haben.png",
 
+    # LIWC
+    "feature-LIWC - Metaph.png",
+    "feature-LIWC - Affect.png",
+    "feature-LIWC - Death.png",
+
+    # POS
+    "feature-POS - KON.png"
+]
+
+images = [Image.open(os.path.join(pipeline._plot_output, path))
+          for path in feature_paths]
+
+title_pat = re.compile(r"(feature|classification)-(\w*) - (\w*).png")
+
+for path, image in zip(feature_paths, images):
+    feature, category = title_pat.match(path).group(2, 3)
+    st.subheader(f"{feature}: {category}")
+    st.image(image, width=None, clear_figure=False)
+
+
+st.markdown("## Classification")
 
 images = [
     Image.open(os.path.join(pipeline._plot_output, ext.filename() + ".png"))
     for ext, _ in classifications
 ]
-captions = [ext.name for ext in classifications]
+captions = [ext.name for ext, _ in classifications]
 
-st.image(images, caption=captions, width=None, clear_figure=False)
+for caption, image in zip(captions, images):
+    st.subheader(caption)
+    st.image(image, width=None, clear_figure=False)

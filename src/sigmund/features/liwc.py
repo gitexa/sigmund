@@ -439,7 +439,8 @@ class Liwc_Trend(Component):
                                   liwc_trend_is_depressed + ' - ' + cat + ' (wordcount) per paragraph')
                 i += 1  # display for next couple
 
-                categories.append(cat)
+                categories.append(
+                    Extension(name=f"LIWC - {cat}", kind=ExtensionKind.FEATURE))
                 plots.append(fig)
 
         return dict(zip(categories, plots))

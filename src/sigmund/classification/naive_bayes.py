@@ -496,6 +496,5 @@ class NaiveBayes(Component):
         sns.heatmap(conf, annot=True)
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
-        plt.show()
 
-        return {Extension(name=f"{NaiveBayes.__name__} for {self.inputs}", kind=ExtensionKind.CLASSIFIER): fig}
+        return {Extension(name=self.name, kind=ExtensionKind.CLASSIFIER): fig}

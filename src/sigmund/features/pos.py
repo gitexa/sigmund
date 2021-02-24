@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 from src.pipelinelib.component import Component
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (POS_DOCUMENT_F, POS_DOCUMENT_M, POS_DOCUMENT_MF,
@@ -225,6 +225,9 @@ class PartOfSpeech(Component):
         pos_document_f['is_depressed_group'] = is_depressed_group_labels
         pos_document_m['is_depressed_group'] = is_depressed_group_labels
 
+        plots = []
+        categories = []
+
         for cat in pos_document_mf.drop(
                 columns=['couple_id', 'document_id', 'is_depressed_group']).columns.values:
 
@@ -264,6 +267,11 @@ class PartOfSpeech(Component):
                                'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('Part of Speech - ' + cat + ' - all')
+
+            categories.append(Extension(name=f"POS - {cat}", kind=ExtensionKind.FEATURE))
+            plots.append(fig)
+
+        return dict(zip(categories, plots))
     '''     
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
         df = POS_DOCUMENT_MF.load_from(storage=created)

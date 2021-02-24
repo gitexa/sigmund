@@ -31,6 +31,9 @@ class Component(metaclass=abc.ABCMeta):
         self.required_extensions = required_extensions
         self.creates_extensions = creates_extensions
 
+    def __repr__(self) -> str:
+        return self.name
+
     def _internal_apply(self, storage: Dict[Extension, pd.DataFrame],
                         queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
@@ -54,4 +57,4 @@ class Component(metaclass=abc.ABCMeta):
         Implement this method in order to visualise DataFrames created by the apply method
         (see Component.apply)
         """
-        pass
+        return dict()

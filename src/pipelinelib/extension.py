@@ -60,6 +60,9 @@ class Extension:
         """
         storage[self] = df
 
+    def filename(self):
+        return f"{self.kind}-{self.name}"
+
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Extension):
             return False

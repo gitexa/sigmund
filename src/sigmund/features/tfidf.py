@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from src.pipelinelib.component import Component
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
@@ -114,6 +114,9 @@ class FeatureTFIDF(Component):
         tfidf_document_f['is_depressed_group'] = is_depressed_group_labels
         tfidf_document_m['is_depressed_group'] = is_depressed_group_labels
 
+        plots = []
+        categories = []
+
         for cat in tfidf_document_mf.drop(
                 columns=['couple_id', 'is_depressed_group']).columns.values:
 
@@ -154,3 +157,9 @@ class FeatureTFIDF(Component):
                                'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('TFIDF - ' + cat + ' - all')
+
+            plots.append(fig)
+            categories.append(
+                Extension(name=f"TFIDF - {cat}", kind=ExtensionKind.FEATURE))
+
+        return dict(zip(categories, plots))

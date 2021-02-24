@@ -355,8 +355,8 @@ class Liwc_Inverse(Component):
 
         return {LIWC_INVERSE: liwc_inverse_sentence.reset_index(drop=True)}
 
-    def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
-        return {LIWC_INVERSE_PLOT: LIWC_INVERSE.load_from(storage=created)}
+    # def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+    #    return {LIWC_INVERSE_PLOT: LIWC_INVERSE.load_from(storage=created)}
 
 
 def liwc_inverse_parser(tokens, parse, category, search):
@@ -415,6 +415,7 @@ class Liwc_Trend(Component):
 
         for cat in self.category:
             fig, axes = plt.subplots(count, 1, figsize=(width, height))
+            fig.tight_layout(pad = 5,h_pad=5.0)
             i = 0
 
             for couple in set(liwc_trend_paragraph.couple_id.tolist()):
@@ -440,7 +441,7 @@ class Liwc_Trend(Component):
                 i += 1  # display for next couple
 
                 categories.append(
-                    Extension(name=f"LIWC - {cat}", kind=ExtensionKind.FEATURE))
+                    Extension(name=f"LIWC Trend - {cat}", kind=ExtensionKind.FEATURE))
                 plots.append(fig)
 
         return dict(zip(categories, plots))

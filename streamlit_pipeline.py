@@ -16,7 +16,7 @@ from src.sigmund.classification.naive_bayes import NaiveBayes
 from src.sigmund.classification.pca import PCAReduction
 from src.sigmund.extensions import *
 from src.sigmund.features.basic_statistics import BasicStatistics
-from src.sigmund.features.liwc import Liwc
+from src.sigmund.features.liwc import Liwc, Liwc_Inverse, Liwc_Trend
 from src.sigmund.features.pos import PartOfSpeech
 from src.sigmund.features.tfidf import FeatureTFIDF
 from src.sigmund.features.vocabulary_size import VocabularySize
@@ -80,6 +80,9 @@ pipeline.add_component(NaiveBayes(inputs=[
     CLASSIFICATION_NAIVE_BAYES_POS,
 ], output=CLASSIFICATION_NAIVE_BAYES_VOTING, voting=True))
 
+pipeline.add_component(Liwc_Trend(category=['Posemo']))
+pipeline.add_component(Liwc_Inverse(category=['Metaph', 'Affect', 'Death']))
+pipeline.add_component(BasicStatistics())
 storage, plots = pipeline.execute(visualise=True)
 
 features = [(ext, plot) for ext, plot in plots.items()
@@ -90,6 +93,13 @@ classifications = [(ext, plot) for ext, plot in plots.items()
 
 st.write("Found", len(features), "features")
 st.write("Found", len(classifications), "classifications")
+
+st.markdown("## Basic Statistics")
+st.subheader("Couple")
+st.image(Image.open(r"images/feature-Basic Statistics Couple Plot.png"), width=None, clear_figure=False)
+
+st.subheader("Per person in couple")
+st.image(Image.open(r"images/feature-Basic Statistics Person per Couple Plot.png"), width=None, clear_figure=False)
 
 st.markdown("## Features")
 
@@ -117,6 +127,13 @@ for path, image in zip(feature_paths, images):
     st.subheader(f"{feature}: {category}")
     st.image(image, width=None, clear_figure=False)
 
+
+df_liwc_inverse = LIWC_INVERSE.load_from(storage=storage)
+st.markdown("## LIWC Inverse: " + ', '.join(df_liwc_inverse.columns.to_list()[7:]))
+st.write(df_liwc_inverse)
+
+st.subheader("LIWC Trend: Posemo")
+st.image(Image.open(r"images/feature-LIWC Trend - Posemo.png"), width=None, clear_figure=False)
 
 st.markdown("## Classification")
 

@@ -19,6 +19,11 @@ from src.sigmund.extensions import (LIWC_DOCUMENT_F, LIWC_DOCUMENT_M, LIWC_DOCUM
 
 
 class Liwc(Component):
+    '''
+    This Component extracts the LIWC categories for each token in each layer (document,paragraph,sentence) and 
+    stores the number of occurrences of the LIWC categories in different columns.
+    For the layers paragraph/sentence the mean of the occurrences per category over each document is stored.
+    '''
     def __init__(
             self, white_list=[],
             black_list=[],
@@ -297,6 +302,13 @@ def liwc_parser_doc(tokens, parse, category):
 
 
 class Liwc_Inverse(Component):
+    '''
+    This Component extracts for given LIWC categories the words per sentences which belongs to the categories
+    and stores those words in a new columns besides the sentence containing the words.
+    Rows not having any word in the sentences belonging to given categories are removed to filter redundant
+    data which is not related with the given LIWC categories.
+    '''
+    
     def __init__(
             self, category=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
@@ -359,6 +371,10 @@ def liwc_inverse_parser(tokens, parse, category, search):
 
 
 class Liwc_Trend(Component):
+    '''
+    This component plots the trend of occurrences of words per paragraph labeled with the  given LIWC categories over each document.
+    All trends for each couple are plotted below eachother for one LIWC category
+    '''
     def __init__(
             self, category=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):

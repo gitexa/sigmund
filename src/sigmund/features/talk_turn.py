@@ -19,7 +19,12 @@ nlp = spacy.load("de_core_news_md")
 
 class TalkTurnExtractor(Component):
     """
-    Extracts Talk turn from text and stores these under TALKTURN
+    Calculates the talkturn ratio for each document.
+    A new paragraph is counted as a talkturn if it contains more then 5 words since fewer words
+    are just like comments or approvals and contain most likely no new input for the discussion.
+
+    The ratio of the talkturn is calculated by the talkturn count for one person per
+    total talkturn counts determined for both persons together.
     """
 
     def __init__(self):

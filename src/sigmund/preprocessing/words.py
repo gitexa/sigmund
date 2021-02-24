@@ -18,7 +18,9 @@ from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
 
 class Tokenizer(Component):
     """
-    Extracts tokens without punctuation from texts.
+    This component extracts tokens without punctuation from texts.
+    The tokens (beeing the words inside the text) are extracted for all the layers: document, paragraph, sentences.
+    The dataframe for each layer contains a list of the tokens.
     """
 
     def __init__(self):
@@ -68,7 +70,8 @@ class Tokenizer(Component):
 
 class Stemmer(Component):
     """
-    Performs stemming on the tokens
+    This component performs stemming on the tokens.
+    The result replaces the list of tokens with the new list of stemmed tokens for each layer.
     """
 
     def __init__(self, stemmer=GermanStemmer()):
@@ -107,8 +110,10 @@ class Stemmer(Component):
 
 class Lemmatizer(Component):
     """
-    Lemmatizes the tokens
+    This component lemmatizes the tokens.
+    The result replaces the list of tokens with the new list of lemmatized tokens for each layer.
     """
+
 
     def __init__(self):
         super().__init__(

@@ -19,9 +19,12 @@ from src.utils.feature_annotator import reading_ease_german, syllable_counter
 
 
 class FleschExtractor(Component):
-    """
-    Calculates the Flesch-Reading-Ease from text and stores these under FRE_DOCUMENT, FRE_PARAGRAPH, FRE_SENTENCE
-    """
+    '''
+    Calculates the Flesch-Reading-Ease from the different text layers (document,paragraphs,sentences) 
+    and stores these under FRE_DOCUMENT, FRE_PARAGRAPH, FRE_SENTENCE.
+    The Flesch-Reading-Ease evaluats the readability of the text.
+    A score indicates simple text structure and readability and higher scores indicate more complex text structures.
+    '''
 
     def __init__(self):
         super().__init__(name=FleschExtractor.__name__, required_extensions=[],

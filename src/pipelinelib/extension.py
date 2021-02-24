@@ -37,6 +37,12 @@ class Extension:
         self.kind = kind
 
     def load_from(self, storage: Dict["Extension", pd.DataFrame]) -> Union[pd.DataFrame, None]:
+        """
+        Load a copy of a DataFrame from the lookup structure using the Extension instance as a key
+
+        @param storage: the lookup structure
+        @return: An independent copy of the requested DataFrame, None if it cannot be found
+        """
         lookup = storage.get(self, None)
         if lookup is None:
             print(
@@ -46,6 +52,12 @@ class Extension:
         return lookup.copy(deep=True)
 
     def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
+        """
+        Store a DataFrame within the lookup structure
+
+        @param storage: the lookup structure
+        @param df: the DataFrame
+        """
         storage[self] = df
 
     def __eq__(self, o: object) -> bool:

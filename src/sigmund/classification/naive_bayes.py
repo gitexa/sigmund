@@ -4,6 +4,7 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from IPython.core.display import display
+from sklearn.metrics import f1_score
 from sklearn.model_selection import (StratifiedKFold, cross_val_predict,
                                      cross_val_score, train_test_split)
 from sklearn.naive_bayes import MultinomialNB
@@ -112,7 +113,7 @@ class NaiveBayes(Component):
 
             # predict
             predicted_test = classifier.predict(features_test)
-            df_predicted_test = pd.DataFrame(
+            df_prediction_test_cv = pd.DataFrame(
                 data=predicted_test, columns=['predicted'],
                 index=label_test.index.copy())
 
@@ -123,20 +124,21 @@ class NaiveBayes(Component):
             couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
             gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
             df_prediction_summary = pd.concat(
-                [couple_id_test, label_test, df_predicted_test], axis=1)
+                [couple_id_test, label_test, df_prediction_test_cv], axis=1)
 
             # Using cross validation
             gt = df_feature_vector['is_depressed_group']
             cv = StratifiedKFold(n_splits=5, random_state=42)
-
-            predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
-            df_predicted_test = pd.DataFrame(
-                data=predictions_test_cv, columns=['predicted'],
+            
+            prediction_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
+            df_prediction_test_cv = pd.DataFrame(
+                data=prediction_test_cv, columns=['predicted'],
                 index=labels.index.copy())
-
-            scores = cross_val_score(classifier, features, labels, cv=cv)
             df_prediction_summary_cv = pd.concat(
-                [couple_id, gt, labels, df_predicted_test], axis=1)
+                [couple_id, gt, labels, df_prediction_test_cv], axis=1)
+
+            accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+            f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
             # Print results
             display('Predictions on the test set')
@@ -145,8 +147,11 @@ class NaiveBayes(Component):
             display(df_prediction_summary_cv)
             display(f'Accuracy on test set: {accuracy}')
             display(
-                f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
+                f'Accuracy with cross-validation: {accuracy_cv} | mean = {np.mean(accuracy_cv)}')
+            display(
+                f'F1-score with cross-validation: {f1_cv}')
 
+            return {self.output: df_prediction_summary_cv}
             return {self.output: df_prediction_summary_cv}
 
         # Hamilton Depression score classification
@@ -225,7 +230,7 @@ class NaiveBayes(Component):
 
             # predict
             predicted_test = classifier.predict(features_test)
-            df_predicted_test = pd.DataFrame(
+            df_prediction_test_cv = pd.DataFrame(
                 data=predicted_test, columns=['predicted'],
                 index=label_test.index.copy())
 
@@ -236,20 +241,21 @@ class NaiveBayes(Component):
             couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
             gt_test = df_feature_vector.iloc[indices_test, :]['hamilton_score']
             df_prediction_summary = pd.concat(
-                [couple_id_test, label_test, df_predicted_test], axis=1)
+                [couple_id_test, label_test, df_prediction_test_cv], axis=1)
 
             # Using cross validation
             gt = df_feature_vector['hamilton_score']
             cv = StratifiedKFold(n_splits=5, random_state=42)
 
-            predictions_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
-            df_predicted_test = pd.DataFrame(
-                data=predictions_test_cv, columns=['predicted'],
+            prediction_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
+            df_prediction_test_cv = pd.DataFrame(
+                data=prediction_test_cv, columns=['predicted'],
                 index=labels.index.copy())
-
-            scores = cross_val_score(classifier, features, labels, cv=cv)
             df_prediction_summary_cv = pd.concat(
-                [couple_id, gt, labels, df_predicted_test], axis=1)
+                [couple_id, gt, labels, df_prediction_test_cv], axis=1)
+
+            accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+            f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
             # Print results
             display('Predictions on the test set')
@@ -258,7 +264,9 @@ class NaiveBayes(Component):
             display(df_prediction_summary_cv)
             display(f'Accuracy on test set: {accuracy}')
             display(
-                f'Accuracy with cross-validation: {scores} | mean = {np.mean(scores)}')
+                f'Accuracy with cross-validation: {accuracy_cv} | mean = {np.mean(accuracy_cv)}')
+            display(
+                f'F1-score with cross-validation: {f1_cv}')
 
             return {self.output: df_prediction_summary_cv}
 
@@ -284,3 +292,6 @@ class NaiveBayes(Component):
             depression_class = 4
 
         return depression_class
+    
+    
+

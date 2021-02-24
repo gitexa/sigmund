@@ -4,6 +4,7 @@ from typing import Dict, List
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA
+from sklearn.metrics import f1_score
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
@@ -68,6 +69,7 @@ class PCAReduction(Component):
 
         df_embedded = self.output.load_from(storage=created)
 
+        plt.figure()
         plt.scatter(
             df_embedded['dim1'],
             df_embedded['dim2'],

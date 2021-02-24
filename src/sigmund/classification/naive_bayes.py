@@ -3,8 +3,9 @@ from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from IPython.core.display import display
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, confusion_matrix
 from sklearn.model_selection import (StratifiedKFold, cross_val_predict,
                                      cross_val_score, train_test_split)
 from sklearn.naive_bayes import MultinomialNB
@@ -14,6 +15,7 @@ from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
+import matplotlib.pyplot as plt
 
 
 class NaiveBayes(Component):
@@ -292,6 +294,19 @@ class NaiveBayes(Component):
             depression_class = 4
 
         return depression_class
+
+    def visualise(self, created: Dict[Extension, pd.DataFrame],
+                queryable: Queryable):
+
+        df_embedded = self.output.load_from(storage=created)
+
+        plt.figure()
+        conf = confusion_matrix(y_pred=df_embedded['predicted'], y_true=df_embedded['is_depressed_group'])
+        fig, ax = plt.subplots(figsize=(10, 10))
+        sns.heatmap(conf, annot=True, fmt='d')
+        plt.ylabel('True Label')
+        plt.xlabel('Predicted Label')
+        plt.show()
     
     
 

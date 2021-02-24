@@ -15,12 +15,12 @@ from src.sigmund.extensions import (POS_DOCUMENT_F, POS_DOCUMENT_M, POS_DOCUMENT
 
 
 class PartOfSpeech(Component):
-    '''
+    """
     This component calculates part of speech features by using Spacy's POS component to
     extract the POS categories for each token in each layer (document,paragraph,sentence) and stores the number of
     occurrences of the POS categories in different columns.
     For the layers paragraph/sentence the mean of the occurrences per category over each document is stored.
-    '''
+    """
 
     def __init__(self, white_list=None, black_list=None):
         super(PartOfSpeech, self).__init__(

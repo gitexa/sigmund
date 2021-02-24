@@ -302,12 +302,12 @@ def liwc_parser_doc(tokens, parse, category):
 
 
 class Liwc_Inverse(Component):
-    '''
+    """
     This Component extracts for given LIWC categories the words per sentences which belongs to the categories
     and stores those words in a new columns besides the sentence containing the words.
     Rows not having any word in the sentences belonging to given categories are removed to filter redundant
     data which is not related with the given LIWC categories.
-    '''
+    """
     
     def __init__(
             self, category=[],

@@ -9,7 +9,7 @@ from src.pipelinelib.querying import Queryable
 
 class Adapter(Component):
     """
-    Creates a new entry within the lookup structure,
+    Creates a new entry within the lookup structure from an old one,
     in case DataFrames need to be copied to different registers
     for generic Components to work correctly
     """

@@ -13,11 +13,11 @@ from src.sigmund.extensions import (BASIC_STATISTICS_DOCUMENT_F,
 
 
 class BasicStatistics(Component):
-    '''
+    """
     This component computes basic statistics as features.
-    Examples there of are the word/paragraph count per document
+    Examples thereof are the word/paragraph count per document
     and the words per paragraph; each for couple and persons in the couple.
-    '''
+    """
 
     def __init__(self):
         super().__init__(BasicStatistics.__name__,

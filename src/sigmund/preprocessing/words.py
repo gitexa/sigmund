@@ -19,7 +19,7 @@ from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
 class Tokenizer(Component):
     """
     This component extracts tokens without punctuation from texts.
-    The tokens (beeing the words inside the text) are extracted for all the layers: document, paragraph, sentences.
+    The tokens (being the words inside the text) are extracted for all the layers: document, paragraph, sentences.
     The dataframe for each layer contains a list of the tokens.
     """
 

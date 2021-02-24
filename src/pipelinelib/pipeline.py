@@ -90,9 +90,6 @@ class Pipeline:
         print("=== Finished pipeline execution ===")
         return curr
 
-    # TODO: FIND A WAY TO SIMPLY PASS TEXT TO THE PIPELINE!
-    # def execute_on(self, text: str) -> dict:
-    #    pass
 
     def _is_compatible(self, component: Component):
         """

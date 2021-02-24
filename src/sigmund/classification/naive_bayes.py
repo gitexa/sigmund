@@ -183,6 +183,12 @@ class NaiveBayes(Component):
             f1_cv_variance_average = 0
 
             for i in range(self.number_cross_validations):
+                # shuffle features and labels for different folds
+                idx = np.random.permutation(features.index)
+                features = features.reindex(idx)
+                labels = labels.reindex(idx)
+
+                # calculate values
                 accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
                 f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
@@ -342,6 +348,12 @@ class NaiveBayes(Component):
             f1_cv_variance_average = 0
 
             for i in range(self.number_cross_validations):
+                # shuffle features and labels for different folds
+                idx = np.random.permutation(features.index)
+                features = features.reindex(idx)
+                labels = labels.reindex(idx)
+                
+                # calculate values
                 accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
                 f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
@@ -361,7 +373,7 @@ class NaiveBayes(Component):
             f1_cv_mean_average = np.mean(f1_cv_mean_list)
             f1_cv_variance_average = np.mean(f1_cv_variance_list)
 
-            # Print results
+            # Print results for normal prediction (does not make sense with little data)
             # display('Predictions on a random test set')
             # display(df_prediction_summary)
             # display(f'Accuracy on test set: {accuracy}')
@@ -420,7 +432,7 @@ class NaiveBayes(Component):
         conf = confusion_matrix(
             y_pred=df_embedded['predicted'],
             y_true=df_embedded['is_depressed_group'],
-            normalize='all')
+            normalize='true')
         fig, ax = plt.subplots(figsize=(10, 10))
         sns.heatmap(conf, annot=True)
         plt.ylabel('True Label')

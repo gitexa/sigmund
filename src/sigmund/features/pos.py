@@ -67,10 +67,6 @@ class PartOfSpeech(Component):
         pos_document_A_B = pos_document_A_B.to_numpy()
         pos_document_AB = pos_document_AB.to_numpy()
 
-        # Add is_depressed_group label
-        # document = queryable.execute(level=TextBody.DOCUMENT)
-        # is_depressed_group = document['is_depressed_group'].to_numpy()
-
         # Build Dataframe with columns: document_id, couple_id, is_depressed_group, pos_female, pos_male, pos_both
         values = np.concatenate(
             (np.arange(0, doc_count + 1, dtype=int),
@@ -122,53 +118,32 @@ class PartOfSpeech(Component):
 
         # Convert dictionary of POS (with counts) in a dataframe to separate columns and concatenate with the labels + NaN -> 0
         pos_sentence_m = pd.concat(
-            [pos_sentence_m.drop(['pos_sentence_m'],
-                                 axis=1),
-             pos_sentence_m['pos_sentence_m'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_sentence_m.drop(['pos_sentence_m'], axis=1),
+             pos_sentence_m['pos_sentence_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_sentence_f = pd.concat(
-            [pos_sentence_f.drop(['pos_sentence_f'],
-                                 axis=1),
-             pos_sentence_f['pos_sentence_f'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_sentence_f.drop(['pos_sentence_f'], axis=1),
+             pos_sentence_f['pos_sentence_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_paragraph_m = pd.concat(
-            [pos_paragraph_m.drop(['pos_paragraph_m'],
-                                  axis=1),
-             pos_paragraph_m['pos_paragraph_m'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_paragraph_m.drop(['pos_paragraph_m'], axis=1),
+             pos_paragraph_m['pos_paragraph_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_paragraph_f = pd.concat(
-            [pos_paragraph_f.drop(['pos_paragraph_f'],
-                                  axis=1),
-             pos_paragraph_f['pos_paragraph_f'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_paragraph_f.drop(['pos_paragraph_f'], axis=1),
+             pos_paragraph_f['pos_paragraph_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_document_m = pd.concat(
-            [pos_document_m.drop(['pos_document_m'],
-                                 axis=1),
-             pos_document_m['pos_document_m'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_document_m.drop(['pos_document_m'], axis=1),
+             pos_document_m['pos_document_m'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_document_f = pd.concat(
-            [pos_document_f.drop(['pos_document_f'],
-                                 axis=1),
-             pos_document_f['pos_document_f'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_document_f.drop(['pos_document_f'], axis=1),
+             pos_document_f['pos_document_f'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         pos_document_mf = pd.concat(
-            [pos_document_mf.drop(['pos_document_mf'],
-                                  axis=1),
-             pos_document_mf['pos_document_mf'].apply(pd.Series).fillna(0).sort_index(
-                 axis=1)],
-            axis=1)
+            [pos_document_mf.drop(['pos_document_mf'], axis=1),
+             pos_document_mf['pos_document_mf'].apply(pd.Series).fillna(0).sort_index(axis=1)], axis=1)
 
         # Keep only elements in the white list or remove elements in the black list
         if self.white_list != [] and self.black_list != []:

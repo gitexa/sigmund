@@ -75,7 +75,7 @@ POS_DOCUMENT_MF = Extension(name='pos_document_mf', kind=ExtensionKind.FEATURE)
 
 # Inverse LIWC Search
 LIWC_INVERSE = Extension(name='liwc_inverse', kind=ExtensionKind.FEATURE)
-
+LIWC_TREND = Extension(name='liwc_trend', kind=ExtensionKind.FEATURE)
 # Aggregated features
 FEATURE_VECTOR = Extension(name="feature_vector", kind=ExtensionKind.FEATURE)
 

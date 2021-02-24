@@ -36,7 +36,7 @@ class NaiveBayes(Component):
                  cross_validate: bool = False,
                  number_cross_validations: int = 1):
 
-        if evaluate_model == save_model:
+        if evaluate_model is True and save_model is True:
             raise Exception(
                 f"Invalid combination: evaluate_model={evaluate_model}, save_model={save_model}; only one can be True")
 

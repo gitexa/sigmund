@@ -56,7 +56,7 @@ The libraries and versions are specified in the Pipfile.
 * 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources). -> DONE
 * 04.02. Second "official" feedback round with supervisor -> DONE
 * 05.02. Summary of results -> DONE 
-* 25.02. Second milestone: Code and presentation due
+* 25.02. Second milestone: Code and presentation due -> DONE
 * 15.03. Third milestone: Report deadline 
 
 ### High Level Architecture Description 
@@ -78,10 +78,10 @@ Due to GDPR, the transcripts are not allowed to be uploaded to this repository.
 Classifying data from the loaded documents is implemented by three more classes:
 
 * [Pipeline](src/pipelinelib/pipeline.py#L13):
-Represents a pipeline for training a model.
+Represents a pipeline for training a classification model.
 
 * [Component](src/pipelinelib/component.py#L13): 
-Every step in a pipeline, be it preprocessing, feature extraction or classification, is implemented as a derivate of this abstract class.
+Every step in a pipeline, be it preprocessing, feature extraction or classification, is implemented as a derivative of this abstract class.
 
 * [Extension](src/pipelinelib/extension.py#L6): 
 The results of a Component instance are stored within a lookup structure for later Components to reuse.
@@ -107,9 +107,6 @@ Their inputs depend on applied preprocessing Components.
 Lastly, we use a classification model in order to categorize the transcripts as depressed or non-depressed.
 This is performed by combining select feature vectors from the aforementioned section and reporting a loss value.
 
-<!-- * Classification: we finally use a classification model in order to classify the transcripts as depressed or non-depressed using the feature vector and report a loss value. The models can also be specified as components in the corresponding subfolder.
- -->
-
 The structure of the repository is as follow:
 
 ```
@@ -124,24 +121,25 @@ The structure of the repository is as follow:
 ├── sigmund
 │   ├── classification
 │   │   ├── __init__.py
+│   │   ├── linear_discriminant_analysis.py
 │   │   ├── logistic_regression.py
+│   │   ├── merger.py
 │   │   ├── naive_bayes.py
-│   │   └── qda.py
+│   │   └── pca.py
 │   ├── extensions.py
 │   ├── features
 │   │   ├── agreement_score.py
+│   │   ├── basic_statistics.py
 │   │   ├── flesch_reading_ease.py
 │   │   ├── __init__.py
-│   │   ├── liwc_one_hot.py
+│   │   ├── liwc.py
 │   │   ├── pos.py
 │   │   ├── talk_turn.py
-│   │   └── tfidf.py
+│   │   ├── tfidf.py
+│   │   └── vocabulary_size.py
 │   ├── __init__.py
 │   └── preprocessing
-│       ├── cleaner.py
 │       ├── __init__.py
-│       ├── pos.py
-│       ├── syllables.py
 │       └── words.py
 ```
 
@@ -151,78 +149,22 @@ We furthermore provide a simple front-end for the Institute of Medical Psycholog
 
 ### Data Sources
 
-* 10 Transcripts of couple conversations as part of the "Enhancing Social Interaction in Depression" (SIDE) [study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6173246/).
-* The structure of the entire dataset of the SIDE study is described in detail in the project proposal, which can be found in the repository as well
+* 10 transcripts of conversations between couples as part of the "Enhancing Social Interaction in Depression" (SIDE) [study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6173246/).
+* The structure of the entire dataset of the SIDE study is described in detail in the project proposal, which can be found in the repository as well.
 * The format of the transcripts is as follows:
     * Docx format
     * Sequence of Speakers, separated by paragraph, starting with speaker label
     * Annotations of the transcriber are defined using parenthesis 
-    * In Our case, the depressive person is always female, however this is not necessary
-    * No further MetaData   
+    * In our case, the depressive person is always female, however this is not necessary
 
-### Basic Statistic
-At 16.12.2020 we had:
+### Basic Statistics
+
+As of 16.12.2020, our data consists of:
+
 * 10 transcripts (10 couples, 20 speakers; 5 pairs with depression, 5 pairs without depression; depressed partner always female)
-* word count ~ 1000 words per transcript
-* word count total ~ 13.000
-* utterances ~ 60 per transcript
-More detailed statics of the transcripts are included in the data_description.ipynb.
+* Word count: ~1000 words per transcript
+* Word count total: ~13.000
+* Utterances: ~60 per transcript
 
-### Pre-Processing
-We implemented minor preprocessing steps during the parsing phase using regex, namely:
-* Removal of annotations like "(spricht unverständlich)", or "[A: Ja]"
-* Whitespace normalisation
-
-Further preprocessing requires more intensive computing with modules that are not part of the standard library, and as such, have been made available under the `preprocessing` section of the sigmund project. 
-Examples of this are:
-* Stemming
-* Lemmatization
-* Stop-Word removal
-
-### Feature Engineering
-Our aim is to find features that allow to discriminate between text associated with depression and text not associated with depression.
-
-An overview with features derived from literature and own thoughts can be found [here](https://docs.google.com/spreadsheets/d/1z2vkU259P_5mGQCHb67HgyoEulPsd03LQv2z-SoTG4g/edit?usp=sharing).
-
-Currently implemented are:
-* Agreement Score:
-* Flesch Reading Ease:
-* LIWC One Hot:
-* Talk Turn: 
-
-### Classification
-Besides finding metrics to describe transcripts in terms of their textual depression-related content, we also classify the transcripts based on the found features. 
-* 2-class classification: depressed couple vs. non-depressed couple
-* regression: Hamilton depression score 
-
-<!--- #### Structural Features --->
-
-<!---##### Complexity of speech | Flesch reading-ease score
-Person suffering from MDD tend to structure their sentences with less complexity. Therefore the complexity of speech is an important feature to extract from the dialogs. For that, the Flesch-Reading-Ease needs to be calculated for each person. The score for the german language is calculated with the following formula,
-where higher values indicate less complex speech: --->
-
-<!---<img src="https://render.githubusercontent.com/render/math?math=\text{FRE}_\text{german} = 180 - \frac{\text{total words}}{\text{total sentences}} - (58.5 \times \frac{\text{total syllables}}{\text{total words}})">-->
-
-<!---##### Talking Turns
-To represent the talking turns each paragraph for each person is count together. 
-The ratio of both numbers describes the dialog distribution. Is the ratio closer to 1, the dialog is
-distributed more evenly between the partners.
-However shorter sentences indicating only an agreement or disagreement are not counted in, as they are 
-not really talking over the speech.--->
-
-<!---##### Agreement-Score
-The Agreement-Score shows how often the partners agree oder disagree to each other. 
-This feature is extracted by analizing the words in the first sentence of a paragraph. 
-If the words show disagreement like in: "nein, trotzdem, aber" the paragraph is counted as 1 disagreement. 
-At the end, the ratio of "Number of disagreements" to "Number of all paragraphs" is calculated.--->
-
-<!---#### Content Features--->
-
-<!---##### Part-of-Speech
-Assigns a tag to each token (e.g. noun, adjective, ...). We use Spacy's POS feature.--->
-
-<!---##### Term-frequency Inverse-document-frequency (TFIDF)
-To find the most important words, we use TFIDF.--->
-
-
+More detailed statistics of the transcripts are included in [feature_summary.ipynb](feature_summary.ipynb).
 

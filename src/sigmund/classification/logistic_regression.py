@@ -11,10 +11,12 @@ from sigmund.features.tfidf import TfIdf
 class LogRegrOnTfIdf(Component):
     """
     This component performs Logistic Regression on TfIdf. 
-    Logistic regression is used to classify the TfIdf data and to show the relationship between the variables by 
-    modeling the distribution of discrete variables.
-    """
     
+    Logistic regression is used to classify the TfIdf data and to show 
+    the relationship between the variables by modeling the distribution of 
+    discrete variables.
+    """
+
     LOG_REGR = Extension("log_regr")
 
     def __init__(self, x_train, y_train):

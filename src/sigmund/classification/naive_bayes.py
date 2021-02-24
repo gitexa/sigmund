@@ -1,23 +1,23 @@
-from functools import reduce
-from typing import Dict, List
 import os
 import pickle
+from functools import reduce
+from typing import Dict, List
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from IPython.core.display import display
-from sklearn.metrics import f1_score, confusion_matrix
+from sklearn.metrics import confusion_matrix, f1_score
 from sklearn.model_selection import (StratifiedKFold, cross_val_predict,
                                      cross_val_score, train_test_split)
 from sklearn.naive_bayes import MultinomialNB
 
 from src.pipelinelib.component import Component
-from src.pipelinelib.extension import Extension
+from src.pipelinelib.extension import Extension, ExtensionKind
 from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
-import matplotlib.pyplot as plt
 
 
 class NaiveBayes(Component):
@@ -129,7 +129,7 @@ class NaiveBayes(Component):
                     pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
                     with open(pkl_filename, 'wb') as file:
                         pickle.dump(classifier, file)
-            
+
             if self.evaluate_model:
 
                 # load model
@@ -155,7 +155,7 @@ class NaiveBayes(Component):
             # Using cross validation
             gt = df_feature_vector['is_depressed_group']
             cv = StratifiedKFold(n_splits=5, random_state=42)
-            
+
             prediction_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
             df_prediction_test_cv = pd.DataFrame(
                 data=prediction_test_cv, columns=['predicted'],
@@ -177,7 +177,6 @@ class NaiveBayes(Component):
             display(
                 f'F1-score with cross-validation: {f1_cv}')
 
-            return {self.output: df_prediction_summary_cv}
             return {self.output: df_prediction_summary_cv}
 
         # Hamilton Depression score classification
@@ -320,18 +319,20 @@ class NaiveBayes(Component):
         return depression_class
 
     def visualise(self, created: Dict[Extension, pd.DataFrame],
-                queryable: Queryable):
+                  queryable: Queryable):
 
         df_embedded = self.output.load_from(storage=created)
         display(df_embedded)
 
         plt.figure()
-        conf = confusion_matrix(y_pred=df_embedded['predicted'], y_true=df_embedded['is_depressed_group'], normalize='all')
+        conf = confusion_matrix(
+            y_pred=df_embedded['predicted'],
+            y_true=df_embedded['is_depressed_group'],
+            normalize='all')
         fig, ax = plt.subplots(figsize=(10, 10))
         sns.heatmap(conf, annot=True)
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
         plt.show()
-    
-    
 
+        return {Extension(name=f"{NaiveBayes.__name__} for {self.inputs}", kind=ExtensionKind.CLASSIFIER): fig}

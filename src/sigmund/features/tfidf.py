@@ -45,7 +45,7 @@ class FeatureTFIDF(Component):
 
         # Calculate TFIDF for masculin person
         df_lemmatized_document_pp_m = df_lemmatized_document_pp[
-            df_lemmatized_document_pp['gender'] == 'M'] #.reset_index(drop=True)
+            df_lemmatized_document_pp['gender'] == 'M']  # .reset_index(drop=True)
         df_tfidf_document_m = self.get_tfidf(df_lemmatized_document_pp_m)
 
         # Calculate TFIDF for feminin person

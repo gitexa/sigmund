@@ -103,3 +103,10 @@ CLASSIFICATION_NAIVE_BAYES_VOTING = Extension(
 CLASSIFICATION_NAIVE_BAYES_POS = Extension(
     name="nb_class_pos", kind=ExtensionKind.CLASSIFIER
 )
+
+
+# Plots
+LIWC_PLOT = Extension(name="LIWC plot", kind=ExtensionKind.FEATURE)
+POS_PLOT = Extension(name="POS plot", kind=ExtensionKind.FEATURE)
+TFIDF_PLOT = Extension(name="TFIDF plot", kind=ExtensionKind.FEATURE)
+LIWC_INVERSE_PLOT = Extension("LIWC Inverse plot", kind=ExtensionKind.FEATURE)

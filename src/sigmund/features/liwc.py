@@ -12,9 +12,10 @@ from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
 from src.sigmund.extensions import (LIWC_DOCUMENT_F, LIWC_DOCUMENT_M, LIWC_DOCUMENT_MF,
-                                    LIWC_INVERSE, LIWC_PARAGRAPH_F, LIWC_PARAGRAPH_M,
-                                    LIWC_PLOT, LIWC_SENTENCE_F, LIWC_SENTENCE_M,
-                                    LIWC_TREND, TOKENS_PARAGRAPH, TOKENS_SENTENCE)
+                                    LIWC_INVERSE, LIWC_INVERSE_PLOT, LIWC_PARAGRAPH_F,
+                                    LIWC_PARAGRAPH_M, LIWC_PLOT, LIWC_SENTENCE_F,
+                                    LIWC_SENTENCE_M, LIWC_TREND, TOKENS_PARAGRAPH,
+                                    TOKENS_SENTENCE)
 
 
 class Liwc(Component):
@@ -54,16 +55,20 @@ class Liwc(Component):
         # Get LIWC for sentence, paragraph
         liwc_sentence['tokens_sentence'] = liwc_sentence['tokens_sentence'].apply(
             liwc_parser, parse=parse, category=category_names)
-        liwc_sentence = liwc_sentence.rename(columns={'tokens_sentence': 'liwc_sentences'})
+        liwc_sentence = liwc_sentence.rename(
+            columns={'tokens_sentence': 'liwc_sentences'})
 
         liwc_paragraph['tokens_paragraph'] = liwc_paragraph['tokens_paragraph'].apply(
             liwc_parser, parse=parse, category=category_names)
-        liwc_paragraph = liwc_paragraph.rename(columns={'tokens_paragraph': 'liwc_paragraph'})
+        liwc_paragraph = liwc_paragraph.rename(
+            columns={'tokens_paragraph': 'liwc_paragraph'})
 
         # Get LIWC for document with gender split and joined
-        liwc_document_A_B = liwc_document.groupby(['document_id', 'gender'])['tokens_paragraph'].apply(list).apply(
+        liwc_document_A_B = liwc_document.groupby(
+            ['document_id', 'gender'])['tokens_paragraph'].apply(list).apply(
             liwc_parser_doc, parse=parse, category=category_names)
-        liwc_document_AB = liwc_document.groupby(['document_id'])['tokens_paragraph'].apply(list).apply(
+        liwc_document_AB = liwc_document.groupby(
+            ['document_id'])['tokens_paragraph'].apply(list).apply(
             liwc_parser_doc, parse=parse, category=category_names)
 
         liwc_document_A_B = liwc_document_A_B.to_numpy()
@@ -79,7 +84,10 @@ class Liwc(Component):
             axis=0).reshape(
             (5, 10)).transpose()
 
-        liwc_document = pd.DataFrame(values, columns=['document_id', 'couple_id', 'liwc_document_m', 'liwc_document_f', 'liwc_document_mf'])
+        liwc_document = pd.DataFrame(values,
+                                     columns=['document_id', 'couple_id',
+                                              'liwc_document_m', 'liwc_document_f',
+                                              'liwc_document_mf'])
         liwc_document['document_id'] = liwc_document['document_id'].astype(np.int64)
         liwc_document['couple_id'] = liwc_document['couple_id'].astype(np.int64)
 
@@ -87,13 +95,17 @@ class Liwc(Component):
         # Rename colums with respect to gender
         liwc_sentence_m = liwc_sentence[liwc_sentence['gender'] == 'M']
         liwc_sentence_f = liwc_sentence[liwc_sentence['gender'] == 'W']
-        liwc_sentence_m = liwc_sentence_m.rename(columns={'liwc_sentences': 'liwc_sentence_m'})
-        liwc_sentence_f = liwc_sentence_f.rename(columns={'liwc_sentences': 'liwc_sentence_f'})
+        liwc_sentence_m = liwc_sentence_m.rename(
+            columns={'liwc_sentences': 'liwc_sentence_m'})
+        liwc_sentence_f = liwc_sentence_f.rename(
+            columns={'liwc_sentences': 'liwc_sentence_f'})
 
         liwc_paragraph_m = liwc_paragraph[liwc_paragraph['gender'] == 'M']
         liwc_paragraph_f = liwc_paragraph[liwc_paragraph['gender'] == 'W']
-        liwc_paragraph_m = liwc_paragraph_m.rename(columns={'liwc_paragraph': 'liwc_paragraph_m'})
-        liwc_paragraph_f = liwc_paragraph_f.rename(columns={'liwc_paragraph': 'liwc_paragraph_f'})
+        liwc_paragraph_m = liwc_paragraph_m.rename(
+            columns={'liwc_paragraph': 'liwc_paragraph_m'})
+        liwc_paragraph_f = liwc_paragraph_f.rename(
+            columns={'liwc_paragraph': 'liwc_paragraph_f'})
 
         # Drop redundant columns
         liwc_sentence_m = liwc_sentence_m.drop(columns=['is_depressed_group'])
@@ -101,9 +113,12 @@ class Liwc(Component):
         liwc_paragraph_m = liwc_paragraph_m.drop(columns=['is_depressed_group'])
         liwc_paragraph_f = liwc_paragraph_f.drop(columns=['is_depressed_group'])
 
-        liwc_document_m = liwc_document.drop(columns=['liwc_document_f', 'liwc_document_mf'])
-        liwc_document_f = liwc_document.drop(columns=['liwc_document_m', 'liwc_document_mf'])
-        liwc_document_mf = liwc_document.drop(columns=['liwc_document_m', 'liwc_document_f'])
+        liwc_document_m = liwc_document.drop(
+            columns=['liwc_document_f', 'liwc_document_mf'])
+        liwc_document_f = liwc_document.drop(
+            columns=['liwc_document_m', 'liwc_document_mf'])
+        liwc_document_mf = liwc_document.drop(
+            columns=['liwc_document_m', 'liwc_document_f'])
 
         # Convert dictionary of LIWC (with counts) in a dataframe to separate columns and concatenate with the labels + NaN -> 0
         liwc_sentence_m = pd.concat(
@@ -207,6 +222,9 @@ class Liwc(Component):
         liwc_document_f['is_depressed_group'] = is_depressed_group_labels
         liwc_document_m['is_depressed_group'] = is_depressed_group_labels
 
+        plots = []
+        categories = []
+
         for cat in liwc_document_mf.drop(
                 columns=['couple_id', 'document_id', 'is_depressed_group']).columns.values:
 
@@ -247,6 +265,13 @@ class Liwc(Component):
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('LIWC - ' + cat + ' - all')
 
+            plots.append(fig)
+            categories.append(
+                Extension(
+                    name=f"LIWC - {cat}", kind=ExtensionKind.FEATURE))
+
+        return dict(zip(categories, plots))
+
 
 def liwc_parser(tokens, parse, category):
 
@@ -268,13 +293,9 @@ def liwc_parser_doc(tokens, parse, category):
     liwc_cats = Counter(category for token in res for category in parse(token))
     liwc_cats = dict(liwc_cats)
     liwc_cats = collections.OrderedDict(sorted(liwc_cats.items()))
-    return liwc_cats  # images = [
-#     Image.open(os.path.join(pipeline._plot_output, ext.filename() + ".png"))
-#     for ext, _ in features
-# ]
-# captions = [ext.name for ext in plots]
+    return liwc_cats
 
-# st.image(images, caption=captions, width=None, clear_figure=False)
+
 class Liwc_Inverse(Component):
     def __init__(
             self, category=[],
@@ -323,7 +344,7 @@ class Liwc_Inverse(Component):
         return {LIWC_INVERSE: liwc_inverse_sentence.reset_index(drop=True)}
 
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
-        display(LIWC_INVERSE.load_from(storage=created))
+        return {LIWC_INVERSE_PLOT: LIWC_INVERSE.load_from(storage=created)}
 
 
 def liwc_inverse_parser(tokens, parse, category, search):
@@ -373,6 +394,9 @@ class Liwc_Trend(Component):
         count = len(set(liwc_trend_paragraph.couple_id.tolist()))
         height, width = 5 * count, 20
 
+        plots = []
+        categories = []
+
         for cat in self.category:
             fig, axes = plt.subplots(count, 1, figsize=(width, height))
             i = 0
@@ -380,17 +404,29 @@ class Liwc_Trend(Component):
             for couple in set(liwc_trend_paragraph.couple_id.tolist()):
 
                 # Get LIWC scores for each paragraph for one couple
-                liwc_trend_couple = liwc_trend_paragraph.loc[liwc_trend_paragraph['couple_id'] == couple][cat].reset_index(drop=True)
+                liwc_trend_couple = liwc_trend_paragraph.loc[liwc_trend_paragraph['couple_id'] == couple][cat].reset_index(
+                    drop=True)
 
                 # Get is depressed information for the current couple
-                liwc_trend_is_depressed = set(liwc_trend_paragraph.loc[liwc_trend_paragraph['couple_id'] == couple]['is_depressed_group']).pop()
+                liwc_trend_is_depressed = set(
+                    liwc_trend_paragraph.loc
+                    [liwc_trend_paragraph['couple_id'] == couple]
+                    ['is_depressed_group']).pop()
                 liwc_trend_is_depressed = "(depressed)" if liwc_trend_is_depressed == True else "(non-depressed)"
 
                 # Plot trend
-                liwc_trend_couple.plot.line(ax=axes[i], xlabel='Paragraphs', ylabel='Count')
+                liwc_trend_couple.plot.line(
+                    ax=axes[i],
+                    xlabel='Paragraphs', ylabel='Count')
                 axes[i].set_ylim([0, 15])
-                axes[i].set_title('Couple-ID ' + str(couple) + ' ' + liwc_trend_is_depressed + ' - ' + cat + ' (wordcount) per paragraph')
+                axes[i].set_title('Couple-ID ' + str(couple) + ' ' +
+                                  liwc_trend_is_depressed + ' - ' + cat + ' (wordcount) per paragraph')
                 i += 1  # display for next couple
+
+                categories.append(cat)
+                plots.append(fig)
+
+        return dict(zip(categories, plots))
 
 
 def liwc_trend_parser(tokens, parse, category, search):

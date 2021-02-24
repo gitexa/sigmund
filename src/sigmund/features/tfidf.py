@@ -44,13 +44,14 @@ class FeatureTFIDF(Component):
             columns={'tokens_paragraph': 'tokens_document'})
 
         # Calculate TFIDF for masculin person
-        df_lemmatized_document_pp_m = df_lemmatized_document_pp.loc[
-            df_lemmatized_document_pp['gender'] == 'M'].reset_index(drop=True)
+        df_lemmatized_document_pp_m = df_lemmatized_document_pp[
+            df_lemmatized_document_pp['gender'] == 'M'] #.reset_index(drop=True)
         df_tfidf_document_m = self.get_tfidf(df_lemmatized_document_pp_m)
 
         # Calculate TFIDF for feminin person
         df_lemmatized_document_pp_f = df_lemmatized_document_pp.loc[
             df_lemmatized_document_pp['gender'] == 'W'].reset_index(drop=True)
+
         df_tfidf_document_f = self.get_tfidf(
             df_lemmatized_document_pp_f)
 
@@ -76,9 +77,8 @@ class FeatureTFIDF(Component):
         lines['tokens_document'] = lines['tokens_document'].apply(
             lambda row: ' '.join(token for token in row))
 
-        # get vectors with frequencies for the words in the lines; each line is considered a document;
-        # remove stop words with stop-word-list from scikit-learn; exclude words with frequency smaller 5
-        count_vectorizer = CountVectorizer(min_df=5)
+        # get vectors with frequencies for the words in the lines; each line is considered a document; exclude words with frequency smaller 5
+        count_vectorizer = CountVectorizer(min_df=2)
         count_vectorized = count_vectorizer.fit_transform(lines['tokens_document'])
 
         # transform the vector-frequency matrix in tfidf

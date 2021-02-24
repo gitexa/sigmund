@@ -160,7 +160,7 @@ def _extract_gender(text: str) -> str:
     without_prefix = re.sub("[AB]: ", "", text)
     without_prefix = re.sub("Er", "M", without_prefix)
     without_prefix = re.sub("Sie", "W", without_prefix)
-    return without_prefix
+    return without_prefix[0]
 
 
 def _split_speaker_text(text: str) -> Tuple[str, str]:

@@ -5,6 +5,7 @@ from typing import Dict, List
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from IPython.core.display import display
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 from spacy.tokens import Doc
@@ -19,7 +20,16 @@ from src.sigmund.extensions import (CLASSIFICATION_LINEAR_DISCRIMINANT_ANALYSIS,
 
 class LinearDiscriminantAnalysisClassifier(Component):
     """
-    Performs linear discriminant analysis on a feature vector 
+    Performs Linear Discriminant Analysis on a feature vector.
+
+    LDA is useful when attempting to lower the dimensionality of a
+    dataset in order to avoid overfitting.
+
+    This is performed by calculating a vector space for new features
+    using the information of classes in order to find optimal
+    (i.e. maximum) class separation.
+
+    LDA is viable for 2- and multi-class-classification.
     """
 
     def __init__(self, inputs: List[Extension] = None,

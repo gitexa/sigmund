@@ -6,18 +6,25 @@ The core module of this project, serves as *frontend*
 """
 import spacy
 import streamlit as st
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
+from src.backwards_compatibility.dialogue_parser import DialogueParser, preprocess
+
 
 nlp = spacy.load("de_core_news_md")
-
-from utils.dialogue_parser import DialogueParser, preprocess
-from docx import Document
-
-from utils.feature_annotator import add_features, reading_ease_german, tf_idf_svd
 
 st.markdown("# Welcome to Sigmund")
 
 uploaded_docx = st.file_uploader("Upload docx File here!")
+
+
+def tf_idf_svd(corpus, components):
+    svd = TruncatedSVD(n_components=components, algorithm="arpack")
+    vectorizer = TfidfVectorizer()
+    vectorizer.fit(corpus)
+    x = vectorizer.transform(corpus).toarray()
+    svd.fit(x)
+    print(svd.singular_values_)
 
 
 def f(words, sentences):
@@ -37,9 +44,7 @@ if uploaded_docx:
     st.markdown("## After Preprocessing")
     st.write(preprocessed_df)
 
-    
-
-    corpus =preprocessed_df["stopwords_removed"]
+    corpus = preprocessed_df["stopwords_removed"]
 
     tf_idf_svd(corpus, 10)
     # st.write(vectorizer.transform(concat_per_speaker[concat_per_speaker["Speaker"] == "A: "]["Text"]).toarray())
@@ -47,7 +52,6 @@ if uploaded_docx:
     # st.write(x.toarray())
 
     # speaker_b_tfidf = vectorizer.transform(concat_per_speaker[concat_per_speaker["Speaker"] == "B: "])
-
 
     # st.write(speaker_b_tfidf.toarray().shape)
 

@@ -15,8 +15,9 @@ _SPEAKER_TEXT_SPLIT_REGEX = re.compile(r"^(([AB])[:;] )(.*)")
 
 class Parser:
     """
-    Reads document(s) into pandas DataFrames so
-    that they can be queried on
+    Reads document(s) into pandas DataFrames so that they can be queried on.
+
+    Extracted data and their types can be reviewed in SCHEMA
     """
 
     DOCUMENT_ID = "document_id"
@@ -49,6 +50,10 @@ class Parser:
     }
 
     def __init__(self, nlp: Callable, metadata_path: str):
+        """
+        @param nlp: Spacy's natural language processing object, initialised with model for the corresponding language
+        @param metadata_path: path to a XLS containing all relevant metadata for the relevant transcripts.
+        """
         self.nlp = nlp
         self.supp_exts = (".docx", ".csv")
 
@@ -58,11 +63,23 @@ class Parser:
         self.frame = pd.DataFrame(columns=Parser.SCHEMA.keys()) \
             .astype(dtype=Parser.SCHEMA)
 
-    def read_from_files(self, paths: Iterable[str]):
+    def read_from_files(self, paths: Iterable[str]) -> None:
+        """
+        Loads multiple documents with the appropriate file format into the DataFrame.
+        Currently supported extensions are reviewable under self.supp_exts
+
+        @param paths: the paths to the files to be loaded
+        """
         for path in paths:
             self.update_frame(path)
 
-    def update_frame(self, path2file: str):
+    def update_frame(self, path2file: str) -> None:
+        """
+        Loads an document with the appropriate file format into the DataFrame.
+        Currently supported extensions are reviewable under self.supp_exts
+
+        @param path2file: the path to the file to be read
+        """
         if not any(path2file.endswith(ext) for ext in self.supp_exts):
             raise ValueError(
                 f"{Parser.__name__} supports reading from {', '.join(self.supp_exts)}")
@@ -81,7 +98,8 @@ class Parser:
             self.nlp.remove_pipe("sentencizer")
 
     def _read_docx_into_frame(self, path2file: str, couple_id_pat: str = re.compile(
-            r"Paar (\d+)")) -> None:
+        r"Paar (\d+)")) -> None:
+
         # Read document
         document = docx.Document(path2file)
         couple_id = next(re.finditer(couple_id_pat, path2file)).group(1)
@@ -151,8 +169,8 @@ class Parser:
 
     def _read_csv_into_frame(self, path2file: str) -> None:
         # Treat these all as new documents, which means offsetting by the amount of assigned document ids
-        csv_df = pd.read_csv(path2file, index_col=0)[
-            Parser.DOCUMENT_ID] + len(self.frame[Parser.DOCUMENT_ID].unique())
+        csv_df = pd.read_csv(path2file, index_col=0)
+        csv_df[Parser.DOCUMENT_ID] += len(self.frame[Parser.DOCUMENT_ID].unique())
         self.frame = pd.concat(self.frame, csv_df)
 
 
@@ -201,25 +219,52 @@ def _split_sentences(text: str, nlp) -> list:
 
 
 class Queryable:
+    """
+    Helper class to treat the cumulative DataFrame as a dataset, such as
+    enabling queries to be performed upon said dataset
+    """
     def __init__(self, dataframe: pd.DataFrame, nlp):
+        """
+        @param dataframe: the dataset to query
+        @param nlp: the NLP used to create the dataset, which can be used by Component implementations directly
+        """
         self.df = dataframe.copy(deep=True)
         self._nlp = nlp
         self.query = list()
 
     def nlp(self):
+        """
+        @return: Access to the NLP used to create the dataset
+        """
         return self._nlp
 
     @staticmethod
     def from_parser(parser: Parser) -> "Queryable":
+        """
+        @param parser: Parser used to load transcripts
+        @return: Queryable from the DataFrames collected by the Parser
+        """
         return Queryable(parser.frame, parser.nlp)
 
     def is_depressed(self, d: bool = True) -> "Queryable":
+        """
+        @param d: Select from the depressed if True, else from the non-depressed group
+        @return: The Queryable object
+        """
         return self._extend_query_with(f"{Parser.IS_DEPRESSED_GROUP} == {d}")
 
     def by_couple_id(self, couple_id: int) -> "Queryable":
+        """
+        @param couple_id: Select data associated with couples with the given ID
+        @return: The Queryable object
+        """
         return self._extend_query_with(f"{Parser.COUPLE_ID} == {couple_id}")
 
     def by_speaker(self, speaker: str) -> "Queryable":
+        """
+        @param speaker:  Select data associated with speaker A or speaker B
+        @return: The Queryable object
+        """
         assert speaker in "AB"
         return self._extend_query_with(f"{Parser.SPEAKER} == {speaker}")
 
@@ -227,6 +272,12 @@ class Queryable:
         return self._extend_query_with(query=query)
 
     def execute(self, level: TextBody, empty_query=True) -> pd.DataFrame:
+        """
+        Execute the query built with the is_* and by_* methods
+        @param level: Aggregate the queried dataframe on the desired corpus level
+        @param empty_query: Empty the query queue after building the DataFrame
+        @return: Dataframe containing the requested information and the desired corpus level
+        """
         # Join query together
         preced = map(lambda q: f"({q})", self.query)
         joined = " and ".join(preced)
@@ -247,6 +298,10 @@ class Queryable:
 
     @functools.lru_cache(maxsize=None)
     def _get_agged_frame(self, level: TextBody) -> pd.DataFrame:
+        """
+        @param level:
+        @return:
+        """
         # Do not modify dataframe read from document!
         if level == TextBody.DOCUMENT:
             return self.df.groupby([Parser.DOCUMENT_ID], as_index=False).agg(

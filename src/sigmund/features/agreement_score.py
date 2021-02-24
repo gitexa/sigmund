@@ -20,7 +20,13 @@ from src.sigmund.extensions import AGREEMENTSCORE, TOKENS_PARAGRAPH
 
 class AgreementScoreExtractor(Component):
     """
-    Extracts the Agreement-Score turn from text and stores these under AGREEMENTSCORE
+    Determines the Agreement Score of the dataset, scaled between 0 and 1.
+
+    The Agreement Score for a couple correlates to how often they agree
+    with each other.
+
+    A greater Agreement Score indicates less tokens that indicate disagreement,
+    such as negative emotions, or discrepancies, etc.
     """
 
     def __init__(self, dictionary_path="./data/German_LIWC2001_Dictionary.dic"):
@@ -74,7 +80,8 @@ class AgreementScoreExtractor(Component):
                             agr_score[0][x] += 1
                             break
 
-        # Calculate disagreement ratio with respect to total paragraph size and substract the result from 1 to get the agreementscore
+        # Calculate disagreement ratio with respect to total paragraph size
+        # and substract the result from 1 to get the agreementscore
         agr_score = 1 - np.around(agr_score[0] / agr_score[1], decimals=2)
 
         # Build Dataframe with columns: document_id, couple_id, is_depressed_group, AgreementScore

@@ -8,7 +8,7 @@ Copyright (C) - All Rights Reserved
 import collections
 
 
-class Liwc():
+class Liwc:
     """
     Class for the Linguistic Inquiry and Word Count (LIWC) dictionairy.
     The dictionary files are proprietary and can be obtained by liwc.net

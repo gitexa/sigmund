@@ -15,7 +15,14 @@ from src.sigmund.extensions import LEMMATIZED_DOCUMENT, TFIDF_DOCUMENT_MF, TFIDF
 
 class FeatureTFIDF(Component):
     """
-    This component provides features for classification by using sklearn tfidf
+    This component provides features for classification by using sklearn's TFIDF classes.
+
+    The TFIDF value corresponds to how much weight a word has within the given corpus.
+
+    Words that appear rarely or exceedingly commonly are deemed to have low relevance for
+    the dataset, and are given low scores.
+    Therefore words with higher scores are deemed to be more important, because they appear
+    a "meaningful" amount of times within the corpus.
     """
 
     def __init__(self, white_list=[], black_list=[]):

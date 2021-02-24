@@ -17,14 +17,15 @@ class Pipeline:
     Attributes
     ----------
     _queryable: Queryable
-        convenience class to query panda dataframes containing the text to train
+        convenience class to query DataFrames containing the text to train,
+        in addition to other metadata
 
     _components: List[Component]
         all pipeline steps that will be executed in storage order
 
     _extensions: Set[Extension]
-        a collection of extensions that the pipeline will create on
-        spacy's Doc instance.
+        a collection of extensions that the pipeline will create
+        within the lookup structure and associate DataFrames with
     """
 
     def __init__(self, queryable: Queryable, empty_pipeline=False):

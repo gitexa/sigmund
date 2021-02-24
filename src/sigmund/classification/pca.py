@@ -3,6 +3,7 @@ from typing import Dict, List
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from IPython.core.display import display
 from sklearn.decomposition import PCA
 from sklearn.metrics import f1_score
 
@@ -15,7 +16,16 @@ from src.sigmund.extensions import FEATURE_VECTOR, PCA_REDUCTION
 
 class PCAReduction(Component):
     """
-    Performs PCA on the feature dataframe 
+    Performs Principal Component Analysis on a feature vector.
+
+    PCA is useful when attempting to lower the dimensionality of a
+    dataset in order to avoid overfitting, similarly to LDA.
+
+    Unlike LDA, PCA is an unsupervised transformation technique,
+    i.e. it ignores class labels.
+
+    Instead, PCA calculates orthogonal vectors in an attempt to detect and
+    remove features that are related, and thereby redundant.
     """
 
     def __init__(self, inputs: List[Extension] = None,

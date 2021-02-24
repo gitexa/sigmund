@@ -18,11 +18,11 @@ class Component(metaclass=abc.ABCMeta):
     name: str
         name of this component
 
-    required_extensions: Iterable[str | Extension]
-        extensions (or their names) that this step depends on
+    required_extensions: Iterable[Extension]
+        extensions that this step depends on
 
-    creates_extensions:
-        extensions that this step will create, and shall not exist prior to this step's application
+    creates_extensions: Iterable[Extension]
+        extensions that this step will create that shall not exist prior to this step's application
     """
 
     def __init__(self, name: str, required_extensions: Iterable[Extension],
@@ -45,11 +45,13 @@ class Component(metaclass=abc.ABCMeta):
     def apply(self, storage: Dict[Extension, pd.DataFrame],
               queryable: Queryable) -> Dict[Extension, pd.DataFrame]:
         """
-        Implement this method in derivatives of this class to perform
-        a step in the analytics pipeline
+        Implement this method to perform a step in the analytics pipeline
         """
         pass
 
-    # @abc.abstractmethod
     def visualise(self, created: Dict[Extension, pd.DataFrame], queryable: Queryable):
+        """
+        Implement this method in order to visualise DataFrames created by the apply method
+        (see Component.apply)
+        """
         pass

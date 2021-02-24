@@ -16,7 +16,11 @@ from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
 
 class VocabularySize(Component):
     """
-    This component calculates the size of the used vocabulary
+    This component calculates the size of the used vocabulary.
+
+    Specifically, this component does so on a per-document basis
+    for males and females separately, and once again for the entire document
+    without consideration for the genders of the individuals.
     """
 
     def __init__(self):

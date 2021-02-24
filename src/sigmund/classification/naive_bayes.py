@@ -33,6 +33,7 @@ class NaiveBayes(Component):
                  save_model: bool = False,
                  model_path: str = './data/model/',
                  evaluate_model: bool = False,
+                 cross_validate: bool = False,
                  number_cross_validations: int = 1):
 
         self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
@@ -43,6 +44,7 @@ class NaiveBayes(Component):
         self.model_path = model_path
         self.evaluate_model = evaluate_model
         self.number_cross_validations = number_cross_validations
+        self.cross_validate = cross_validate
 
         super().__init__(
             f"{NaiveBayes.__name__} for {self.inputs}",
@@ -58,8 +60,9 @@ class NaiveBayes(Component):
         # if voting==True, feature vector consists of previous classifier outputs
         # if hamilton==True, 4-class prediction on Hamilton depression scale is performed, otherwise binary classification (depressed vs non-depressed is performed)
 
-        # Binary classification
+        # Binary classification (is depressed vs. not-depressed couple)
         if not self.hamilton:
+
             # Construct feature vector for non-voting-classifier
             if not self.voting:
                 if not len(self.inputs):
@@ -107,131 +110,143 @@ class NaiveBayes(Component):
                         metadata[['couple_id', 'is_depressed_group']],
                         df_feature_vector, on='couple_id', how='inner')
 
-            # Display feature vector
+            # Display and partition the feature vector
             display(df_feature_vector)
-
             couple_id = df_feature_vector["couple_id"]
             labels = df_feature_vector["is_depressed_group"].astype(int)
             features = df_feature_vector[df_feature_vector.columns.difference(
                 ["couple_id", "is_depressed_group"], sort=False)]
 
-            # Using "normal" validation
-            features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-                features, labels, features.index.values, test_size=0.50)
+            # With "normal" validation = without cross-validation (with the possibility to store the model)
+            if not self.cross_validate:
 
-            # if training_mode
-            if not self.evaluate_model:
+                # construct train and test set
+                features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
+                    features, labels, features.index.values, test_size=0.50, random_state=42)
 
-                # fit classifier
-                classifier = MultinomialNB()
-                classifier.fit(features_train, label_train)
+                # if training_mode
+                if not self.evaluate_model:
 
-                # if save model (CAVE: overwrites model for now)
-                if self.save_model:
-                    if not os.path.exists(self.model_path):
-                        os.mkdir(self.model_path)
+                    # fit classifier
+                    classifier = MultinomialNB()
+                    classifier.fit(features_train, label_train)
 
-                    pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
-                    with open(pkl_filename, 'wb') as file:
-                        pickle.dump(classifier, file)
+                    # if save model (CAVE: overwrites model for now)
+                    if self.save_model:
+                        if not os.path.exists(self.model_path):
+                            os.mkdir(self.model_path)
 
-            if self.evaluate_model:
+                        pkl_filename = os.path.join(
+                            self.model_path, "naive_bayes_binary.pkl")
+                        with open(pkl_filename, 'wb') as file:
+                            pickle.dump(classifier, file)
 
-                # load model
-                pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
-                with open(pkl_filename, 'rb') as file:
-                    classifier = pickle.load(file)
+                # if evaluation mode
+                if self.evaluate_model:
 
-            # predict
-            predicted_test = classifier.predict(features_test)
-            df_prediction_test_cv = pd.DataFrame(
-                data=predicted_test, columns=['predicted'],
-                index=label_test.index.copy())
+                    # load model
+                    pkl_filename = os.path.join(
+                        self.model_path, "naive_bayes_binary.pkl")
+                    with open(pkl_filename, 'rb') as file:
+                        classifier = pickle.load(file)
 
-            # evaluate classifier
-            accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+                # predict
+                predicted_test = classifier.predict(features_test)
+                df_prediction_test = pd.DataFrame(
+                    data=predicted_test, columns=['predicted'],
+                    index=label_test.index.copy())
 
-            # aggregate results and build dataframe
-            couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
-            gt_test = df_feature_vector.iloc[indices_test, :]['is_depressed_group']
-            df_prediction_summary = pd.concat(
-                [couple_id_test, label_test, df_prediction_test_cv], axis=1)
+                # evaluate classifier
+                accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+
+                # aggregate results and build dataframe
+                couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+                df_prediction_summary = pd.concat(
+                    [couple_id_test, label_test, df_prediction_test], axis=1)
+
+                # Print results
+                display(
+                    'Predictions on a random test set (without stratified sampling, unsuited for small sets)')
+                display(df_prediction_summary)
+                display(f'Accuracy on test set: {accuracy}')
 
             # Using cross validation
-            gt = df_feature_vector['is_depressed_group']
-            cv = StratifiedKFold(n_splits=5, random_state=42)
+            else:
+                gt = df_feature_vector['is_depressed_group']
+                cv = StratifiedKFold(n_splits=5, random_state=42)
 
-            prediction_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
-            df_prediction_test_cv = pd.DataFrame(
-                data=prediction_test_cv, columns=['predicted'],
-                index=labels.index.copy())
-            df_prediction_summary_cv = pd.concat(
-                [couple_id, labels, df_prediction_test_cv], axis=1)
+                classifier = MultinomialNB()
 
-            # multiple times cross-validation with different splits for more accurate estimation
-            accuracy_cv_list = []
-            accuracy_cv_mean_list = []
-            accuracy_cv_variance_list = []
-            accuracy_cv_max = 0
-            accuracy_cv_mean_average = 0
-            accuracy_cv_variance_average = 0
-            f1_cv_list = []
-            f1_cv_mean_list = []
-            f1_cv_variance_list = []
-            f1_cv_max = 0
-            f1_cv_mean_average = 0
-            f1_cv_variance_average = 0
+                prediction_test_cv = cross_val_predict(
+                    classifier, features, labels, cv=cv)
+                df_prediction_test_cv = pd.DataFrame(
+                    data=prediction_test_cv, columns=['predicted'],
+                    index=labels.index.copy())
 
-            for i in range(self.number_cross_validations):
-                # shuffle features and labels for different folds
-                idx = np.random.permutation(features.index)
-                features = features.reindex(idx)
-                labels = labels.reindex(idx)
+                df_prediction_summary = pd.concat(
+                    [couple_id, labels, df_prediction_test_cv], axis=1)
 
-                # calculate values
-                accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
-                f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+                # multiple times cross-validation with different splits for more accurate estimation
+                accuracy_cv_list = []
+                accuracy_cv_mean_list = []
+                accuracy_cv_variance_list = []
+                accuracy_cv_max = 0
+                accuracy_cv_mean_average = 0
+                accuracy_cv_variance_average = 0
+                f1_cv_list = []
+                f1_cv_mean_list = []
+                f1_cv_variance_list = []
+                f1_cv_max = 0
+                f1_cv_mean_average = 0
+                f1_cv_variance_average = 0
 
-                accuracy_cv_list.append(accuracy_cv)
-                accuracy_cv_mean_list.append(np.mean(accuracy_cv))
-                accuracy_cv_variance_list.append(np.var(accuracy_cv))
+                for i in range(self.number_cross_validations):
+                    # shuffle features and labels for different folds
+                    idx = np.random.permutation(features.index)
+                    features = features.reindex(idx)
+                    labels = labels.reindex(idx)
 
-                f1_cv_list.append(f1_cv)
-                f1_cv_mean_list.append(np.mean(f1_cv))
-                f1_cv_variance_list.append(np.var(f1_cv))
+                    # calculate values
+                    accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+                    f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
-            accuracy_cv_max = np.max(accuracy_cv_mean_list)
-            accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
-            accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
+                    accuracy_cv_list.append(accuracy_cv)
+                    accuracy_cv_mean_list.append(np.mean(accuracy_cv))
+                    accuracy_cv_variance_list.append(np.var(accuracy_cv))
 
-            f1_cv_max = np.max(f1_cv_mean_list)
-            f1_cv_mean_average = np.mean(f1_cv_mean_list)
-            f1_cv_variance_average = np.mean(f1_cv_variance_list)
+                    f1_cv_list.append(f1_cv)
+                    f1_cv_mean_list.append(np.mean(f1_cv))
+                    f1_cv_variance_list.append(np.var(f1_cv))
 
-            # Print results
-            #display('Predictions on a random test set')
-            # display(df_prediction_summary)
-            #display(f'Accuracy on test set: {accuracy}')
+                accuracy_cv_max = np.max(accuracy_cv_mean_list)
+                accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
+                accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
 
-            display('--' * 20)
-            display('Prediction from one cross-validation')
-            display(df_prediction_summary_cv)
-            display(f'Scores from {self.number_cross_validations} cross-validation(s)')
-            display('--' * 20)
-            display(
-                f'Accuracy: {accuracy_cv_list}')
-            display(f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
-            display(
-                f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
-            display('--' * 20)
-            display(f'F1-score: {f1_cv_list}')
-            display(
-                f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
-            display(
-                f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
-            display('--' * 20)
+                f1_cv_max = np.max(f1_cv_mean_list)
+                f1_cv_mean_average = np.mean(f1_cv_mean_list)
+                f1_cv_variance_average = np.mean(f1_cv_variance_list)
 
-            return {self.output: df_prediction_summary_cv}
+                display('--' * 20)
+                display('Prediction from one cross-validation')
+                display(df_prediction_summary)
+                display(
+                    f'Scores from {self.number_cross_validations} cross-validation(s)')
+                display('--' * 20)
+                display(
+                    f'Accuracy: {accuracy_cv_list}')
+                display(
+                    f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
+                display(
+                    f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
+                display('--' * 20)
+                display(f'F1-score: {f1_cv_list}')
+                display(
+                    f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
+                display(
+                    f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
+                display('--' * 20)
+
+            return {self.output: df_prediction_summary}
 
         # Hamilton Depression score classification
         else:
@@ -291,113 +306,143 @@ class NaiveBayes(Component):
                             metadata_hrs[['couple_id', 'hamilton_score']],
                             df_feature_vector, on='couple_id', how='inner')
 
-            # Display feature vector
+            # Display and partition the feature vector
             display(df_feature_vector)
-
             couple_id = df_feature_vector["couple_id"]
             labels = df_feature_vector["hamilton_score"].astype(int)
             features = df_feature_vector[df_feature_vector.columns.difference(
                 ["couple_id", "hamilton_score"], sort=False)]
 
-            # Using "normal" validation
-            features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-                features, labels, features.index.values, test_size=0.50)
+            # With "normal" validation = without cross-validation (with the possibility to store the model)
+            if not self.cross_validate:
 
-            # fit classifier
-            classifier = MultinomialNB()
-            classifier.fit(features_train, label_train)
+                # construct the train and test set for hamilton
+                features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
+                    features, labels, features.index.values, test_size=0.50, random_state=42)
 
-            # predict
-            predicted_test = classifier.predict(features_test)
-            df_prediction_test_cv = pd.DataFrame(
-                data=predicted_test, columns=['predicted'],
-                index=label_test.index.copy())
+                # if training_mode
+                if not self.evaluate_model:
 
-            # evaluate classifier
-            accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+                    # fit classifier
+                    classifier = MultinomialNB()
+                    classifier.fit(features_train, label_train)
 
-            # aggregate results and build dataframe
-            couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
-            gt_test = df_feature_vector.iloc[indices_test, :]['hamilton_score']
-            df_prediction_summary = pd.concat(
-                [couple_id_test, label_test, df_prediction_test_cv], axis=1)
+                    # if save model (CAVE: overwrites model for now)
+                    if self.save_model:
+                        if not os.path.exists(self.model_path):
+                            os.mkdir(self.model_path)
+
+                        pkl_filename = os.path.join(
+                            self.model_path, "naive_bayes_hamilton.pkl")
+                        with open(pkl_filename, 'wb') as file:
+                            pickle.dump(classifier, file)
+
+                # if evaluation mode
+                if self.evaluate_model:
+
+                    # load model
+                    pkl_filename = os.path.join(
+                        self.model_path, "naive_bayes_hamilton.pkl")
+                    with open(pkl_filename, 'rb') as file:
+                        classifier = pickle.load(file)
+
+                # predict
+                predicted_test = classifier.predict(features_test)
+                df_prediction_test = pd.DataFrame(
+                    data=predicted_test, columns=['predicted'],
+                    index=label_test.index.copy())
+
+                # evaluate classifier
+                accuracy = ((predicted_test == label_test).sum()) / len(label_test)
+
+                # aggregate results and build dataframe
+                couple_id_test = df_feature_vector.iloc[indices_test, :]['couple_id']
+                df_prediction_summary = pd.concat(
+                    [couple_id_test, label_test, df_prediction_test], axis=1)
+
+                # Print results
+                display(
+                    'Predictions on a random test set (without stratified sampling, unsuited for small sets)')
+                display(df_prediction_summary)
+                display(f'Accuracy on test set: {accuracy}')
 
             # Using cross validation
-            gt = df_feature_vector['hamilton_score']
-            cv = StratifiedKFold(n_splits=5, random_state=42)
+            else:
 
-            prediction_test_cv = cross_val_predict(classifier, features, labels, cv=cv)
-            df_prediction_test_cv = pd.DataFrame(
-                data=prediction_test_cv, columns=['predicted'],
-                index=labels.index.copy())
-            df_prediction_summary_cv = pd.concat(
-                [couple_id, labels, df_prediction_test_cv], axis=1)
+                gt = df_feature_vector['hamilton_score']
+                cv = StratifiedKFold(n_splits=5, random_state=42)
 
-            # multiple times cross-validation with different splits for more accurate estimation
-            accuracy_cv_list = []
-            accuracy_cv_mean_list = []
-            accuracy_cv_variance_list = []
-            accuracy_cv_max = 0
-            accuracy_cv_mean_average = 0
-            accuracy_cv_variance_average = 0
-            f1_cv_list = []
-            f1_cv_mean_list = []
-            f1_cv_variance_list = []
-            f1_cv_max = 0
-            f1_cv_mean_average = 0
-            f1_cv_variance_average = 0
+                classifier = MultinomialNB()
 
-            for i in range(self.number_cross_validations):
-                # shuffle features and labels for different folds
-                idx = np.random.permutation(features.index)
-                features = features.reindex(idx)
-                labels = labels.reindex(idx)
-                
-                # calculate values
-                accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
-                f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+                prediction_test_cv = cross_val_predict(
+                    classifier, features, labels, cv=cv)
+                df_prediction_test_cv = pd.DataFrame(
+                    data=prediction_test_cv, columns=['predicted'],
+                    index=labels.index.copy())
+                df_prediction_summary = pd.concat(
+                    [couple_id, labels, df_prediction_test_cv], axis=1)
 
-                accuracy_cv_list.append(accuracy_cv)
-                accuracy_cv_mean_list.append(np.mean(accuracy_cv))
-                accuracy_cv_variance_list.append(np.var(accuracy_cv))
+                # multiple times cross-validation with different splits for more accurate estimation
+                accuracy_cv_list = []
+                accuracy_cv_mean_list = []
+                accuracy_cv_variance_list = []
+                accuracy_cv_max = 0
+                accuracy_cv_mean_average = 0
+                accuracy_cv_variance_average = 0
+                f1_cv_list = []
+                f1_cv_mean_list = []
+                f1_cv_variance_list = []
+                f1_cv_max = 0
+                f1_cv_mean_average = 0
+                f1_cv_variance_average = 0
 
-                f1_cv_list.append(f1_cv)
-                f1_cv_mean_list.append(np.mean(f1_cv))
-                f1_cv_variance_list.append(np.var(f1_cv))
+                for i in range(self.number_cross_validations):
+                    # shuffle features and labels for different folds
+                    idx = np.random.permutation(features.index)
+                    features = features.reindex(idx)
+                    labels = labels.reindex(idx)
 
-            accuracy_cv_max = np.max(accuracy_cv_mean_list)
-            accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
-            accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
+                    # calculate values
+                    accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+                    f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
 
-            f1_cv_max = np.max(f1_cv_mean_list)
-            f1_cv_mean_average = np.mean(f1_cv_mean_list)
-            f1_cv_variance_average = np.mean(f1_cv_variance_list)
+                    accuracy_cv_list.append(accuracy_cv)
+                    accuracy_cv_mean_list.append(np.mean(accuracy_cv))
+                    accuracy_cv_variance_list.append(np.var(accuracy_cv))
 
-            # Print results for normal prediction (does not make sense with little data)
-            # display('Predictions on a random test set')
-            # display(df_prediction_summary)
-            # display(f'Accuracy on test set: {accuracy}')
+                    f1_cv_list.append(f1_cv)
+                    f1_cv_mean_list.append(np.mean(f1_cv))
+                    f1_cv_variance_list.append(np.var(f1_cv))
 
-            display('--' * 20)
-            display('Prediction from one cross-validation')
-            display(df_prediction_summary_cv)
-            display(f'Scores from {self.number_cross_validations} cross-validation(s)')
-            display('--' * 20)
-            display(
-                f'Accuracy: {accuracy_cv_list}')
-            display(
-                f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
-            display(
-                f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
-            display('--' * 20)
-            display(f'F1-score: {f1_cv_list}')
-            display(
-                f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
-            display(
-                f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
-            display('--' * 20)
+                accuracy_cv_max = np.max(accuracy_cv_mean_list)
+                accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
+                accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
 
-            return {self.output: df_prediction_summary_cv}
+                f1_cv_max = np.max(f1_cv_mean_list)
+                f1_cv_mean_average = np.mean(f1_cv_mean_list)
+                f1_cv_variance_average = np.mean(f1_cv_variance_list)
+
+                display('--' * 20)
+                display('Prediction from one cross-validation')
+                display(df_prediction_summary)
+                display(
+                    f'Scores from {self.number_cross_validations} cross-validation(s)')
+                display('--' * 20)
+                display(
+                    f'Accuracy: {accuracy_cv_list}')
+                display(
+                    f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
+                display(
+                    f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
+                display('--' * 20)
+                display(f'F1-score: {f1_cv_list}')
+                display(
+                    f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
+                display(
+                    f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
+                display('--' * 20)
+
+                return {self.output: df_prediction_summary}
 
     def __merge_frame(
             self, left: pd.DataFrame, right_ext: Extension, right: pd.DataFrame):

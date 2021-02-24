@@ -26,6 +26,8 @@ src/data/*
 all_preprocessed.csv
 all_preprocessed_old.csv
 data/transcripts/*
+data/model/*
+data/test_transcripts/*
 
 TODOs
 # LDA stuff

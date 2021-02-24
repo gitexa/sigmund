@@ -94,14 +94,18 @@ classifications = [(ext, plot) for ext, plot in plots.items()
 st.write("Found", len(features), "features")
 st.write("Found", len(classifications), "classifications")
 
-st.markdown("## Basic Statistics")
+st.markdown("# Basic Statistics")
 st.subheader("Couple")
-st.image(Image.open(r"images/feature-Basic Statistics Couple Plot.png"), width=None, clear_figure=False)
+st.image(
+    Image.open(r"images/feature-Basic Statistics Couple Plot.png"),
+    width=None, clear_figure=False)
 
 st.subheader("Per person in couple")
-st.image(Image.open(r"images/feature-Basic Statistics Person per Couple Plot.png"), width=None, clear_figure=False)
+st.image(
+    Image.open(r"images/feature-Basic Statistics Person per Couple Plot.png"),
+    width=None, clear_figure=False)
 
-st.markdown("## Features")
+st.markdown("# Features")
 
 feature_paths = [
     # TFIDF
@@ -124,7 +128,8 @@ title_pat = re.compile(r"(feature|classification)-(\w*) - (\w*).png")
 
 for path, image in zip(feature_paths, images):
     feature, category = title_pat.match(path).group(2, 3)
-    st.subheader(f"{feature}: {category}")
+    st.markdown(f"## {feature}")
+    st.subheader(f"{category}")
     st.image(image, width=None, clear_figure=False)
 
 
@@ -133,9 +138,11 @@ st.markdown("## LIWC Inverse: " + ', '.join(df_liwc_inverse.columns.to_list()[7:
 st.write(df_liwc_inverse)
 
 st.subheader("LIWC Trend: Posemo")
-st.image(Image.open(r"images/feature-LIWC Trend - Posemo.png"), width=None, clear_figure=False)
+st.image(
+    Image.open(r"images/feature-LIWC Trend - Posemo.png"),
+    width=None, clear_figure=False)
 
-st.markdown("## Classification")
+st.markdown("# Classification")
 
 images = [
     Image.open(os.path.join(pipeline._plot_output, ext.filename() + ".png"))
@@ -144,5 +151,5 @@ images = [
 captions = [ext.name for ext, _ in classifications]
 
 for caption, image in zip(captions, images):
-    st.subheader(caption)
+    st.markdown(f"## {caption}")
     st.image(image, width=None, clear_figure=False)

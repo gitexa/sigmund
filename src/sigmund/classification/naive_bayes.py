@@ -126,6 +126,9 @@ class NaiveBayes(Component):
 
                 # if save model (CAVE: overwrites model for now)
                 if self.save_model:
+                    if not os.path.exists(self.model_path):
+                        os.mkdir(self.model_path)
+
                     pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
                     with open(pkl_filename, 'wb') as file:
                         pickle.dump(classifier, file)

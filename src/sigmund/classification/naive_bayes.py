@@ -115,7 +115,7 @@ class NaiveBayes(Component):
 
             # Using "normal" validation
             features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-                features, labels, features.index.values, test_size=0.50, random_state=42)
+                features, labels, features.index.values, test_size=0.50)
 
             # if training_mode
             if not self.evaluate_model:
@@ -250,7 +250,7 @@ class NaiveBayes(Component):
 
             # Using "normal" validation
             features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
-                features, labels, features.index.values, test_size=0.50, random_state=42)
+                features, labels, features.index.values, test_size=0.50)
 
             # fit classifier
             classifier = MultinomialNB()

@@ -36,6 +36,10 @@ class NaiveBayes(Component):
                  cross_validate: bool = False,
                  number_cross_validations: int = 1):
 
+        if evaluate_model == save_model:
+            raise Exception(
+                f"Invalid combination: evaluate_model={evaluate_model}, save_model={save_model}; only one can be True")
+
         self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
         self.output: Extension = output or CLASSIFICATION_NAIVE_BAYES
         self.voting = voting

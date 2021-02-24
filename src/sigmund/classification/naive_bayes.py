@@ -32,7 +32,8 @@ class NaiveBayes(Component):
                  hamilton: bool = False,
                  save_model: bool = False,
                  model_path: str = './data/model/',
-                 evaluate_model: bool = False):
+                 evaluate_model: bool = False,
+                 number_cross_validations: int = 1):
 
         self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
         self.output: Extension = output or CLASSIFICATION_NAIVE_BAYES
@@ -41,6 +42,7 @@ class NaiveBayes(Component):
         self.save_model = save_model
         self.model_path = model_path
         self.evaluate_model = evaluate_model
+        self.number_cross_validations = number_cross_validations
 
         super().__init__(
             f"{NaiveBayes.__name__} for {self.inputs}",
@@ -166,19 +168,62 @@ class NaiveBayes(Component):
             df_prediction_summary_cv = pd.concat(
                 [couple_id, labels, df_prediction_test_cv], axis=1)
 
-            accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
-            f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+            # multiple times cross-validation with different splits for more accurate estimation
+            accuracy_cv_list = []
+            accuracy_cv_mean_list = []
+            accuracy_cv_variance_list = []
+            accuracy_cv_max = 0
+            accuracy_cv_mean_average = 0
+            accuracy_cv_variance_average = 0
+            f1_cv_list = []
+            f1_cv_mean_list = []
+            f1_cv_variance_list = []
+            f1_cv_max = 0
+            f1_cv_mean_average = 0
+            f1_cv_variance_average = 0
+
+            for i in range(self.number_cross_validations):
+                accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+                f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+
+                accuracy_cv_list.append(accuracy_cv)
+                accuracy_cv_mean_list.append(np.mean(accuracy_cv))
+                accuracy_cv_variance_list.append(np.var(accuracy_cv))
+
+                f1_cv_list.append(f1_cv)
+                f1_cv_mean_list.append(np.mean(f1_cv))
+                f1_cv_variance_list.append(np.var(f1_cv))
+
+            accuracy_cv_max = np.max(accuracy_cv_mean_list)
+            accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
+            accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
+
+            f1_cv_max = np.max(f1_cv_mean_list)
+            f1_cv_mean_average = np.mean(f1_cv_mean_list)
+            f1_cv_variance_average = np.mean(f1_cv_variance_list)
 
             # Print results
-            display('Predictions on the test set')
-            display(df_prediction_summary)
-            display('Cross-Validation')
+            #display('Predictions on a random test set')
+            # display(df_prediction_summary)
+            #display(f'Accuracy on test set: {accuracy}')
+
+            display('--' * 20)
+            display('Prediction from one cross-validation')
             display(df_prediction_summary_cv)
-            display(f'Accuracy on test set: {accuracy}')
+            display(f'Scores from {self.number_cross_validations} cross-validation(s)')
+            display('--' * 20)
             display(
-                f'Accuracy with cross-validation: {accuracy_cv} | mean = {np.mean(accuracy_cv)}')
+                f'Accuracy: {accuracy_cv_list}')
+            display(f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
             display(
-                f'F1-score with cross-validation: {f1_cv}')
+                f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
+            display('--' * 20)
+            display(f'F1-score: {f1_cv_list}')
+            display(
+                f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
+            display(
+                f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
+            display('--' * 20)
 
             return {self.output: df_prediction_summary_cv}
 
@@ -282,19 +327,63 @@ class NaiveBayes(Component):
             df_prediction_summary_cv = pd.concat(
                 [couple_id, labels, df_prediction_test_cv], axis=1)
 
-            accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
-            f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+            # multiple times cross-validation with different splits for more accurate estimation
+            accuracy_cv_list = []
+            accuracy_cv_mean_list = []
+            accuracy_cv_variance_list = []
+            accuracy_cv_max = 0
+            accuracy_cv_mean_average = 0
+            accuracy_cv_variance_average = 0
+            f1_cv_list = []
+            f1_cv_mean_list = []
+            f1_cv_variance_list = []
+            f1_cv_max = 0
+            f1_cv_mean_average = 0
+            f1_cv_variance_average = 0
+
+            for i in range(self.number_cross_validations):
+                accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
+                f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
+
+                accuracy_cv_list.append(accuracy_cv)
+                accuracy_cv_mean_list.append(np.mean(accuracy_cv))
+                accuracy_cv_variance_list.append(np.var(accuracy_cv))
+
+                f1_cv_list.append(f1_cv)
+                f1_cv_mean_list.append(np.mean(f1_cv))
+                f1_cv_variance_list.append(np.var(f1_cv))
+
+            accuracy_cv_max = np.max(accuracy_cv_mean_list)
+            accuracy_cv_mean_average = np.mean(accuracy_cv_mean_list)
+            accuracy_cv_variance_average = np.mean(accuracy_cv_variance_list)
+
+            f1_cv_max = np.max(f1_cv_mean_list)
+            f1_cv_mean_average = np.mean(f1_cv_mean_list)
+            f1_cv_variance_average = np.mean(f1_cv_variance_list)
 
             # Print results
-            display('Predictions on the test set')
-            display(df_prediction_summary)
-            display('Cross-Validation')
+            # display('Predictions on a random test set')
+            # display(df_prediction_summary)
+            # display(f'Accuracy on test set: {accuracy}')
+
+            display('--' * 20)
+            display('Prediction from one cross-validation')
             display(df_prediction_summary_cv)
-            display(f'Accuracy on test set: {accuracy}')
+            display(f'Scores from {self.number_cross_validations} cross-validation(s)')
+            display('--' * 20)
             display(
-                f'Accuracy with cross-validation: {accuracy_cv} | mean = {np.mean(accuracy_cv)}')
+                f'Accuracy: {accuracy_cv_list}')
             display(
-                f'F1-score with cross-validation: {f1_cv}')
+                f'Mean of each: {accuracy_cv_mean_list} | Var of each: {accuracy_cv_variance_list}')
+            display(
+                f'Overall max: {accuracy_cv_max} | Overall mean: {accuracy_cv_mean_average} | Overall variance: {accuracy_cv_variance_average}')
+            display('--' * 20)
+            display(f'F1-score: {f1_cv_list}')
+            display(
+                f'Mean of each: {f1_cv_mean_list} | Var of each: {f1_cv_variance_list}')
+            display(
+                f'Overall max: {f1_cv_max} | Overall mean: {f1_cv_mean_average} | Overall variance: {f1_cv_variance_average}')
+            display('--' * 20)
 
             return {self.output: df_prediction_summary_cv}
 

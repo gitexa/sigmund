@@ -1,5 +1,7 @@
 from functools import reduce
 from typing import Dict, List
+import os
+import pickle
 
 import numpy as np
 import pandas as pd
@@ -27,12 +29,18 @@ class NaiveBayes(Component):
                  inputs: List[Extension] = None,
                  output: Extension = None,
                  voting: bool = False,
-                 hamilton: bool = False):
+                 hamilton: bool = False,
+                 save_model: bool = False,
+                 model_path: str = './data/model/',
+                 evaluate_model: bool = False):
 
         self.inputs: List[Extension] = inputs or [FEATURE_VECTOR]
         self.output: Extension = output or CLASSIFICATION_NAIVE_BAYES
         self.voting = voting
         self.hamilton = hamilton
+        self.save_model = save_model
+        self.model_path = model_path
+        self.evaluate_model = evaluate_model
 
         super().__init__(
             f"{NaiveBayes.__name__} for {self.inputs}",
@@ -109,9 +117,25 @@ class NaiveBayes(Component):
             features_train, features_test, label_train, label_test, indices_train, indices_test = train_test_split(
                 features, labels, features.index.values, test_size=0.50, random_state=42)
 
-            # fit classifier
-            classifier = MultinomialNB()
-            classifier.fit(features_train, label_train)
+            # if training_mode
+            if not self.evaluate_model:
+
+                # fit classifier
+                classifier = MultinomialNB()
+                classifier.fit(features_train, label_train)
+
+                # if save model (CAVE: overwrites model for now)
+                if self.save_model:
+                    pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
+                    with open(pkl_filename, 'wb') as file:
+                        pickle.dump(classifier, file)
+            
+            if self.evaluate_model:
+
+                # load model
+                pkl_filename = os.path.join(self.model_path, "naive_bayes.pkl")
+                with open(pkl_filename, 'rb') as file:
+                    classifier = pickle.load(file)
 
             # predict
             predicted_test = classifier.predict(features_test)
@@ -137,7 +161,7 @@ class NaiveBayes(Component):
                 data=prediction_test_cv, columns=['predicted'],
                 index=labels.index.copy())
             df_prediction_summary_cv = pd.concat(
-                [couple_id, gt, labels, df_prediction_test_cv], axis=1)
+                [couple_id, labels, df_prediction_test_cv], axis=1)
 
             accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
             f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
@@ -254,7 +278,7 @@ class NaiveBayes(Component):
                 data=prediction_test_cv, columns=['predicted'],
                 index=labels.index.copy())
             df_prediction_summary_cv = pd.concat(
-                [couple_id, gt, labels, df_prediction_test_cv], axis=1)
+                [couple_id, labels, df_prediction_test_cv], axis=1)
 
             accuracy_cv = cross_val_score(classifier, features, labels, cv=cv)
             f1_cv = f1_score(y_true=gt, y_pred=prediction_test_cv)
@@ -299,11 +323,12 @@ class NaiveBayes(Component):
                 queryable: Queryable):
 
         df_embedded = self.output.load_from(storage=created)
+        display(df_embedded)
 
         plt.figure()
-        conf = confusion_matrix(y_pred=df_embedded['predicted'], y_true=df_embedded['is_depressed_group'])
+        conf = confusion_matrix(y_pred=df_embedded['predicted'], y_true=df_embedded['is_depressed_group'], normalize='all')
         fig, ax = plt.subplots(figsize=(10, 10))
-        sns.heatmap(conf, annot=True, fmt='d')
+        sns.heatmap(conf, annot=True)
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
         plt.show()

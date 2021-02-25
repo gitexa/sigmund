@@ -9,6 +9,16 @@ We examine transcripts of couple conversations from a current [research project]
 * Ubeydullah Ilhan (3447661) | Applied Informatics (M.Sc.) | ubeydullah.il@gmail.com
 * Benjamin Sparks (3664690) | Applied Informatics (M.Sc.) | benjamin.sparks@protonmail.com
 
+### Getting Started
+
+A prerequisite is installing the required dependencies with Pipenv.
+Then, activate your virtual environment, and choose any of of these entrypoints to get started:
+
+* [feature summary](feature_summary.ipynb): Summary of all features in one notebook
+* [pipeline demo](pipeline_demo.ipynb): Demonstrates usage of Pipeline API, including utilisation of singular classification and voting classification
+* [streamlit](streamlit_pipeline.py): Simple visual front-end for rendering plots. 
+In order to execute this file, checkout the `streamlit-demo` branch and execute `streamlit run streamlit_pipeline.py`.
+
 ### Contributions for the Milestone
 #### Fist milestone (16.12.2020)
 * Data acquisition: speech-to-text and docx-extraction
@@ -53,10 +63,10 @@ The libraries and versions are specified in the Pipfile.
 
 ### Project Planning
 
-* 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources). -> DONE
-* 04.02. Second "official" feedback round with supervisor -> DONE
-* 05.02. Summary of results -> DONE 
-* 25.02. Second milestone: Code and presentation due -> DONE
+* 15.01. Implementation of all features and first results to share with the Institute, to evaluate if further transcripts are possible. If that should not be the case, we evaluate on different datasets we discovered (see section data sources) ✅
+* 04.02. Second "official" feedback round with supervisor ✅
+* 05.02. Summary of results ✅ 
+* 25.02. Second milestone: Code and presentation ✅
 * 15.03. Third milestone: Report deadline 
 
 ### High Level Architecture Description 

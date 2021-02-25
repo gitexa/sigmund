@@ -9,8 +9,9 @@ from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension
 from src.pipelinelib.querying import Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.extensions import LEMMATIZED_DOCUMENT, TFIDF_DOCUMENT_MF, TFIDF_DOCUMENT_M, TFIDF_DOCUMENT_F, \
-    LEMMATIZED_PARAGRAPH
+from src.sigmund.extensions import (LEMMATIZED_DOCUMENT, LEMMATIZED_PARAGRAPH,
+                                    TFIDF_DOCUMENT_F, TFIDF_DOCUMENT_M,
+                                    TFIDF_DOCUMENT_MF)
 
 
 class FeatureTFIDF(Component):
@@ -51,16 +52,14 @@ class FeatureTFIDF(Component):
             columns={'tokens_paragraph': 'tokens_document'})
 
         # Calculate TFIDF for masculin person
-        df_lemmatized_document_pp_m = df_lemmatized_document_pp[
-            df_lemmatized_document_pp['gender'] == 'M']  # .reset_index(drop=True)
+        df_lemmatized_document_pp_m = df_lemmatized_document_pp.loc[
+            df_lemmatized_document_pp['gender'] == 'M'].reset_index(drop=True)
         df_tfidf_document_m = self.get_tfidf(df_lemmatized_document_pp_m)
 
         # Calculate TFIDF for feminin person
         df_lemmatized_document_pp_f = df_lemmatized_document_pp.loc[
             df_lemmatized_document_pp['gender'] == 'W'].reset_index(drop=True)
-
-        df_tfidf_document_f = self.get_tfidf(
-            df_lemmatized_document_pp_f)
+        df_tfidf_document_f = self.get_tfidf(df_lemmatized_document_pp_f)
 
         # Check black and white list
         if self.white_list != [] and self.black_list != []:

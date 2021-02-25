@@ -1,7 +1,6 @@
 import os
 import re
 
-import matplotlib.pyplot as plt
 import spacy
 import streamlit as st
 from PIL import Image
@@ -9,17 +8,12 @@ from PIL import Image
 from src.pipelinelib.pipeline import Pipeline
 from src.pipelinelib.querying import Parser, Queryable
 from src.pipelinelib.text_body import TextBody
-from src.sigmund.classification.linear_discriminant_analysis import \
-    LinearDiscriminantAnalysisClassifier
-from src.sigmund.classification.merger import FeatureMerger
 from src.sigmund.classification.naive_bayes import NaiveBayes
-from src.sigmund.classification.pca import PCAReduction
 from src.sigmund.extensions import *
 from src.sigmund.features.basic_statistics import BasicStatistics
 from src.sigmund.features.liwc import Liwc, Liwc_Inverse, Liwc_Trend
 from src.sigmund.features.pos import PartOfSpeech
 from src.sigmund.features.tfidf import FeatureTFIDF
-from src.sigmund.features.vocabulary_size import VocabularySize
 from src.sigmund.preprocessing.words import Lemmatizer, Stemmer, Tokenizer
 
 st.title('Welcome to Sigmund!')
@@ -48,7 +42,6 @@ st.write(document_df)
 # Execute Pipeline
 pipeline_execute_state = st.text('Executing pipeline ...')
 
-
 pipeline = Pipeline(queryable=queryable)
 pipeline.add_components([Tokenizer(), Stemmer(), Lemmatizer()])
 pipeline.add_component(FeatureTFIDF(white_list=[
@@ -57,7 +50,8 @@ pipeline.add_component(FeatureTFIDF(white_list=[
 pipeline.add_component(
     NaiveBayes(
         inputs=[TFIDF_DOCUMENT_MF],
-        output=CLASSIFICATION_NAIVE_BAYES_TFIDF, voting=False))
+        output=CLASSIFICATION_NAIVE_BAYES_TFIDF, voting=False,
+        cross_validate=True, number_cross_validations=4))
 
 pipeline.add_component(Liwc(white_list=[
     'Posemo', 'Past', 'Present', 'Future', 'Metaph',
@@ -66,19 +60,22 @@ pipeline.add_component(Liwc(white_list=[
 pipeline.add_component(
     NaiveBayes(
         inputs=[LIWC_DOCUMENT_MF],
-        output=CLASSIFICATION_NAIVE_BAYES_LIWC, voting=False))
+        output=CLASSIFICATION_NAIVE_BAYES_LIWC, voting=False,
+        cross_validate=True, number_cross_validations=4))
 
 pipeline.add_component(PartOfSpeech(white_list=["ADV", "PPER", "ADJD", "VAFIN", "KON"]))
 pipeline.add_component(
     NaiveBayes(
         inputs=[POS_DOCUMENT_MF],
-        output=CLASSIFICATION_NAIVE_BAYES_POS, voting=False))
+        output=CLASSIFICATION_NAIVE_BAYES_POS, voting=False,
+        cross_validate=True, number_cross_validations=4))
 
 pipeline.add_component(NaiveBayes(inputs=[
     CLASSIFICATION_NAIVE_BAYES_TFIDF,
     CLASSIFICATION_NAIVE_BAYES_LIWC,
     CLASSIFICATION_NAIVE_BAYES_POS,
-], output=CLASSIFICATION_NAIVE_BAYES_VOTING, voting=True))
+], output=CLASSIFICATION_NAIVE_BAYES_VOTING, voting=True,
+    cross_validate=True, number_cross_validations=4))
 
 pipeline.add_component(Liwc_Trend(category=['Posemo']))
 pipeline.add_component(Liwc_Inverse(category=['Metaph', 'Affect', 'Death']))
@@ -131,7 +128,6 @@ for path, image in zip(feature_paths, images):
     st.markdown(f"## {feature}")
     st.subheader(f"{category}")
     st.image(image, width=None, clear_figure=False)
-
 
 df_liwc_inverse = LIWC_INVERSE.load_from(storage=storage)
 st.markdown("## LIWC Inverse: " + ', '.join(df_liwc_inverse.columns.to_list()[7:]))

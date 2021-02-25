@@ -104,6 +104,27 @@ CLASSIFICATION_NAIVE_BAYES_POS = Extension(
     name="nb_class_pos", kind=ExtensionKind.CLASSIFIER
 )
 
+CLASSIFICATION_RANDOM_FOREST = Extension(
+    name="rf_class", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_RANDOM_FOREST_TFIDF = Extension(
+    name="rf_class_tfidf", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_RANDOM_FOREST_LIWC = Extension(
+    name="rf_class_liwc", kind=ExtensionKind.CLASSIFIER
+)
+
+
+CLASSIFICATION_RANDOM_FOREST_VOTING = Extension(
+    name="rf_class_voting", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_RANDOM_FOREST_POS = Extension(
+    name="rf_class_pos", kind=ExtensionKind.CLASSIFIER
+)
+
 
 # Plots
 LIWC_PLOT = Extension(name="LIWC plot", kind=ExtensionKind.FEATURE)

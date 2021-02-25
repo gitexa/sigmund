@@ -19,8 +19,22 @@ from src.sigmund.preprocessing.words import Lemmatizer, Stemmer, Tokenizer
 st.title('Welcome to Sigmund!')
 
 folder = os.path.join(os.getcwd(), "data", "transcripts")
-files = [os.path.join(root, f) for root, _, files in os.walk(folder)
-         for f in files if f.endswith(".docx")]
+# files = [os.path.join(root, f) for root, _, files in os.walk(folder)
+#         for f in files if f.endswith(".docx")]
+
+files = [
+    "data/transcripts/Paar 27_T1_IM_FW.docx",
+    "data/transcripts/Paar 182_T1_IM_FW.docx",
+    "data/transcripts/Paar 81_T1_IM_FW.docx",
+    "data/transcripts/Paar 47_T1_IM_FW.docx",
+    "data/transcripts/Paar 58_T1_IM_FW.docx",
+    "data/transcripts/Paar 29_T1_IM_FW.docx",
+    "data/transcripts/Paar 105_T1_IM_FW.docx",
+    "data/transcripts/Paar 60_T1_IM_FW.docx",
+    "data/transcripts/Paar 138_T1_IM_FW.docx",
+    "data/transcripts/Paar 87_T1_IM_FW.docx"]
+
+
 nlp = spacy.load("de_core_news_sm", disable=["ner", "parser"])
 
 # Create a text element and let the reader know the data is loading.
@@ -44,9 +58,11 @@ pipeline_execute_state = st.text('Executing pipeline ...')
 
 pipeline = Pipeline(queryable=queryable)
 pipeline.add_components([Tokenizer(), Stemmer(), Lemmatizer()])
+pipeline.add_component(BasicStatistics())
+
 pipeline.add_component(FeatureTFIDF(white_list=[
     'ja', 'auch', 'wenn', 'also', 'werden', 'schon', 'wir',  # high in depressed group
-    'und', 'haben', 'du', 'sehr'])),  # 'so', 'wirkl  ich', 'ich', 'gerne', 'weil']))
+    'und', 'haben', 'du', 'sehr']))
 pipeline.add_component(
     NaiveBayes(
         inputs=[TFIDF_DOCUMENT_MF],
@@ -57,6 +73,10 @@ pipeline.add_component(Liwc(white_list=[
     'Posemo', 'Past', 'Present', 'Future', 'Metaph',
     'Death', 'Affect', 'Incl', 'Achieve'
 ]))
+pipeline.add_component(Liwc_Trend(category=['Posemo']))
+pipeline.add_component(Liwc_Inverse(category=['Metaph', 'Affect', 'Death']))
+
+
 pipeline.add_component(
     NaiveBayes(
         inputs=[LIWC_DOCUMENT_MF],
@@ -77,9 +97,8 @@ pipeline.add_component(NaiveBayes(inputs=[
 ], output=CLASSIFICATION_NAIVE_BAYES_VOTING, voting=True,
     cross_validate=True, number_cross_validations=4))
 
-pipeline.add_component(Liwc_Trend(category=['Posemo']))
-pipeline.add_component(Liwc_Inverse(category=['Metaph', 'Affect', 'Death']))
-pipeline.add_component(BasicStatistics())
+st.text("\n".join(map(str, pipeline._components)))
+
 storage, plots = pipeline.execute(visualise=True)
 
 features = [(ext, plot) for ext, plot in plots.items()
@@ -133,7 +152,7 @@ df_liwc_inverse = LIWC_INVERSE.load_from(storage=storage)
 st.markdown("## LIWC Inverse: " + ', '.join(df_liwc_inverse.columns.to_list()[7:]))
 st.write(df_liwc_inverse)
 
-st.subheader("LIWC Trend: Posemo")
+st.markdown("## LIWC Trend: Positive Emotions")
 st.image(
     Image.open(r"images/feature-LIWC Trend - Posemo.png"),
     width=None, clear_figure=False)

@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from IPython.core.display import display
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, f1_score
 from sklearn.model_selection import (StratifiedKFold, cross_val_predict,
                                      cross_val_score, train_test_split)
-from sklearn.ensemble import RandomForestClassifier
 
 from src.pipelinelib.component import Component
 from src.pipelinelib.extension import Extension, ExtensionKind
@@ -132,7 +132,8 @@ class RandomForest(Component):
                 if not self.evaluate_model:
 
                     # fit classifier
-                    classifier = RandomForestClassifier(n_estimators=100, criterion='gini')
+                    classifier = RandomForestClassifier(
+                        n_estimators=100, criterion='gini', random_state=42)
                     classifier.fit(features_train, label_train)
 
                     # if save model (CAVE: overwrites model for now)
@@ -169,7 +170,8 @@ class RandomForest(Component):
                     [couple_id_test, label_test, df_prediction_test], axis=1)
 
                 # Print results
-                display('Predictions on a random test set (without stratified sampling, unsuited for small sets)')
+                display(
+                    'Predictions on a random test set (without stratified sampling, unsuited for small sets)')
                 display(df_prediction_summary)
                 display(f'Accuracy on test set: {accuracy}')
 
@@ -178,7 +180,8 @@ class RandomForest(Component):
                 gt = df_feature_vector['is_depressed_group']
                 cv = StratifiedKFold(n_splits=5, random_state=42)
 
-                classifier = RandomForestClassifier(n_estimators=100, criterion='gini')
+                classifier = RandomForestClassifier(
+                    n_estimators=100, criterion='gini', random_state=42)
 
                 prediction_test_cv = cross_val_predict(
                     classifier, features, labels, cv=cv)
@@ -328,7 +331,7 @@ class RandomForest(Component):
 
                     # fit classifier
                     classifier = RandomForestClassifier(
-                        n_estimators=100, criterion='gini')
+                        n_estimators=100, criterion='gini', random_state=42)
                     classifier.fit(features_train, label_train)
 
                     # if save model (CAVE: overwrites model for now)
@@ -376,7 +379,8 @@ class RandomForest(Component):
                 gt = df_feature_vector['hamilton_score']
                 cv = StratifiedKFold(n_splits=5, random_state=42)
 
-                classifier = RandomForestClassifier(n_estimators=100, criterion='gini') 
+                classifier = RandomForestClassifier(
+                    n_estimators=100, criterion='gini', random_state=42)
 
                 prediction_test_cv = cross_val_predict(
                     classifier, features, labels, cv=cv)

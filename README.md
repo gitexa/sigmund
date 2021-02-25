@@ -47,16 +47,14 @@ We use several libraries for the project, including:
 * matplotlib
 * Spacy + German News Dataset (https://spacy.io/models/de)
 * NLTK
-* SentiWS
 * pyphen
 * liwc-python
 * gensim
-* Stanford Parser Toolkit 
-* Streamlit to build a simple front-end
-* Seaborn for visualisation
+* Streamlit
+* Seaborn
 * LIWC library with german dictionary (https://pypi.org/project/liwc/)
 
-The libraries and versions are specified in the Pipfile.
+All libraries and versions are specified in the Pipfile.
 
 ## Project State
 

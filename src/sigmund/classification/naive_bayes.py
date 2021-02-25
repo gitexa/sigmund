@@ -23,6 +23,16 @@ from src.sigmund.extensions import CLASSIFICATION_NAIVE_BAYES, FEATURE_VECTOR
 class NaiveBayes(Component):
     """
     Performs naive bayes on a feature vector and prints results
+
+    @param inputs: feature extensions from the storage
+    @param output: classification results
+    @param voting: if used as voting classifiers based on the results of other classifiers
+    @param hamilton: if classifier is to be used on the hamilton scale (4 classes) or binary (2 classes)
+    @param save_model: if trained model should be saved (works only for normal validation, not for cross-validation)
+    @param model_path: path to save and reload the model
+    @param evaluate_model: if pretrained model is to be used on training data (model is loaded from storage)
+    @param cross_validate: if crossvalidation or "normal" validation (random test and training set)
+    @param number_cross_validations: number of crossvalidations to be performed (shuffles dataset and changes folds)
     """
 
     def __init__(self,

@@ -14,9 +14,9 @@ We examine transcripts of couple conversations from a current [research project]
 A prerequisite is installing the required dependencies with Pipenv.
 Then, activate your virtual environment, and choose any of of these entrypoints to get started:
 
-* [feature summary](feature_summary.ipynb): Summary of all features in one notebook
-* [pipeline demo](pipeline_demo.ipynb): Demonstrates usage of Pipeline API, including utilisation of singular classification and voting classification
-* [streamlit](streamlit_pipeline.py): Simple visual front-end for rendering plots. 
+* [Feature Summary](feature_summary.ipynb): Summary of all features in one notebook
+* [Pipeline Demo](pipeline_demo.ipynb): Demonstrates usage of Pipeline API, including utilisation of singular classification and voting classification
+* [Streamlit](streamlit_pipeline.py): Simple visual front-end for rendering plots. 
 In order to execute this file, checkout the `streamlit-demo` branch and execute `streamlit run streamlit_pipeline.py`.
 
 ### Contributions for the Milestone
@@ -78,7 +78,7 @@ The phase of importing and aggregating data is performed by two different classe
 * [Parser](src/pipelinelib/querying.py#L16):
 Loads the provided transcripts into a [DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html), alongside the corresponding metadata, such as whether a transcript belongs to the depressive sample set.
 
-* [Queryable](src/pipelinelib/querying.py#L192)
+* [Queryable](src/pipelinelib/querying.py#L192):
 Provides a type-safe wrapper around queries that can be applied to the loaded DataFrame.
 Its capabilities include being able to aggregate the data on [differing corpus levels](src/pipelinelib/text_body.py), loading only transcript data from the depressed group, etc.
 
@@ -177,4 +177,5 @@ As of 16.12.2020, our data consists of:
 * Utterances: ~60 per transcript
 
 More detailed statistics of the transcripts are included in [feature_summary.ipynb](feature_summary.ipynb).
-
+This notebook depends on a preliminary approach of data aggregation that can be found in (src/backwards_compatibility)[src/backwards_compatbility], which has now been superseded functionality-wise by [Parser](src/pipelinelib/querying.py#L16) and [Queryable](src/pipelinelib/querying.py#L192).
+The classes within this folder are not used within the [Pipeline API](src/pipelinelib), nor the [Sigmund](src/sigmund) codebase.

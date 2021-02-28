@@ -2,6 +2,8 @@ from itertools import filterfalse
 from typing import Dict, List, Set
 
 import pandas as pd
+import sqlalchemy
+from sqlalchemy.sql.sqltypes import String
 
 from src.pipelinelib.adapter import Adapter
 from src.pipelinelib.querying import Queryable
@@ -28,10 +30,13 @@ class Pipeline:
         within the lookup structure and associate DataFrames with
     """
 
-    def __init__(self, queryable: Queryable, empty_pipeline=False):
+    def __init__(self, queryable: Queryable, empty_pipeline=False,
+                 database_path: str = "sqlite:///data/sigmund.db"):
         self._queryable = queryable
         self._extensions: Set[Extension] = set()
         self._components: List[Component] = list()
+
+        self._engine = sqlalchemy.create_engine(database_path)
 
         if empty_pipeline:
             self._remove_all_pipes()
@@ -85,7 +90,7 @@ class Pipeline:
 
             if result:
                 for extension, df in result.items():
-                    extension.store_to(curr, df)
+                    extension.store_to(curr, df, self._engine)
 
         print("=== Finished pipeline execution ===")
         return curr

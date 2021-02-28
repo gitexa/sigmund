@@ -1,6 +1,9 @@
 from typing import Dict, Union
 
 import pandas as pd
+import sqlalchemy
+
+
 
 
 class ExtensionKind:
@@ -51,7 +54,7 @@ class Extension:
 
         return lookup.copy(deep=True)
 
-    def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame):
+    def store_to(self, storage: Dict["Extension", pd.DataFrame], df: pd.DataFrame, engine: sqlalchemy.engine):
         """
         Store a DataFrame within the lookup structure
 
@@ -59,6 +62,15 @@ class Extension:
         @param df: the DataFrame
         """
         storage[self] = df
+
+        print(self.name)
+        print(engine)
+        print(df)
+
+        # Write additionally into sql-database for persistence 
+        if not self.kind == ExtensionKind.PREPROCESSING:
+            df.to_sql(self.name, engine, if_exists='replace')
+
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Extension):

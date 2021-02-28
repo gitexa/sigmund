@@ -29,6 +29,7 @@ data/transcripts/*
 data/model/*
 data/test_transcripts/*
 data/old_transcripts/*
+data/sigmund.db
 
 TODOs
 # LDA stuff

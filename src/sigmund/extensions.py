@@ -104,6 +104,27 @@ CLASSIFICATION_NAIVE_BAYES_POS = Extension(
     name="nb_class_pos", kind=ExtensionKind.CLASSIFIER
 )
 
+CLASSIFICATION_NAIVE_BAYES_BASIC_STATISTICS = Extension(
+    name="nb_class_bs", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_NAIVE_BAYES_VOCABULARY_SIZE = Extension(
+    name="nb_class_vs", kind=ExtensionKind.CLASSIFIER
+)
+
+
+CLASSIFICATION_NAIVE_BAYES_FLESCH = Extension(
+    name="nb_class_flesch", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_NAIVE_BAYES_AGREEMENT_SCORE = Extension(
+    name="nb_class_as", kind=ExtensionKind.CLASSIFIER
+)
+
+CLASSIFICATION_NAIVE_BAYES_TALKING_TURNS = Extension(
+    name="nb_class_tt", kind=ExtensionKind.CLASSIFIER
+)
+
 CLASSIFICATION_RANDOM_FOREST = Extension(
     name="rf_class", kind=ExtensionKind.CLASSIFIER
 )

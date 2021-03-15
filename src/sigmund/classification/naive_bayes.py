@@ -201,6 +201,7 @@ class NaiveBayes(Component):
                     [couple_id, labels, df_prediction_test_cv], axis=1)
 
                 # multiple times cross-validation with different splits for more accurate estimation
+                # total
                 accuracy_cv_list = []
                 accuracy_cv_mean_list = []
                 accuracy_cv_variance_list = []
@@ -213,6 +214,7 @@ class NaiveBayes(Component):
                 f1_cv_max = 0
                 f1_cv_mean_average = 0
                 f1_cv_variance_average = 0
+
 
                 for i in range(self.number_cross_validations):
                     # shuffle features and labels for different folds

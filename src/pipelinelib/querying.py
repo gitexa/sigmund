@@ -1,6 +1,7 @@
 import functools
 import re
 from itertools import filterfalse
+from os import system
 from typing import Callable, Iterable, Tuple
 
 import docx
@@ -70,8 +71,22 @@ class Parser:
 
         @param paths: the paths to the files to be loaded
         """
+        print('Read files')
         for path in paths:
-            self.update_frame(path)
+            if "T2" in path or "t2" in path:  # TODO improve quickfix
+                print(path)
+                print("Skipped T2.")
+            elif path in ["/home/alexander/Projects/sigmund/data/all_transcripts/Paar_104_IM.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_7_IM.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_60_T1_IM_FW.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_82_T1_IM.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_86_IM.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_91_IM.docx",
+                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_119_T1_IM.docx"]:
+                print(path)
+                print("Skipped")  # TODO fix paths
+            else:
+                self.update_frame(path)
 
     def update_frame(self, path2file: str) -> None:
         """
@@ -91,29 +106,27 @@ class Parser:
             self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
 
         self._read_docx_into_frame(path2file) \
-            if path2file.endswith(".docx") \
+            if path2file.endswith(".docx")\
             else self._read_csv_into_frame(path2file)  # path2file.endswith(".csv")
 
         if modifies_nlp:
             self.nlp.remove_pipe("sentencizer")
 
     def _read_docx_into_frame(self, path2file: str, couple_id_pat: str = re.compile(
-        r"Paar (\d+)")) -> None:
+            r"Paar_(\d+)")) -> None:  # TODO make generic
 
         # Read document
         document = docx.Document(path2file)
         couple_id = next(re.finditer(couple_id_pat, path2file)).group(1)
         new_document_id = len(self.frame[Parser.DOCUMENT_ID].unique())
-
         paragraph_w_speakers = [paragraph.text for paragraph in document.paragraphs]
-
-        first_speaker = _extract_gender(paragraph_w_speakers[1])
-        second_speaker = _extract_gender(paragraph_w_speakers[2])
-        genders_lookup = {"A": first_speaker, "B": second_speaker}
+        genders_lookup = _parse_speakers(paragraph_w_speakers)
 
         # Skip None, A, B with [3:]
+
+        paragraph_w_speakers_filtered = _remove_legend(paragraph_w_speakers)
         speaker_paragraphs = [_split_speaker_text(
-            p) for p in paragraph_w_speakers][3:]
+            p) for p in paragraph_w_speakers_filtered] #TODO change as it might be variable 2/3/...
         paragraph_split = map(list, zip(*speaker_paragraphs))
         paragraph_speakers = next(paragraph_split)
         paragraphs = next(paragraph_split)
@@ -124,23 +137,31 @@ class Parser:
             for sentence in _split_sentences(paragraph, self.nlp)
         ]
         speaker_pid_sentence = map(list, zip(*speaker_pid_sentence))
-
         sentence_speakers = next(speaker_pid_sentence)
         paragraph_ids = next(speaker_pid_sentence)
         sentences = next(speaker_pid_sentence)
-
         sentence_genders = [genders_lookup[speaker] for speaker in sentence_speakers]
         sentence_count = len(sentences)
 
-        couple_metadata = self.metadata.query(f"Paarnummer == {couple_id}")
+        #couple_metadata = self.metadata.query(f"Paarnummer == {couple_id}")
+        couple_metadata = self.metadata.loc[(
+            self.metadata['Paarnummer'] == int(couple_id)) & (self.metadata['mzp'] == 1)]
+        couple_metadata_f = self.metadata.loc[(self.metadata['Paarnummer'] == int(
+            couple_id)) & (self.metadata['mzp'] == 1) & (self.metadata['Sex'] == 1)]
+        couple_metadata_m = self.metadata.loc[(self.metadata['Paarnummer'] == int(
+            couple_id)) & (self.metadata['mzp'] == 1) & (self.metadata['Sex'] == 0)]
 
         # NOTE: our dataset says that group id 1 means W is depressed
-        group_id = couple_metadata["Gruppe"].iloc[0]
-        is_depressed_group = bool(group_id)
+        #group_id = couple_metadata["Gruppe"].iloc[0]
+        group_tel = couple_metadata["Gruppe_TEL"].iloc[0]  # TODO adapt
+        is_depressed_group = bool(group_tel-1)  # TODO improve quickfix
         depressed_person = None if not is_depressed_group else "W"
 
         # Hamilton Score reading
-        male_hs, female_hs = couple_metadata["HDI.1"]
+        #male_hs, female_hs = couple_metadata["HDI.1"]
+        female_hs = couple_metadata_f["HDI_SCORE"].iloc[0]
+        male_hs = couple_metadata_m["HDI_SCORE"].iloc[0]
+
         hamilton_scores = [male_hs
                            if speaker == "M" else female_hs
                            for speaker in sentence_genders]
@@ -165,6 +186,7 @@ class Parser:
         new_df = pd.DataFrame.from_dict(
             collected, orient="index").transpose().astype(
             Parser.SCHEMA)
+
         self.frame = self.frame.append(new_df)
 
     def _read_csv_into_frame(self, path2file: str) -> None:
@@ -174,16 +196,50 @@ class Parser:
         self.frame = pd.concat(self.frame, csv_df)
 
 
+def _parse_speakers(paragraph_w_speakers):
+
+    # TODO
+
+    # - Start mit Überschrift
+    # - Start mit ''
+    # - Start mit A,B
+    # - Leere Anführungszeichen löschen
+    counter = 0
+    a_flag, b_flag = True, True
+    for paragraph in paragraph_w_speakers:
+        if paragraph.startswith(('A:', 'a:')) and a_flag:
+            first_speaker = _extract_gender(paragraph)
+            a_flag = False
+        if paragraph.startswith(('B:', 'b:')) and b_flag:
+            second_speaker = _extract_gender(paragraph)
+            b_flag = False
+        if not a_flag and not b_flag:
+            return {"A": first_speaker, "B": second_speaker}
+        counter += 1
+        if counter > 5:
+            print('Speakers cannot be identified.')
+            system.exit(0)
+
+
 def _extract_gender(text: str) -> str:
-    without_prefix = re.sub("[AB]: ", "", text)
-    without_prefix = re.sub("Er", "M", without_prefix)
-    without_prefix = re.sub("Sie", "W", without_prefix)
+    without_prefix = re.sub("[AB]:\s?", "", text)
+    without_prefix = re.sub("(Er|er)", "M", without_prefix)
+    without_prefix = re.sub("(Sie|sie)", "W", without_prefix)
     return without_prefix[0]
 
 
 def _split_speaker_text(text: str) -> Tuple[str, str]:
     matches = _SPEAKER_TEXT_SPLIT_REGEX.match(text)
     return (None, None) if not matches else matches.group(2, 3)
+
+def _remove_legend(paragraphs: list) -> list:
+    r1 = re.compile("[AB]:\s?(Sie|Er)")
+    r2 = re.compile("^$")
+    r3 = re.compile("^Paar\s?[0-9]+")
+    # best guess: found AAH - 36 or AAI - Paar 37
+    r4 = re.compile("^AA[A-Z]\s?[\–,\-]\s?(Paar)?\s?[0-9]+")
+    filtered = [i for i in paragraphs if not (r1.match(i) or r2.match(i) or r3.match(i) or r4.match(i))]
+    return filtered
 
 
 def _clean_comments(text: str) -> str:
@@ -200,6 +256,9 @@ def _clean_comments(text: str) -> str:
         # Remove comments
         text = re.sub(r"\(.*?\) ?", "", text)
         text = re.sub(r"\[.*?\] ?", "", text)
+
+        # Remove other extra symbols
+        text = re.sub(r"\°\s?", "", text)
 
         return text
     else:
@@ -223,6 +282,7 @@ class Queryable:
     Helper class to treat the cumulative DataFrame as a dataset, such as
     enabling queries to be performed upon said dataset
     """
+
     def __init__(self, dataframe: pd.DataFrame, nlp):
         """
         @param dataframe: the dataset to query

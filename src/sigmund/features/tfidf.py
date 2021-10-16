@@ -133,8 +133,14 @@ class FeatureTFIDF(Component):
             ax[0, 0].set_title('TFIDF - ' + cat + ' - mean')
 
             # Second barplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
-            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
+            #), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            #df.boxplot(ax=ax[1, 0])
+            #ax[1, 0].set_title('TFIDF - ' + cat + ' - all')
+
+            df = pd.DataFrame([cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].reset_index(
+                drop=True), cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple', 'non-depressed couple']
             df.boxplot(ax=ax[1, 0])
             ax[1, 0].set_title('TFIDF - ' + cat + ' - all')
 
@@ -148,9 +154,17 @@ class FeatureTFIDF(Component):
             ax[0, 1].set_title('TFIDF - ' + cat + ' - mean')
 
             # Second boxplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
-                               'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
-                               'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
-                               'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+            #                   'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            df = pd.DataFrame([cat_document_f[cat_document_f['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_f[cat_document_f['is_depressed_group'] == False][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple - Female', 
+                            'depressed couple - Male',
+                            'non-depressed couple - Female', 
+                            'non-depressed couple - Male']
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('TFIDF - ' + cat + ' - all')

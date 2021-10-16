@@ -78,7 +78,7 @@ class PartOfSpeech(Component):
              pos_document_A_B[1:: 2],
              pos_document_AB),
             axis=0).reshape(
-            (5, 10)).transpose()
+            (5, doc_count + 1)).transpose()
 
         pos_document = pd.DataFrame(values,
                                     columns=['document_id', 'couple_id',
@@ -243,8 +243,12 @@ class PartOfSpeech(Component):
             ax[0, 0].set_title('Part of Speech - ' + cat + ' - mean')
 
             # Second barplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
-            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
+            #), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})            #df.boxplot(ax=ax[1, 0])
+
+            df = pd.DataFrame([cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].reset_index(
+                drop=True), cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple', 'non-depressed couple']
             df.boxplot(ax=ax[1, 0])
             ax[1, 0].set_title('Part of Speech - ' + cat + ' - all')
 
@@ -258,10 +262,19 @@ class PartOfSpeech(Component):
             ax[0, 1].set_title('Part of Speech - ' + cat + ' - mean')
 
             # Second boxplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
-                               'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
-                               'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
-                               'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+            #                   'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            #df.boxplot(ax=ax[1, 1])
+            df = pd.DataFrame([cat_document_f[cat_document_f['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_f[cat_document_f['is_depressed_group'] == False][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple - Female',
+                          'depressed couple - Male',
+                          'non-depressed couple - Female',
+                          'non-depressed couple - Male']
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('Part of Speech - ' + cat + ' - all')
     '''     

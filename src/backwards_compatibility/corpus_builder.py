@@ -31,7 +31,8 @@ if __name__ == '__main__':
         preprocessed = [parser.get_paragraphs().apply(preprocess, axis=1)
                         for parser in parsers]
         all_frames = pd.concat(preprocessed)
-        all_frames.to_csv("all_preprocessed.csv")
+        #all_frames.to_csv("all_preprocessed.csv")
+        all_frames.to_csv(config['path_to_corpus_file'])
 
     else:
         all_frames = pd.read_csv("all_preprocessed.csv")

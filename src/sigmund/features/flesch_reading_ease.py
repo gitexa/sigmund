@@ -72,7 +72,7 @@ class FleschExtractor(Component):
              fre_document_M_F[1:: 2],
              fre_document_MF),
             axis=0).reshape(
-            (5, 10)).transpose()
+            (5, doc_count + 1)).transpose()
 
         fre_document = pd.DataFrame(values,
                                     columns=['document_id', 'couple_id',

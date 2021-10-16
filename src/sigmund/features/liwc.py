@@ -24,6 +24,7 @@ class Liwc(Component):
     stores the number of occurrences of the LIWC categories in different columns.
     For the layers paragraph/sentence the mean of the occurrences per category over each document is stored.
     '''
+
     def __init__(
             self, white_list=[],
             black_list=[],
@@ -87,7 +88,7 @@ class Liwc(Component):
              liwc_document_A_B[1:: 2],
              liwc_document_AB),
             axis=0).reshape(
-            (5, 10)).transpose()
+            (5, doc_count + 1)).transpose()
 
         liwc_document = pd.DataFrame(values,
                                      columns=['document_id', 'couple_id',
@@ -248,8 +249,11 @@ class Liwc(Component):
             ax[0, 0].set_title('LIWC - ' + cat + ' - mean')
 
             # Second barplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
-            ), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].to_numpy(
+            #), 'non-depressed couple': cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].to_numpy()})
+            #df.boxplot(ax=ax[1, 0])
+            df = pd.DataFrame([cat_document_mf[cat_document_mf['is_depressed_group'] == True][cat].reset_index(drop=True), cat_document_mf[cat_document_mf['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple', 'non-depressed couple']
             df.boxplot(ax=ax[1, 0])
             ax[1, 0].set_title('LIWC - ' + cat + ' - all')
 
@@ -263,10 +267,19 @@ class Liwc(Component):
             ax[0, 1].set_title('LIWC - ' + cat + ' - mean')
 
             # Second boxplot: Female/Male in depr/non_depr couples
-            df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
-                               'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
-                               'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
-                               'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            #df = pd.DataFrame({'depressed couple - Female': cat_document_f[cat_document_f['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'depressed couple - Male': cat_document_m[cat_document_m['is_depressed_group'] == True][cat].to_numpy(),
+            #                   'non-depressed couple - Female ': cat_document_f[cat_document_f['is_depressed_group'] == False][cat].to_numpy(),
+            #                   'non-depressed couple - Male ': cat_document_m[cat_document_m['is_depressed_group'] == False][cat].to_numpy()})
+            #df.boxplot(ax=ax[1, 1])
+            df = pd.DataFrame([cat_document_f[cat_document_f['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == True][cat].reset_index(drop=True),
+                               cat_document_f[cat_document_f['is_depressed_group'] == False][cat].reset_index(drop=True),
+                               cat_document_m[cat_document_m['is_depressed_group'] == False][cat].reset_index(drop=True)]).T
+            df.columns = ['depressed couple - Female',
+                          'depressed couple - Male',
+                          'non-depressed couple - Female',
+                          'non-depressed couple - Male']
             df.boxplot(ax=ax[1, 1])
             ax[1, 1].set_title('LIWC - ' + cat + ' - all')
 
@@ -308,7 +321,7 @@ class Liwc_Inverse(Component):
     Rows not having any word in the sentences belonging to given categories are removed to filter redundant
     data which is not related with the given LIWC categories.
     """
-    
+
     def __init__(
             self, category=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):
@@ -375,6 +388,7 @@ class Liwc_Trend(Component):
     This component plots the trend of occurrences of words per paragraph labeled with the  given LIWC categories over each document.
     All trends for each couple are plotted below eachother for one LIWC category
     '''
+
     def __init__(
             self, category=[],
             token_parser_path="./data/German_LIWC2001_Dictionary.dic"):

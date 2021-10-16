@@ -47,5 +47,6 @@
         }
     },
     "jupyter.jupyterServerType": "local",
-    "python.analysis.completeFunctionParens": true
+    "python.analysis.completeFunctionParens": true,
+    "python.pythonPath": "venv/bin/python3.8"
 }

@@ -1,5 +1,6 @@
 # Visual Studio Code
 .vscode/*
+.vscode
 
 # virtualenv files
 .venv/
@@ -21,6 +22,7 @@ __pycache__/
 TODO.md
 
 # data
+data/*
 src/data/*
 !src/data/.gitkeep
 all_preprocessed.csv

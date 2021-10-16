@@ -1,4 +1,5 @@
 import functools
+import os
 import re
 from itertools import filterfalse
 from os import system
@@ -76,15 +77,15 @@ class Parser:
             if "T2" in path or "t2" in path:  # TODO improve quickfix
                 print(path)
                 print("Skipped T2.")
-            elif path in ["/home/alexander/Projects/sigmund/data/all_transcripts/Paar_104_IM.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_7_IM.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_60_T1_IM_FW.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_82_T1_IM.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_86_IM.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_91_IM.docx",
-                          "/home/alexander/Projects/sigmund/data/all_transcripts/Paar_119_T1_IM.docx"]:
-                print(path)
-                print("Skipped")  # TODO fix paths
+            elif path in [
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_104_IM.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_7_IM.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_60_T1_IM_FW.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_82_T1_IM.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_86_IM.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_91_IM.docx"),
+                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_119_T1_IM.docx")]:
+                print(f"Skipped: {path}")  # TODO fix paths
             else:
                 self.update_frame(path)
 

@@ -21,6 +21,7 @@ __pycache__/
 TODO.md
 
 # data
+data/*
 src/data/*
 !src/data/.gitkeep
 all_preprocessed.csv
@@ -51,3 +52,4 @@ images/
 # idea
 .idea
 *.tar.gz
+

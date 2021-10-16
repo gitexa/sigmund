@@ -53,3 +53,5 @@ images/
 .idea
 *.tar.gz
 
+# frontend stuff
+sigmundfrontend/*

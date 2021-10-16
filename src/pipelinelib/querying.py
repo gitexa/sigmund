@@ -78,13 +78,13 @@ class Parser:
                 print(path)
                 print("Skipped T2.")
             elif path in [
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_104_IM.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_7_IM.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_60_T1_IM_FW.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_82_T1_IM.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_86_IM.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_91_IM.docx"),
-                os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_119_T1_IM.docx")]:
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_104_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_7_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_60_T1_IM_FW.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_82_T1_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_86_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_91_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_119_T1_IM.docx")]:
                 print(f"Skipped: {path}")  # TODO fix paths
             else:
                 self.update_frame(path)
@@ -123,20 +123,29 @@ class Parser:
         paragraph_w_speakers = [paragraph.text for paragraph in document.paragraphs]
         genders_lookup = _parse_speakers(paragraph_w_speakers)
 
-        # Skip None, A, B with [3:]
+        # remove legend (A,B,title)
+        paragraph_w_speakers_wo_legend = _remove_legend(paragraph_w_speakers)
 
-        paragraph_w_speakers_filtered = _remove_legend(paragraph_w_speakers)
-        speaker_paragraphs = [_split_speaker_text(
-            p) for p in paragraph_w_speakers_filtered] #TODO change as it might be variable 2/3/...
-        paragraph_split = map(list, zip(*speaker_paragraphs))
-        paragraph_speakers = next(paragraph_split)
-        paragraphs = next(paragraph_split)
+        # split speaker and paragrah (A: | "lorem ipson")
+        paragraph_w_speakers_separated = [_split_speaker_text(
+            p) for p in paragraph_w_speakers_wo_legend]  # TODO change as it might be variable 2/3/...
 
+        # split speakers and paragraphs
+        paragraph_split = map(list, zip(*paragraph_w_speakers_separated))
+        paragraphs_speakers = next(paragraph_split)
+        paragraphs_text = next(paragraph_split)
+
+        # remove comments
+        paragraphs_text, paragraphs_speakers = _clean_comments(
+            paragraphs_text, paragraphs_speakers)
+
+        # Split into sentences and assign ids to paragraphs and sentences
         speaker_pid_sentence = [
             (speaker, pid, sentence)
-            for pid, (speaker, paragraph) in enumerate(zip(paragraph_speakers, paragraphs))
+            for pid, (speaker, paragraph) in enumerate(zip(paragraphs_speakers, paragraphs_text))
             for sentence in _split_sentences(paragraph, self.nlp)
         ]
+
         speaker_pid_sentence = map(list, zip(*speaker_pid_sentence))
         sentence_speakers = next(speaker_pid_sentence)
         paragraph_ids = next(speaker_pid_sentence)
@@ -233,49 +242,68 @@ def _split_speaker_text(text: str) -> Tuple[str, str]:
     matches = _SPEAKER_TEXT_SPLIT_REGEX.match(text)
     return (None, None) if not matches else matches.group(2, 3)
 
+
 def _remove_legend(paragraphs: list) -> list:
     r1 = re.compile("[AB]:\s?(Sie|Er)")
     r2 = re.compile("^$")
     r3 = re.compile("^Paar\s?[0-9]+")
     # best guess: found AAH - 36 or AAI - Paar 37
     r4 = re.compile("^AA[A-Z]\s?[\–,\-]\s?(Paar)?\s?[0-9]+")
-    filtered = [i for i in paragraphs if not (r1.match(i) or r2.match(i) or r3.match(i) or r4.match(i))]
+    filtered = [i for i in paragraphs if not (
+        r1.match(i) or r2.match(i) or r3.match(i) or r4.match(i))]
     return filtered
 
 
-def _clean_comments(text: str) -> str:
+def _clean_comments(paragraphs_text: list, paragraphs_speaker: list) -> list:
     """
     Remove Comments from Text
     :type text: str
     :param text: text to remove comments from
     :return: cleaned text
     """
-    if text:
-        # Normalise whitespace
-        text = re.sub(r"\s{2,}", "", text)
 
-        # Remove comments
-        text = re.sub(r"\(.*?\) ?", "", text)
-        text = re.sub(r"\[.*?\] ?", "", text)
+    cleaned_paragraphs_text = list()
 
-        # Remove other extra symbols
-        text = re.sub(r"\°\s?", "", text)
+    index_counter = 0
+    for paragraph in paragraphs_text:
 
-        return text
-    else:
-        return ""
+        if not paragraph == None:
+
+            # Normalise whitespace
+            paragraph = re.sub(r"\s{2,}", "", paragraph)
+
+            # Remove comments
+            paragraph = re.sub(r"\(.*?\) ?", "", paragraph)
+            paragraph = re.sub(r"\[.*?\] ?", "", paragraph)
+
+            # Remove other extra symbols
+            paragraph = re.sub(r"\°\s?", "", paragraph)
+
+            # Append to new list
+            if not paragraph == "":
+                cleaned_paragraphs_text.append(paragraph)
+                index_counter += 1
+            else:
+                del paragraphs_speaker[index_counter]
+        else:
+            del paragraphs_speaker[index_counter]
+
+    assert len(cleaned_paragraphs_text) == len(paragraphs_speaker)
+
+    return cleaned_paragraphs_text, paragraphs_speaker
 
 
 def _split_sentences(text: str, nlp) -> list:
     if not text:
         return []
 
-    cleaned = _clean_comments(text)
-    sentences = nlp(cleaned).sents
+    #cleaned = _clean_comments(text)
+    sentences = nlp(text).sents
 
     # Remove empty tokens from cleaned
-    strs = map(str, sentences)
-    return list(filterfalse(lambda x: not x, strs))
+    # strs = map(str, sentences)
+    # return list(filterfalse(lambda x: not x, strs))
+    return list(sentences)
 
 
 class Queryable:
@@ -298,6 +326,14 @@ class Queryable:
         @return: Access to the NLP used to create the dataset
         """
         return self._nlp
+
+    def from_csv(path: str, nlp):
+        """
+        @param path: path to csv with all transcripts in parsed format
+        @return: Queryable 
+        """
+        df = pd.read_csv(path)
+        return Queryable(df, nlp)
 
     @staticmethod
     def from_parser(parser: Parser) -> "Queryable":

@@ -78,12 +78,22 @@ class Parser:
                 print(path)
                 print("Skipped T2.")
             elif path in [
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_104_IM.docx"),
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_7_IM.docx"),
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_60_T1_IM_FW.docx"),
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_82_T1_IM.docx"),
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_86_IM.docx"),
-                    os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_91_IM.docx"),
+                    os.path.join(
+                        os.getcwd(),
+                        "data", "all_transcripts", "Paar_104_IM.docx"),
+                    os.path.join(
+                        os.getcwd(),
+                        "data", "all_transcripts", "Paar_7_IM.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts",
+                                 "Paar_60_T1_IM_FW.docx"),
+                    os.path.join(os.getcwd(), "data", "all_transcripts",
+                                 "Paar_82_T1_IM.docx"),
+                    os.path.join(
+                        os.getcwd(),
+                        "data", "all_transcripts", "Paar_86_IM.docx"),
+                    os.path.join(
+                        os.getcwd(),
+                        "data", "all_transcripts", "Paar_91_IM.docx"),
                     os.path.join(os.getcwd(), "data", "all_transcripts", "Paar_119_T1_IM.docx")]:
                 print(f"Skipped: {path}")  # TODO fix paths
             else:
@@ -135,16 +145,18 @@ class Parser:
         paragraphs_speakers = next(paragraph_split)
         paragraphs_text = next(paragraph_split)
 
+        if couple_id == '50':
+            print('50')
+
         # remove comments
-        paragraphs_text, paragraphs_speakers = _clean_comments(
+        cleaned_paragraphs_text, cleaned_paragraphs_speakers = _clean_comments(
             paragraphs_text, paragraphs_speakers)
 
         # Split into sentences and assign ids to paragraphs and sentences
         speaker_pid_sentence = [
-            (speaker, pid, sentence)
-            for pid, (speaker, paragraph) in enumerate(zip(paragraphs_speakers, paragraphs_text))
-            for sentence in _split_sentences(paragraph, self.nlp)
-        ]
+            (speaker, pid, sentence) for pid, (speaker, paragraph)
+            in enumerate(zip(cleaned_paragraphs_speakers, cleaned_paragraphs_text))
+            for sentence in _split_sentences(paragraph, self.nlp)]
 
         speaker_pid_sentence = map(list, zip(*speaker_pid_sentence))
         sentence_speakers = next(speaker_pid_sentence)
@@ -153,7 +165,7 @@ class Parser:
         sentence_genders = [genders_lookup[speaker] for speaker in sentence_speakers]
         sentence_count = len(sentences)
 
-        #couple_metadata = self.metadata.query(f"Paarnummer == {couple_id}")
+        # couple_metadata = self.metadata.query(f"Paarnummer == {couple_id}")
         couple_metadata = self.metadata.loc[(
             self.metadata['Paarnummer'] == int(couple_id)) & (self.metadata['mzp'] == 1)]
         couple_metadata_f = self.metadata.loc[(self.metadata['Paarnummer'] == int(
@@ -162,13 +174,13 @@ class Parser:
             couple_id)) & (self.metadata['mzp'] == 1) & (self.metadata['Sex'] == 0)]
 
         # NOTE: our dataset says that group id 1 means W is depressed
-        #group_id = couple_metadata["Gruppe"].iloc[0]
+        # group_id = couple_metadata["Gruppe"].iloc[0]
         group_tel = couple_metadata["Gruppe_TEL"].iloc[0]  # TODO adapt
         is_depressed_group = bool(group_tel-1)  # TODO improve quickfix
         depressed_person = None if not is_depressed_group else "W"
 
         # Hamilton Score reading
-        #male_hs, female_hs = couple_metadata["HDI.1"]
+        # male_hs, female_hs = couple_metadata["HDI.1"]
         female_hs = couple_metadata_f["HDI_SCORE"].iloc[0]
         male_hs = couple_metadata_m["HDI_SCORE"].iloc[0]
 
@@ -230,6 +242,8 @@ def _parse_speakers(paragraph_w_speakers):
             print('Speakers cannot be identified.')
             system.exit(0)
 
+# TODO include white space and wrong versions of er / sie
+
 
 def _extract_gender(text: str) -> str:
     without_prefix = re.sub("[AB]:\s?", "", text)
@@ -276,11 +290,26 @@ def _clean_comments(paragraphs_text: list, paragraphs_speaker: list) -> list:
             paragraph = re.sub(r"\(.*?\) ?", "", paragraph)
             paragraph = re.sub(r"\[.*?\] ?", "", paragraph)
 
-            # Remove other extra symbols
+            # Remove other random extra symbols
             paragraph = re.sub(r"\°\s?", "", paragraph)
+            paragraph = re.sub(r"\<\s?", "", paragraph)
+            paragraph = re.sub(r"\>\s?", "", paragraph)
+            paragraph = re.sub(r"\(", "", paragraph)
+            paragraph = re.sub(r"\)", "", paragraph)
+            paragraph = re.sub(r"\]", "", paragraph)
+            paragraph = re.sub(r"\[", "", paragraph)
+
+            # Remove lines with only special characters (containing not an alphanumeric number)
+            if not paragraph == '':
+                only_content = re.compile("[A-Za-z0-9]*")
+                paragraph_only_content = only_content.match(paragraph).group()
+                if len(paragraph_only_content) == 0:
+                    paragraph = ''
 
             # Append to new list
-            if not paragraph == "":
+            exclude_list = ['', '\t', '?', ', .', '. .',
+                            '...', '.']  # found in transcripts
+            if paragraph not in exclude_list:
                 cleaned_paragraphs_text.append(paragraph)
                 index_counter += 1
             else:
@@ -294,16 +323,25 @@ def _clean_comments(paragraphs_text: list, paragraphs_speaker: list) -> list:
 
 
 def _split_sentences(text: str, nlp) -> list:
+
+    # filter None?
     if not text:
         return []
 
-    #cleaned = _clean_comments(text)
+    # cleaned = _clean_comments(text)
     sentences = nlp(text).sents
+    sentences = map(str, sentences)
 
-    # Remove empty tokens from cleaned
-    # strs = map(str, sentences)
-    # return list(filterfalse(lambda x: not x, strs))
-    return list(sentences)
+    # Remove None tokens and tokens from exclude_list or if length == 1 (most of times a punctuation symbol) or if only special characters
+
+    exclude_list = ['', '\t', '?', ', .', '. .', '...', '.']
+    sentences = list(
+        filterfalse(
+            lambda x: (x in exclude_list) or (len(x) == 1) or (re.match(
+                '[^A-Za-z0-9]+', x)),
+            sentences))
+
+    return sentences
 
 
 class Queryable:
@@ -330,12 +368,12 @@ class Queryable:
     def from_csv(path: str, nlp):
         """
         @param path: path to csv with all transcripts in parsed format
-        @return: Queryable 
+        @return: Queryable
         """
         df = pd.read_csv(path)
         return Queryable(df, nlp)
 
-    @staticmethod
+    @ staticmethod
     def from_parser(parser: Parser) -> "Queryable":
         """
         @param parser: Parser used to load transcripts
@@ -393,7 +431,7 @@ class Queryable:
 
         return df
 
-    @functools.lru_cache(maxsize=None)
+    @ functools.lru_cache(maxsize=None)
     def _get_agged_frame(self, level: TextBody) -> pd.DataFrame:
         """
         @param level:

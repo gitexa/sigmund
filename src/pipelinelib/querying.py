@@ -145,9 +145,6 @@ class Parser:
         paragraphs_speakers = next(paragraph_split)
         paragraphs_text = next(paragraph_split)
 
-        if couple_id == '50':
-            print('50')
-
         # remove comments
         cleaned_paragraphs_text, cleaned_paragraphs_speakers = _clean_comments(
             paragraphs_text, paragraphs_speakers)

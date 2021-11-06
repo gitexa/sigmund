@@ -287,6 +287,7 @@ class Liwc(Component):
             categories.append(
                 Extension(
                     name=f"LIWC - {cat}", kind=ExtensionKind.FEATURE))
+        
 
         return dict(zip(categories, plots))
 

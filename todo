@@ -1,3 +1,8 @@
+- Invers LIWC 
+
+- LIWC 
+-> add heatmap; left depressed, right non-depressed, columns are couples, rows are sentences | paragraphs | documents, color-code max, mean, variance; for all liwc categories
+
 - LSA
 - LDA 
 - Sentiment Network

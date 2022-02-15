@@ -46,6 +46,7 @@ nips12raw_str602.tgz
 # visualisations for presentation
 visualisations/
 images/
+figures/
 
 *.tar.gz
 
